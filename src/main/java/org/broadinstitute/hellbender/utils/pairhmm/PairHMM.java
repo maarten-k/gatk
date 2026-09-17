@@ -91,21 +91,13 @@ public abstract class PairHMM implements Closeable{
             //    logger.info("FPGA-accelerated native PairHMM implementation is not supported");
             //}
             try {
-                final VectorLoglessPairHMM hmm = new VectorLoglessPairHMM(VectorLoglessPairHMM.Implementation.OMP, args);
-                logger.info("Using the OpenMP multi-threaded AVX-accelerated native PairHMM implementation");
-                return hmm;
+                return new VectorLoglessPairHMM(args);
             }
             catch ( UserException.HardwareFeatureException e ) {
-                logger.info("OpenMP multi-threaded AVX-accelerated native PairHMM implementation is not supported");
-            }
-            try {
-                final VectorLoglessPairHMM hmm = new VectorLoglessPairHMM(VectorLoglessPairHMM.Implementation.AVX, args);
-                logger.info("Using the AVX-accelerated native PairHMM implementation");
-                return hmm;
-            }
-            catch ( UserException.HardwareFeatureException e ) {
-                logger.warn("***WARNING: Machine does not have the AVX instruction set support needed for the accelerated AVX PairHmm. " +
-                            "Falling back to the MUCH slower LOGLESS_CACHING implementation!");
+                logger.warn("***********************************************************************************************");
+                logger.warn("*** WARNING: no native PairHMM library is available for this platform: " + e.getMessage());
+                logger.warn("*** Falling back to the MUCH slower Java LOGLESS_CACHING PairHMM implementation!");
+                logger.warn("***********************************************************************************************");
                 return new LoglessPairHMM();
             }
         });

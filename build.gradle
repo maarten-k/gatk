@@ -52,6 +52,7 @@ final sparkVersion = System.getProperty('spark.version', '2.2.0')
 final hadoopVersion = System.getProperty('hadoop.version', '2.8.2')
 final hadoopBamVersion = System.getProperty('hadoopBam.version','7.10.0')
 final tensorflowVersion = System.getProperty('tensorflow.version','1.9.0')
+final fgklVersion = System.getProperty('fgkl.version', '0.2.0')
 final genomicsdbVersion = System.getProperty('genomicsdb.version','0.10.0-proto-3.0.0-beta-1+bdce8be25b873')
 final testNGVersion = '6.11'
 // Using the shaded version to avoid conflicts between its protobuf dependency
@@ -273,6 +274,8 @@ dependencies {
     // Dependency change for including MLLib
     implementation('com.esotericsoftware:reflectasm:1.10.0:shaded')
 
+    implementation 'com.fulcrumgenomics:fgkl:' + fgklVersion
+    // Only the GKL inflater and deflater are still used, by GATK's and Picard's command line programs
     implementation('com.intel.gkl:gkl:0.8.6') {
         exclude module: 'htsjdk'
     }

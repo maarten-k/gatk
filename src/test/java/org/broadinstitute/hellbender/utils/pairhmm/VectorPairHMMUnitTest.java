@@ -31,20 +31,16 @@ public final class VectorPairHMMUnitTest extends GATKBaseTest {
         args.useDoublePrecision = false;
         args.maxNumberOfThreads = 1;
 
-        for (VectorLoglessPairHMM.Implementation imp : VectorLoglessPairHMM.Implementation.values()) {
-            boolean loaded = true;
-            PairHMM avxPairHMM = null;
-            try {
-                avxPairHMM = new VectorLoglessPairHMM(imp, args);
-                //avxPairHMM.doNotUseTristateCorrection();
-            }
-            catch (UserException.HardwareFeatureException e ) {
-                loaded = false;
-            }
-
-            final Pair<PairHMM, Boolean> hmm_load = new ImmutablePair<PairHMM, Boolean>(avxPairHMM, new Boolean(loaded));
-            list.add(hmm_load);
+        boolean loaded = true;
+        PairHMM avxPairHMM = null;
+        try {
+            avxPairHMM = new VectorLoglessPairHMM(args);
         }
+        catch (UserException.HardwareFeatureException e ) {
+            loaded = false;
+        }
+
+        list.add(new ImmutablePair<PairHMM, Boolean>(avxPairHMM, loaded));
 
         return list;
     }

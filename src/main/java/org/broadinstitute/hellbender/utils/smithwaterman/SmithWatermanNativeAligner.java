@@ -10,9 +10,9 @@ import org.broadinstitute.hellbender.exceptions.UserException;
  * SmithWatermanIntelAligner class that converts instance of {@link SWAlignerNativeBinding} into a {@link SmithWatermanIntelAligner}
  * This is optimized for Intel Architectures and can fail if Machine does not support AVX and will throw {@link UserException}
  */
+public final class SmithWatermanNativeAligner implements SmithWatermanAligner {
 
-public final class SmithWatermanIntelAligner implements SmithWatermanAligner {
-
+    private static final Logger logger = LogManager.getLogger(SmithWatermanNativeAligner.class);
 
 
     private final SWAlignerNativeBinding smithWaterman = new IntelSmithWaterman();
@@ -22,15 +22,9 @@ public final class SmithWatermanIntelAligner implements SmithWatermanAligner {
     */
     private final SWNativeAlignerWrapper alignerWrapper = new SWNativeAlignerWrapper(smithWaterman);
 
-
-    /**
-     * Create a new SW pairwise aligner, which is implementation of smith waterman aligner that's takes advantage of intel hardware optimizations.
-     */
-
-    public SmithWatermanIntelAligner() throws UserException.HardwareFeatureException {
-        final boolean isSupported = smithWaterman.load(null);
-        if (!isSupported) {
-            throw new UserException.HardwareFeatureException("Machine does not support AVX SmithWaterman.");
+    public SmithWatermanNativeAligner() throws UserException.HardwareFeatureException {
+        if (!smithWaterman.load(null)) {
+            throw new UserException.HardwareFeatureException("The native Smith-Waterman library is not available on this platform.");
         }
     }
 

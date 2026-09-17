@@ -47,9 +47,7 @@ public interface SmithWatermanAligner extends Closeable {
 
         FASTEST_AVAILABLE( () -> {
             try {
-                final SmithWatermanIntelAligner aligner = new SmithWatermanIntelAligner();
-                logger.info("Using AVX accelerated SmithWaterman implementation");
-                return aligner;
+                return new SmithWatermanNativeAligner();
             } catch (UserException.HardwareFeatureException exception) {
                 logger.info("AVX accelerated SmithWaterman implementation is not supported, falling back to the Java implementation");
                 return SmithWatermanJavaAligner.getInstance();
@@ -59,12 +57,7 @@ public interface SmithWatermanAligner extends Closeable {
         /**
          * use the AVX enabled Smith-Waterman aligner
          */
-        AVX_ENABLED( () -> {
-            final SmithWatermanIntelAligner aligner = new SmithWatermanIntelAligner();
-            logger.info("Using AVX accelerated SmithWaterman implementation");
-            return aligner;
-        }
-        ),
+        AVX_ENABLED(SmithWatermanNativeAligner::new),
 
         /**
          * use the pure java implementation of Smith-Waterman, works on all hardware

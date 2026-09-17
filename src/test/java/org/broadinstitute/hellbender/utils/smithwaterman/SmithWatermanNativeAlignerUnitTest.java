@@ -5,7 +5,11 @@ import org.testng.SkipException;
 import java.util.*;
 
 
-public class SmithWatermanIntelAlignerUnitTest extends SmithWatermanAlignerAbstractUnitTest {
+/**
+ * Runs the shared aligner tests against the native Smith-Waterman aligner, and checks that it produces exactly the
+ * alignments the Java aligner does on many random sequence pairs.
+ */
+public class SmithWatermanNativeAlignerUnitTest extends SmithWatermanAlignerAbstractUnitTest {
 
     /*
     *Test the Intel Aligner Native Interface
@@ -13,12 +17,11 @@ public class SmithWatermanIntelAlignerUnitTest extends SmithWatermanAlignerAbstr
 
 
     @Override
-    protected SmithWatermanIntelAligner getAligner() {
-
-        boolean loaded = true;
-        SmithWatermanIntelAligner aligner = null;
+    protected SmithWatermanNativeAligner getAligner() {
         try {
-            aligner = new SmithWatermanIntelAligner();
+            return new SmithWatermanNativeAligner();
+        } catch (final UserException.HardwareFeatureException e) {
+            throw new SkipException("The native Smith-Waterman aligner is not available on this machine");
         }
         catch (UserException.HardwareFeatureException e ) {
             loaded = false;

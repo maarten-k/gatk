@@ -1143,7 +1143,8 @@ public class ReadThreadingGraph extends BaseGraph<MultiDeBruijnVertex, MultiSamp
 
         // either use our unique merge vertex, or create a new one in the chain
         final MultiDeBruijnVertex nextVertex = uniqueMergeVertex == null ? createVertex(kmer) : uniqueMergeVertex;
-        addEdge(prevVertex, nextVertex, ((MyEdgeFactory)getEdgeFactory()).createEdge(isRef, count));
+        // The outgoing edges were checked for this suffix above, so this edge cannot already exist.
+        addEdgeWhereNoneExists(prevVertex, nextVertex, ((MyEdgeFactory)getEdgeFactory()).createEdge(isRef, count));
         return nextVertex;
     }
 

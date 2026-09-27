@@ -1006,7 +1006,8 @@ public class ReadThreadingGraph extends BaseGraph<MultiDeBruijnVertex, MultiSamp
      * Get the collection of all sequences for kmers across all samples in no particular order
      * @return non-null Collection
      */
-    private Collection<SequenceForKmers> getAllPendingSequences() {
+    @VisibleForTesting
+    Collection<SequenceForKmers> getAllPendingSequences() {
         return pending.values().stream().flatMap(oneSampleWorth -> oneSampleWorth.stream()).collect(Collectors.toList());
     }
 

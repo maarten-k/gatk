@@ -317,10 +317,10 @@ public final class FeatureDataSource<T extends Feature> implements GATKDataSourc
             featureInput.setFeatureCodecClass((Class<FeatureCodec<T, ?>>)codec.getClass());
         } else {
             try {
-                codec = codecClass.newInstance();
+                codec = codecClass.getConstructor().newInstance();
             }
-            catch ( InstantiationException | IllegalAccessException e ) {
-                throw new GATKException("Unable to automatically instantiate codec " + codecClass.getName());
+            catch ( ReflectiveOperationException e ) {
+                throw new GATKException("Unable to automatically instantiate codec " + codecClass.getName(), e);
             }
         }
         return codec;

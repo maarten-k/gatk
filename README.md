@@ -40,7 +40,6 @@ releases of the toolkit.
     * [Uploading Archives to Sonatype](#sonatype)
     * [Building GATK4 Docker images](#docker_building)
     * [Releasing GATK4](#releasing_gatk)
-    * [Generating GATK4 documentation](#gatkdocs)
     * [Using Zenhub to track github issues](#zenhub)
 * [Further Reading on Spark](#spark_further_reading)
 * [How to contribute to GATK](#contribute)
@@ -502,12 +501,6 @@ Please see the [the Docker README](scripts/docker/README.md) in ``scripts/docker
 #### <a name="releasing_gatk">Releasing GATK4</a>
 
 Please see the [How to release GATK4](https://github.com/broadinstitute/gatk/wiki/How-to-release-GATK4) wiki article for instructions on releasing GATK4.
-
-#### <a name="gatkdocs">Generating GATK4 documentation</a>
-
-To generate GATK documentation, run `./gradlew gatkDoc`
-
-* Generated docs will be in the `build/docs/gatkdoc` directory.
 
 #### <a name="zenhub">Using Zenhub to track github issues</a>
 

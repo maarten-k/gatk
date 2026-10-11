@@ -476,13 +476,13 @@ public final class FeatureManager implements AutoCloseable {
 
         for ( final Class<?> codecClass : DISCOVERED_CODECS ) {
             try {
-                final FeatureCodec<? extends Feature, ?> codec = (FeatureCodec<? extends Feature, ?>)codecClass.newInstance();
+                final FeatureCodec<? extends Feature, ?> codec = (FeatureCodec<? extends Feature, ?>)codecClass.getConstructor().newInstance();
                 if ( codec.canDecode(featureFile.toAbsolutePath().toUri().toString()) ) {
                     candidateCodecs.add(codec);
                 }
             }
-            catch ( InstantiationException | IllegalAccessException e ) {
-                throw new GATKException("Unable to automatically instantiate codec " + codecClass.getName());
+            catch ( ReflectiveOperationException e ) {
+                throw new GATKException("Unable to automatically instantiate codec " + codecClass.getName(), e);
             }
         }
 

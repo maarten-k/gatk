@@ -13,6 +13,7 @@ import org.broadinstitute.hellbender.tools.walkers.annotator.PedigreeAnnotation;
 import org.broadinstitute.hellbender.utils.Utils;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -179,7 +180,24 @@ public class GATKAnnotationPluginDescriptor  extends CommandLinePluginDescriptor
             // rather than creating a new one, in case it has state provided by the tool
             annot = toolDefaultAnnotations.get(simpleName);
         } else {
-            annot = (Annotation) pluggableClass.newInstance();
+            try {
+                annot = (Annotation) pluggableClass.getConstructor().newInstance();
+            } catch (final NoSuchMethodException e) {
+                final InstantiationException exception = new InstantiationException(e.getMessage());
+                exception.initCause(e);
+                throw exception;
+            } catch (final InvocationTargetException e) {
+                final Throwable cause = e.getCause();
+                if (cause instanceof RuntimeException) {
+                    throw (RuntimeException) cause;
+                }
+                if (cause instanceof Error) {
+                    throw (Error) cause;
+                }
+                final InstantiationException exception = new InstantiationException(cause.getMessage());
+                exception.initCause(cause);
+                throw exception;
+            }
         }
 
         // Add all annotations to the allDiscoveredAnnotations list, even if the instance came from the

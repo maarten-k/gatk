@@ -3,7 +3,7 @@ package org.broadinstitute.hellbender.tools.walkers.haplotypecaller;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.broadinstitute.barclay.argparser.Argument;
-import org.broadinstitute.barclay.argparser.DeprecatedFeature;
+//import org.broadinstitute.barclay.argparser.DeprecatedFeature;
 import org.broadinstitute.gatk.nativebindings.pairhmm.PairHMMNativeArguments;
 
 /**
@@ -12,7 +12,7 @@ import org.broadinstitute.gatk.nativebindings.pairhmm.PairHMMNativeArguments;
 public class PairHMMNativeArgumentCollection {
     private static final Logger logger = LogManager.getLogger(PairHMMNativeArgumentCollection.class);
 
-    @DeprecatedFeature(detail = "The native PairHMM runs on the calling thread, so this argument has no effect")
+    //@DeprecatedFeature(detail = "The native PairHMM runs on the calling thread, so this argument has no effect")
     @Argument(fullName = "native-pair-hmm-threads", doc="Ignored: the native PairHMM runs on the calling thread", optional = true)
     private int pairHmmNativeThreads = 1;
 

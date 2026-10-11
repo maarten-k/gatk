@@ -51,8 +51,8 @@ public final class ClassUtils {
         for (final Class<?> found: classes){
             if (canMakeInstances(found)){
                 try {
-                    results.add((T)found.newInstance());
-                } catch (InstantiationException | IllegalAccessException e) {
+                    results.add((T)found.getConstructor().newInstance());
+                } catch (ReflectiveOperationException e) {
                     throw new GATKException("Problem making an instance of " + found + " Do check that the class has a non-arg constructor", e);
                 }
             }

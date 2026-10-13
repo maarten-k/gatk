@@ -458,12 +458,11 @@ tasks.register('sparkJar', ShadowJar) {
 }
 
 tasks.register('bundle', Zip) {
-    dependsOn shadowJar, 'gatkTabComplete', 'createPythonPackageArchive'
+    dependsOn shadowJar, 'createPythonPackageArchive'
 
     doFirst {
         assert file("gatk").exists()
         assert file("README.md").exists()
-        assert file("build/docs/tabCompletion/gatk-completion.sh").exists()
     }
 
     archiveBaseName.set(project.name + "-" + project.version)
@@ -473,7 +472,6 @@ tasks.register('bundle', Zip) {
     from(shadowJar.archiveFile)
     from("gatk")
     from("README.md")
-    from("build/docs/tabCompletion/gatk-completion.sh")
     from("${buildDir}/${pythonPackageArchiveName}")
     // When including gatkcondaenv.yml file in the release bundle, strip off the
     // 'build/' prefix used for the location of the Python package archive.

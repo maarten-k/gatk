@@ -624,7 +624,8 @@ public final class MathUtils {
                 allMatch(vector, MathUtils::goodLog10Probability) &&
                 !( shouldSumToOne && compareDoubles(sumLog10(vector), 1.0, 1e-4) != 0 );
     }
-
+   
+    public static boolean isValidLog10Probability(final double result) { return result <= 0.0; }
     /**
      *  Returns the sum of values whose log10s we have. That is, returns sum(10^x_i).
      */

@@ -54,21 +54,21 @@ public abstract class PairHMM implements Closeable{
         /* Optimized AVX implementation of LOGLESS_CACHING called through JNI. Throws if AVX is not available */
         AVX_LOGLESS_CACHING(args -> {
             // Constructor will throw a UserException if AVX is not available
-            final VectorLoglessPairHMM hmm = new VectorLoglessPairHMM(VectorLoglessPairHMM.Implementation.AVX, args);
+            final VectorLoglessPairHMM hmm = new VectorLoglessPairHMM(args);
             logger.info("Using the AVX-accelerated native PairHMM implementation");
             return hmm;
         }),
         /* OpenMP Multi-threaded AVX implementation of LOGLESS_CACHING called through JNI. Throws if OpenMP AVX is not available */
         AVX_LOGLESS_CACHING_OMP(args -> {
             // Constructor will throw a UserException if OpenMP AVX is not available
-            final VectorLoglessPairHMM hmm = new VectorLoglessPairHMM(VectorLoglessPairHMM.Implementation.OMP, args);
+            final VectorLoglessPairHMM hmm = new VectorLoglessPairHMM(args);
             logger.info("Using the OpenMP multi-threaded AVX-accelerated native PairHMM implementation");
             return hmm;
         }),
         /* FPGA implementation of LOGLESS_CACHING called through JNI. Throws if FPGA is not available */
         EXPERIMENTAL_FPGA_LOGLESS_CACHING(args -> {
             // Constructor will throw a UserException if FPGA is not available
-            final VectorLoglessPairHMM hmm = new VectorLoglessPairHMM(VectorLoglessPairHMM.Implementation.FPGA, args);
+            final VectorLoglessPairHMM hmm = new VectorLoglessPairHMM(args);
             logger.info("Using the FPGA-accelerated native PairHMM implementation");
             return hmm;
         }),

@@ -1,3 +1,59 @@
+# HaplotypeCaller Speedup Backports
+
+This fork backports performance optimizations for GATK HaplotypeCaller based on [Broad Institute GATK PR #9441](https://github.com/broadinstitute/gatk/pull/9441), which transitions from Intel GKL to **fgkl**, a Rust-based implementation designed to offer better performance and broader platform support.
+
+The goal is to improve runtime and reduce memory consumption while preserving functionally equivalent output to the original implementation.
+
+## Building
+
+Build the shaded JAR using Gradle:
+
+```bash
+./gradlew shadowJar
+```
+
+The resulting JAR can be found in `build/libs/`.
+
+## Changes Required for the Backport
+
+The following changes were necessary to backport these optimizations:
+
+- **Java 8 → Java 17:** Updated the Java version from 8 to 17.
+- **Gradle 8.14.6:** Upgraded Gradle to support building with Java 17.
+- **Spark build:** The Spark build is no longer supported.
+- **Documentation and tab completion:** Removed the functionality for generating documentation and command-line tab completion.
+
+## Output Equivalence
+
+\* Functionally equivalent output does not necessarily mean byte-for-byte identical output. For example, some high log-likelihood scores may differ slightly between implementations.
+
+In practice, these differences have no observed downstream impact. After running `ReblockGVCF`, the resulting outputs are identical in the tested cases.
+
+## Benchmarks
+
+The following results are from a single run per version, without reruns. They should therefore be considered preliminary rather than statistically robust benchmarks.
+
+| Metric | Wall-clock time (s) | User CPU time (s) | Maximum resident set size (KB) |
+|---|---:|---:|---:|
+| GATK 4.0.1.2 (original) | 984 | 2,488 | 6,500,684 |
+| GATK 4.0.1.2 (backport) | 844 | 939 | 1,945,656 |
+| Improvement | 14.2% faster | 62.3% less | 70.1% lower |
+
+
+
+The backport reduced wall-clock time by approximately **14%**, user CPU time by **62%**, and peak resident memory usage by **70%** in this single-run benchmark.
+
+### Benchmark Environment
+
+- **CPU:** AMD Ryzen 7 3700X (released in 2019, does not have AVX512 instruction set)
+- **Input:** Chromosome 22 (chr22)
+- **Measurement tool:** `/usr/bin/time -v`
+- **Runs per version:** 1 (no reruns)
+
+
+
+
+
 [![Build Status](https://travis-ci.org/broadinstitute/gatk.svg?branch=master)](https://travis-ci.org/broadinstitute/gatk)
 [![codecov](https://codecov.io/gh/broadinstitute/gatk/branch/master/graph/badge.svg)](https://codecov.io/gh/broadinstitute/gatk)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.broadinstitute/gatk/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.broadinstitute/gatk)

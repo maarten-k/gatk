@@ -470,6 +470,10 @@ task condaStandardEnvironmentDefinition(type: Copy) {
     }
 }
 
+tasks.named('shadowJar') {
+    inputs.files(condaStandardEnvironmentDefinition)
+}
+
 
 // Create GATK conda environment yml file from the conda enc template
 task condaEnvironmentDefinition() {
@@ -492,6 +496,10 @@ task pythonPackageArchive(type: Zip) {
     doLast {
         logger.lifecycle("Created GATK Python package archive in ${destinationDirectory.get().asFile}/${archiveFileName.get()}")
     }
+}
+
+tasks.named('shadowJar') {
+    inputs.files(pythonPackageArchive)
 }
 
 // Creates a standard, local, GATK conda environment, for use by developers during iterative

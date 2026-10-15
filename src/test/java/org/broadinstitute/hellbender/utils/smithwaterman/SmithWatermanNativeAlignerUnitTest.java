@@ -6,6 +6,7 @@ import org.broadinstitute.gatk.nativebindings.smithwaterman.SWParameters;
 import org.broadinstitute.hellbender.exceptions.UserException;
 import org.broadinstitute.hellbender.testutils.RandomSequenceTestUtils;
 import org.broadinstitute.hellbender.utils.Utils;
+import org.broadinstitute.hellbender.utils.read.CigarUtils;
 import org.testng.Assert;
 import org.testng.SkipException;
 import org.testng.annotations.DataProvider;
@@ -24,10 +25,10 @@ public class SmithWatermanNativeAlignerUnitTest extends SmithWatermanAlignerAbst
 
     /** Every parameter set GATK aligns with. */
     private static final SWParameters[] PARAMETER_SETS = {
-            SmithWatermanAlignmentConstants.ORIGINAL_DEFAULT,
-            SmithWatermanAlignmentConstants.STANDARD_NGS,
-            SmithWatermanAlignmentConstants.NEW_SW_PARAMETERS,
-            SmithWatermanAlignmentConstants.ALIGNMENT_TO_BEST_HAPLOTYPE_SW_PARAMETERS,
+            SmithWatermanAligner.ORIGINAL_DEFAULT,
+            SmithWatermanAligner.STANDARD_NGS,
+            CigarUtils.NEW_SW_PARAMETERS,
+            CigarUtils.ALIGNMENT_TO_BEST_HAPLOTYPE_SW_PARAMETERS,
     };
 
     /** Kinds of random sequence pair, each exercising a different part of the alignment and overhang handling. */

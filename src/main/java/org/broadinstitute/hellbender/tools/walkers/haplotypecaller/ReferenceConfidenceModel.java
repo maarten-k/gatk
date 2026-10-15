@@ -9,7 +9,6 @@ import htsjdk.samtools.util.Locatable;
 import htsjdk.variant.variantcontext.*;
 import htsjdk.variant.vcf.VCFHeaderLine;
 import htsjdk.variant.vcf.VCFSimpleHeaderLine;
-import org.apache.commons.lang3.tuple.Pair;
 import org.broadinstitute.hellbender.engine.AlignmentContext;
 import org.broadinstitute.hellbender.engine.AssemblyRegion;
 import org.broadinstitute.hellbender.tools.walkers.genotyper.PloidyModel;
@@ -25,6 +24,7 @@ import org.broadinstitute.hellbender.utils.pileup.ReadPileup;
 import org.broadinstitute.hellbender.utils.read.AlignmentUtils;
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 import org.broadinstitute.hellbender.utils.read.ReadCoordinateComparator;
+import org.broadinstitute.hellbender.utils.read.SAMRecordToGATKReadAdapter;
 import org.broadinstitute.hellbender.utils.variant.GATKVCFConstants;
 import org.broadinstitute.hellbender.utils.variant.GATKVariantContextUtils;
 import org.broadinstitute.hellbender.utils.variant.HomoSapiensConstants;
@@ -616,9 +616,8 @@ public final class ReferenceConfidenceModel {
                 // We are safe to use the faster no-copy versions of getBases and getBaseQualities here,
                 // since we're not modifying the returned arrays in any way. This makes a small difference
                 // in the HaplotypeCaller profile, since this method is a major hotspot.
-                final Pair<byte[], byte[]> readBasesAndBaseQualities = AlignmentUtils.getBasesAndBaseQualitiesAlignedOneToOne(read);  //calls getBasesNoCopy if CIGAR is all match
-                final byte[] readBases = readBasesAndBaseQualities.getLeft();
-                final byte[] readQualities = readBasesAndBaseQualities.getRight();
+                final byte[] readBases = AlignmentUtils.getBasesAlignedOneToOne(read);  //calls getBasesNoCopy if CIGAR is all match
+                final byte[] readQualities = AlignmentUtils.getBaseQualsAlignedOneToOne(read);
 
                 // Need to check for closeness to the end of the read again as the array size may be different than read.Len() due to deletions in the cigar
                 if (readBases.length - readStart > maxIndelSize) {

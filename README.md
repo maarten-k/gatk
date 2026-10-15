@@ -457,13 +457,13 @@ We use [git-lfs](https://git-lfs.github.com/) to version and distribute test dat
 
 * Select "Use auto-import" and "Use default gradle wrapper".
 
-* Make sure the Gradle JVM points to Java 1.8 
+* Make sure the Gradle JVM points to Java 17
 
 * Click "Finish"
 
 * After downloading project dependencies, IntelliJ should open a new window with your GATK project
 
-* Make sure that the Java version is set correctly by going to File -> "Project Structure" -> "Project". Check that the "Project SDK" is set to your Java 1.8 JDK, and "Project language level" to 8 (you may need to add your Java 8 JDK under "Platform Settings" -> SDKs if it isn't there already). Then click "Apply"/"Ok".
+* Make sure that the Java version is set correctly by going to File -> "Project Structure" -> "Project". Check that the "Project SDK" is set to your Java 17 JDK, and "Project language level" to 17 (you may need to add your Java 17 JDK under "Platform Settings" -> SDKs if it isn't there already). Then click "Apply"/"Ok".
 
 #### <a name="debugging">Setting up debugging in IntelliJ</a>
 

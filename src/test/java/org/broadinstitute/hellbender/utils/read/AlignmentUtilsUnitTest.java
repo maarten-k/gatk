@@ -2,6 +2,7 @@ package org.broadinstitute.hellbender.utils.read;
 
 import htsjdk.samtools.*;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.broadinstitute.gatk.nativebindings.smithwaterman.SWOverhangStrategy;
 import org.broadinstitute.hellbender.utils.Utils;
 import org.broadinstitute.hellbender.utils.haplotype.Haplotype;
@@ -1480,6 +1481,31 @@ public final class AlignmentUtilsUnitTest {
             Assert.assertNull(actualBytes);
         else
             Assert.assertEquals(new String(actualBytes), expected);
+    }
+
+    @DataProvider
+    public Object[][] makeGetBasesAndBaseQualitiesAlignedOneToOneTest() {
+        final String readBases = "ATCGATCG";
+        return new Object[][]{
+                {readBases, "8M", "ATCGATCG", new byte[]{10, 10, 10, 10, 10, 10, 10, 10}},
+                {readBases, "4M4D4M", "ATCG----ATCG", new byte[]{10, 10, 10, 10, 0, 0, 0, 0, 10, 10, 10, 10}},
+                {readBases, "2M3I3M", "ATTCG", new byte[]{10, 10, 10, 10, 10}},
+                {readBases, "2I6M", "CGATCG", new byte[]{10, 10, 10, 10, 10, 10}},
+                {readBases, "6M2I", "ATCGAT", new byte[]{10, 10, 10, 10, 10, 10}},
+                {readBases, "1D8M1D", "-ATCGATCG-", new byte[]{0, 10, 10, 10, 10, 10, 10, 10, 10, 0}},
+                {readBases, "2M1I1D2M2I1M2D", "AT-GAG--", new byte[]{10, 10, 0, 10, 10, 10, 0, 0}}
+        };
+    }
+
+    @Test(dataProvider = "makeGetBasesAndBaseQualitiesAlignedOneToOneTest")
+    public void testGetBasesAndBaseQualitiesAlignedOneToOne(final String readBases, final String cigar, final String expectedBases, final byte[] expectedQualities) {
+        final byte[] qualities = Utils.dupBytes((byte)10, readBases.length());
+        final GATKRead read = ArtificialReadUtils.createArtificialRead(readBases.getBytes(), qualities, cigar);
+
+        final Pair<byte[], byte[]> alignedBasesAndQualities = AlignmentUtils.getBasesAndBaseQualitiesAlignedOneToOne(read);
+
+        Assert.assertEquals(new String(alignedBasesAndQualities.getLeft()), expectedBases);
+        Assert.assertEquals(alignedBasesAndQualities.getRight(), expectedQualities);
     }
 
     @DataProvider(name = "StartsOrEndsWithInsertionOrDeletionData")

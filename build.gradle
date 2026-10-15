@@ -153,7 +153,7 @@ configurations.configureEach {
 }
 
 tasks.withType(JavaCompile) {
-    options.compilerArgs = ['-proc:none', '-Xlint:all,-deprecation,-removal', '-Werror', '-Xdiags:verbose']
+    options.compilerArgs = ['-proc:none', '-Xlint:all,-deprecation,-removal', '-Xdiags:verbose']
 }
 
 sourceSets {

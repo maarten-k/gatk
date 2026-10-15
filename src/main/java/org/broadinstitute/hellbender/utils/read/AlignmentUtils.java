@@ -3,6 +3,8 @@ package org.broadinstitute.hellbender.utils.read;
 import htsjdk.samtools.Cigar;
 import htsjdk.samtools.CigarElement;
 import htsjdk.samtools.CigarOperator;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.broadinstitute.gatk.nativebindings.smithwaterman.SWOverhangStrategy;
 import org.broadinstitute.hellbender.exceptions.GATKException;
 import org.broadinstitute.hellbender.utils.BaseUtils;
@@ -206,6 +208,51 @@ public final class AlignmentUtils {
 
     public static byte[] getBaseQualsAlignedOneToOne(final GATKRead read) {
         return getSequenceAlignedOneToOne(read, r -> r.getBaseQualitiesNoCopy(), (byte)0);
+    }
+
+    public static Pair<byte[], byte[]> getBasesAndBaseQualitiesAlignedOneToOne(final GATKRead read) {
+        Utils.nonNull(read);
+        final byte[] bases = read.getBasesNoCopy();
+        final byte[] baseQualities = read.getBaseQualitiesNoCopy();
+        final int numCigarElements = read.numCigarElements();
+        boolean sawIndel = false;
+
+        for (int i = 0; i < numCigarElements; i++) {
+            final CigarOperator operator = read.getCigarElement(i).getOperator();
+            if (operator == CigarOperator.INSERTION || operator == CigarOperator.DELETION) {
+                sawIndel = true;
+                break;
+            }
+        }
+        if (!sawIndel) {
+            return new ImmutablePair<>(bases, baseQualities);
+        }
+
+        final int alignedLength = CigarUtils.countRefBasesIncludingSoftClips(read, 0, numCigarElements);
+        final byte[] alignedBases = new byte[alignedLength];
+        final byte[] alignedQualities = new byte[alignedLength];
+        int readPosition = 0;
+        int alignedPosition = 0;
+        for (int i = 0; i < numCigarElements; i++) {
+            final CigarElement element = read.getCigarElement(i);
+            final CigarOperator operator = element.getOperator();
+            if (operator.consumesReadBases()) {
+                if (!operator.consumesReferenceBases()) {
+                    readPosition += element.getLength();
+                } else {
+                    System.arraycopy(bases, readPosition, alignedBases, alignedPosition, element.getLength());
+                    System.arraycopy(baseQualities, readPosition, alignedQualities, alignedPosition, element.getLength());
+                    readPosition += element.getLength();
+                    alignedPosition += element.getLength();
+                }
+            } else if (operator.consumesReferenceBases()) {
+                for (int j = 0; j < element.getLength(); j++) {
+                    alignedBases[alignedPosition] = GAP_CHARACTER;
+                    alignedPosition++;
+                }
+            }
+        }
+        return new ImmutablePair<>(alignedBases, alignedQualities);
     }
 
     public static byte[] getSequenceAlignedOneToOne(final GATKRead read, final Function<GATKRead, byte[]> bytesProvider, final byte padWith) {

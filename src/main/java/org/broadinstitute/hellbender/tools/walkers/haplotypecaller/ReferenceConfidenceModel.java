@@ -266,7 +266,7 @@ public final class ReferenceConfidenceModel {
             final Locatable curPos = pileup.getLocation();
             final int offset = curPos.getStart() - refSpan.getStart();
 
-            final VariantContext overlappingSite = GATKVariantContextUtils.getOverlappingVariantContext(curPos, variantCalls);
+            final VariantContext overlappingSite = getOverlappingVariantContext(curPos, variantCalls);
             final List<VariantContext> currentPriors = VCpriors.isEmpty() ? Collections.emptyList() : getMatchingPriors(curPos, overlappingSite, VCpriors);
             if (overlappingSite != null && overlappingSite.getStart() == curPos.getStart()) {
                 if (applyPriors) {

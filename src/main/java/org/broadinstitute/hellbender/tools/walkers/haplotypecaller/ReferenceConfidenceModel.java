@@ -9,6 +9,7 @@ import htsjdk.samtools.util.Locatable;
 import htsjdk.variant.variantcontext.*;
 import htsjdk.variant.vcf.VCFHeaderLine;
 import htsjdk.variant.vcf.VCFSimpleHeaderLine;
+import org.apache.commons.lang3.tuple.Pair;
 import org.broadinstitute.hellbender.engine.AlignmentContext;
 import org.broadinstitute.hellbender.engine.AssemblyRegion;
 import org.broadinstitute.hellbender.tools.walkers.genotyper.PloidyModel;
@@ -600,9 +601,9 @@ public final class ReferenceConfidenceModel {
         // We are safe to use the faster no-copy versions of getBases and getBaseQualities here,
         // since we're not modifying the returned arrays in any way. This makes a small difference
         // in the HaplotypeCaller profile, since this method is a major hotspot.
-        final byte[] readBases = AlignmentUtils.getBasesAlignedOneToOne(read);  //calls getBasesNoCopy if CIGAR is all match
-        final byte[] readQuals = AlignmentUtils.getBaseQualsAlignedOneToOne(read);
-
+        final Pair<byte[], byte[]> readBasesAndBaseQualities = AlignmentUtils.getBasesAndBaseQualitiesAlignedOneToOne(read);  //calls getBasesNoCopy if CIGAR is all match
+        final byte[] readBases = readBasesAndBaseQualities.getLeft();
+        final byte[] readQuals = readBasesAndBaseQualities.getRight();
 
         final int baselineMMSum = sumMismatchingQualities(readBases, readQuals, readStart, refBases, refStart, Integer.MAX_VALUE);
 
@@ -664,7 +665,7 @@ public final class ReferenceConfidenceModel {
         final GATKRead read = p.getRead();
         int offset = (p.getCurrentCigarElement().getOperator().consumesReferenceBases() || p.getCurrentCigarElement().getOperator() == CigarOperator.S)? p.getOffsetInCurrentCigar() : 0;
         for (int i = 0; i < p.getCurrentCigarOffset(); i++ ) {
-            CigarElement elem = read.getCigarElement(i);
+            final CigarElement elem = read.getCigarElement(i);
             if (elem.getOperator().consumesReferenceBases() || elem.getOperator() == CigarOperator.S) {
                 offset += elem.getLength();
             }

@@ -5,6 +5,7 @@ import org.broadinstitute.hellbender.utils.QualityUtils;
 import org.broadinstitute.hellbender.utils.collections.NestedIntegerArray;
 import org.broadinstitute.hellbender.utils.report.GATKReportTable;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,6 +15,7 @@ import java.util.List;
  * Class that encapsulates the information necessary for quality score quantization for BQSR
  */
 public final class QuantizationInfo implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
     private List<Byte> quantizedQuals;
     private final List<Long> empiricalQualCounts;

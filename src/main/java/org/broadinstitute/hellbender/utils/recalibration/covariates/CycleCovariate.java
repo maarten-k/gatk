@@ -5,11 +5,14 @@ import org.broadinstitute.hellbender.exceptions.UserException;
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 import org.broadinstitute.hellbender.utils.recalibration.RecalibrationArgumentCollection;
 
+import java.io.Serial;
+
 /**
  * The Cycle covariate.
  * For ILLUMINA the cycle is simply the position in the read (counting backwards if it is a negative strand read)
  */
 public final class CycleCovariate implements Covariate {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final int MAXIMUM_CYCLE_VALUE;
@@ -45,7 +48,7 @@ public final class CycleCovariate implements Covariate {
 
     @Override
     public int keyFromValue(final Object value) {
-        return (value instanceof String) ? keyFromCycle(Integer.parseInt((String) value), MAXIMUM_CYCLE_VALUE) : keyFromCycle((Integer) value, MAXIMUM_CYCLE_VALUE);
+        return (value instanceof String s) ? keyFromCycle(Integer.parseInt(s), MAXIMUM_CYCLE_VALUE) : keyFromCycle((Integer) value, MAXIMUM_CYCLE_VALUE);
     }
 
     @Override

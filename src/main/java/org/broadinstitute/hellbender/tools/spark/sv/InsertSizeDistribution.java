@@ -4,6 +4,7 @@ import org.apache.commons.math3.distribution.AbstractIntegerDistribution;
 import org.apache.commons.math3.distribution.IntegerDistribution;
 import org.broadinstitute.hellbender.exceptions.UserException;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,6 +14,7 @@ import java.util.regex.Pattern;
  */
 public class InsertSizeDistribution implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private static Pattern DESCRIPTION_PATTERN =

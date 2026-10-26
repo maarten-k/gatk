@@ -6,6 +6,7 @@ import org.broadinstitute.hellbender.cmdline.ReadFilterArgumentDefinitions;
 import org.broadinstitute.hellbender.utils.help.HelpConstants;
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -17,6 +18,7 @@ import java.io.Serializable;
  */
 @DocumentedFeature(groupName= HelpConstants.DOC_CAT_READFILTERS, groupSummary=HelpConstants.DOC_CAT_READFILTERS_SUMMARY, summary = "Keep only read pairs with insert length less than or equal to the given value")
 public final class FragmentLengthReadFilter extends ReadFilter implements Serializable  {
+    @Serial
     private static final long serialVersionUID = 1l;
 
     @Argument(fullName = ReadFilterArgumentDefinitions.MAX_FRAGMENT_LENGTH_NAME,

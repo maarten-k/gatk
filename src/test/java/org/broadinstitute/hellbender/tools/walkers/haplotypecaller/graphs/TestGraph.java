@@ -4,6 +4,7 @@ import org.broadinstitute.hellbender.tools.walkers.haplotypecaller.readthreading
 import org.broadinstitute.hellbender.utils.Utils;
 import org.jgrapht.EdgeFactory;
 
+import java.io.Serial;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import java.util.Map;
  * A Test kmer graph
  */
 public final class TestGraph extends BaseGraph<MultiDeBruijnVertex, BaseEdge> {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Override

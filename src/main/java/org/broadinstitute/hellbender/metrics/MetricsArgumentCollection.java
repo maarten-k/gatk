@@ -3,6 +3,7 @@ package org.broadinstitute.hellbender.metrics;
 import org.broadinstitute.barclay.argparser.Argument;
 import org.broadinstitute.hellbender.cmdline.StandardArgumentDefinitions;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -10,6 +11,7 @@ import java.io.Serializable;
  * instantiable as command line arguments.
  */
 public class MetricsArgumentCollection implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Argument(

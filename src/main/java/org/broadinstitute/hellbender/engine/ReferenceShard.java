@@ -3,6 +3,7 @@ package org.broadinstitute.hellbender.engine;
 import htsjdk.samtools.util.Locatable;
 import org.broadinstitute.hellbender.utils.Utils;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -11,6 +12,7 @@ import java.io.Serializable;
  * This class is designed to be a simple data-storage class with related static utilities.
  */
 public final class ReferenceShard implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final int shardNumber; // shardNumber is zero-based.

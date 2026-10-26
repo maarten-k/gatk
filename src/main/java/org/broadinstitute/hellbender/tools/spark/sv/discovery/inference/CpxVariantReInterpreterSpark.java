@@ -24,6 +24,7 @@ import org.broadinstitute.hellbender.tools.spark.sv.discovery.SvDiscoveryInputMe
 import org.broadinstitute.hellbender.tools.spark.sv.utils.SVVCFWriter;
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 
+import java.io.Serial;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -43,6 +44,7 @@ import java.util.Set;
                 " and outputs two VCF files containing bare bone information on the simple variants.",
         programGroup = StructuralVariantDiscoveryProgramGroup.class)
 public class CpxVariantReInterpreterSpark extends GATKSparkTool {
+    @Serial
     private static final long serialVersionUID = 1L;
     private final Logger localLogger = LogManager.getLogger(CpxVariantReInterpreterSpark.class);
 

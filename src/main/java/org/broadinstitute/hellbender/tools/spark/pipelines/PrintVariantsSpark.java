@@ -14,6 +14,7 @@ import org.broadinstitute.hellbender.engine.spark.datasources.VariantsSparkSink;
 import org.broadinstitute.hellbender.exceptions.UserException;
 
 import java.io.IOException;
+import java.io.Serial;
 
 /**
  * Print out variants from a VCF file.
@@ -46,6 +47,7 @@ import java.io.IOException;
 @BetaFeature
 public final class PrintVariantsSpark extends VariantWalkerSpark {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Argument(doc = "Uri for the output file (a local file path).",

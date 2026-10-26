@@ -6,6 +6,8 @@ import org.broadinstitute.hellbender.cmdline.ReadFilterArgumentDefinitions;
 import org.broadinstitute.hellbender.utils.help.HelpConstants;
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 
+import java.io.Serial;
+
 /**
  * Keep only reads whose strand is either forward (not 0x10) or reverse (0x10), as specified.
  *
@@ -13,6 +15,7 @@ import org.broadinstitute.hellbender.utils.read.GATKRead;
  */
 @DocumentedFeature(groupName= HelpConstants.DOC_CAT_READFILTERS, groupSummary=HelpConstants.DOC_CAT_READFILTERS_SUMMARY, summary = "Keep only reads whose strand is as specified")
 public final class ReadStrandFilter extends ReadFilter {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Argument(fullName = ReadFilterArgumentDefinitions.KEEP_REVERSE_STRAND_ONLY_NAME,

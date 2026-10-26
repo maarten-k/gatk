@@ -401,8 +401,7 @@ public final class ProteinChangeInfo {
 
     @Override
     public boolean equals(final Object that){
-        if ( that instanceof ProteinChangeInfo ) {
-            final ProteinChangeInfo thatPCI = (ProteinChangeInfo)that;
+        if ( that instanceof ProteinChangeInfo thatPCI ) {
             return  (aaStartPos == thatPCI.aaStartPos) &&
                     (aaEndPos    == thatPCI.aaEndPos) &&
                     (refAaSeq.equals(thatPCI.refAaSeq)) &&

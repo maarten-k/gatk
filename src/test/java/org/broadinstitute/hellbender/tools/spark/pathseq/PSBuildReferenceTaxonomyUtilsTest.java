@@ -51,8 +51,10 @@ public final class PSBuildReferenceTaxonomyUtilsTest extends GATKBaseTest {
     @Test(expectedExceptions = Exception.class)
     public void testParseCatalog() {
 
-        final String input =    "2\tx\tacc_A\tx\tx\tx\tx\n"
-                            +   "3\tx\tacc_B\tx\tx\tx\tx\n";
+        final String input =    """
+                            2\tx\tacc_A\tx\tx\tx\tx
+                            3\tx\tacc_B\tx\tx\tx\tx
+                            """;
         final BufferedReader reader = new BufferedReader(new StringReader(input));
 
         final Map<String, Tuple2<String, Long>> accessionToNameAndLength = new HashMap<>();
@@ -93,10 +95,12 @@ public final class PSBuildReferenceTaxonomyUtilsTest extends GATKBaseTest {
     @Test(expectedExceptions = Exception.class)
     public void testParseNamesFile() {
 
-        final String input = "1\t|\tname A\t|\t-\t|\taccording to xyz\t|\n"
-                + "1\t|\tname A\t|\t-\t|\tscientific name\t|\n"
-                + "2\t|\tname B\t|\t-\t|\tscientific name\t|\n"
-                + "3\t|\tname C\t|\t-\t|\tscientific name\t|\n";
+        final String input = """
+                1\t|\tname A\t|\t-\t|\taccording to xyz\t|
+                1\t|\tname A\t|\t-\t|\tscientific name\t|
+                2\t|\tname B\t|\t-\t|\tscientific name\t|
+                3\t|\tname C\t|\t-\t|\tscientific name\t|
+                """;
         final BufferedReader reader = new BufferedReader(new StringReader(input));
 
         final Map<Integer, PSPathogenReferenceTaxonProperties> taxIdToProperties = new HashMap<>();
@@ -120,10 +124,12 @@ public final class PSBuildReferenceTaxonomyUtilsTest extends GATKBaseTest {
     @Test(expectedExceptions = Exception.class)
     public void testParseNodesFile() {
 
-        final String input = "1\t|\t0\t|\troot\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\n"
-                + "2\t|\t1\t|\tkingdom\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\n"
-                + "3\t|\t1\t|\tkingdom\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\n"
-                + "4\t|\t1\t|\tkingdom\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\n";
+        final String input = """
+                1\t|\t0\t|\troot\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|
+                2\t|\t1\t|\tkingdom\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|
+                3\t|\t1\t|\tkingdom\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|
+                4\t|\t1\t|\tkingdom\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|\t-\t|
+                """;
         final BufferedReader reader = new BufferedReader(new StringReader(input));
 
         final Map<Integer, PSPathogenReferenceTaxonProperties> taxIdToProperties = new HashMap<>();

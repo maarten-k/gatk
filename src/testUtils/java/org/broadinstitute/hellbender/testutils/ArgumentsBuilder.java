@@ -21,8 +21,8 @@ public final class ArgumentsBuilder {
 
     public ArgumentsBuilder(Object[] args){
         for (Object arg: args){
-            if (arg instanceof String){
-                this.add((String) arg);
+            if (arg instanceof String string){
+                this.add(string);
             } else {
                 this.add(arg);
             }

@@ -5,6 +5,7 @@ import org.broadinstitute.barclay.argparser.Argument;
 import org.broadinstitute.hellbender.cmdline.StandardArgumentDefinitions;
 import org.broadinstitute.hellbender.utils.Utils;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * An ArgumentCollection that requires one or more intervals be specified with -L at the command line
  */
 public final class RequiredIntervalArgumentCollection extends IntervalArgumentCollection {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     // Interval list files such as Picard interval lists are structured and require specialized parsing that

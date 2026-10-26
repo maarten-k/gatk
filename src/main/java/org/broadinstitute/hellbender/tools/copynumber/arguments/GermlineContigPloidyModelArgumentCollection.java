@@ -4,6 +4,7 @@ import org.broadinstitute.barclay.argparser.Argument;
 import org.broadinstitute.hellbender.tools.copynumber.DetermineGermlineContigPloidy;
 import org.broadinstitute.hellbender.utils.param.ParamUtils;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,6 +14,7 @@ import java.util.List;
  * @author Mehrtash Babadi &lt;mehrtash@broadinstitute.org&gt;
  */
 public final class GermlineContigPloidyModelArgumentCollection implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public static final String MEAN_BIAS_STANDARD_DEVIATION_LONG_NAME = "mean-bias-standard-deviation";

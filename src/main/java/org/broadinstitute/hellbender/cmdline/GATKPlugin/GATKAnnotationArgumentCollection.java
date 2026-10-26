@@ -1,5 +1,6 @@
 package org.broadinstitute.hellbender.cmdline.GATKPlugin;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import java.util.List;
  * @see org.broadinstitute.hellbender.cmdline.GATKPlugin.GATKAnnotationPluginDescriptor
  */
 public abstract class GATKAnnotationArgumentCollection implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

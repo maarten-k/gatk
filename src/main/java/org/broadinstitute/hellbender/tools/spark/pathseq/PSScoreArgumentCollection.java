@@ -3,9 +3,11 @@ package org.broadinstitute.hellbender.tools.spark.pathseq;
 import org.broadinstitute.barclay.argparser.Advanced;
 import org.broadinstitute.barclay.argparser.Argument;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 public final class PSScoreArgumentCollection implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public static final String SCORES_OUTPUT_LONG_NAME = "scores-output";

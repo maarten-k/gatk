@@ -7,6 +7,8 @@ import htsjdk.samtools.CigarOperator;
 import org.broadinstitute.hellbender.utils.Utils;
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 
+import java.io.Serial;
+
 /**
  * A read transformer that refactors NDN cigar elements to one N element.
  *
@@ -20,6 +22,7 @@ import org.broadinstitute.hellbender.utils.read.GATKRead;
  */
 
 public final class NDNCigarReadTransformer implements ReadTransformer {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Override

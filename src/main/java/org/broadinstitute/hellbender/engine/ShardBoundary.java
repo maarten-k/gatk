@@ -4,6 +4,7 @@ import htsjdk.samtools.util.Locatable;
 import org.broadinstitute.hellbender.utils.SimpleInterval;
 import org.broadinstitute.hellbender.utils.Utils;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -11,6 +12,7 @@ import java.util.Objects;
  * Holds the bounds of a {@link Shard}, both with and without padding
  */
 public class ShardBoundary implements Locatable, Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     protected final SimpleInterval interval;

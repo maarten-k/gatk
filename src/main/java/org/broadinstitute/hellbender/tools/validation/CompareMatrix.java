@@ -13,6 +13,7 @@ import java.io.*;
  * score of j, (stored in mat[i][j]).
  */
 public final class CompareMatrix implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public static final int dimension = QualityUtils.MAX_SAM_QUAL_SCORE+1;

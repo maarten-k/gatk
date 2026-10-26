@@ -14,6 +14,7 @@ import org.broadinstitute.hellbender.utils.param.ParamUtils;
 import org.broadinstitute.hellbender.utils.reference.ReferenceBases;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -24,6 +25,7 @@ import java.util.List;
  */
 public final class SVContext extends VariantContext {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
@@ -58,8 +60,8 @@ public final class SVContext extends VariantContext {
      * @return never {@code null}, potentially the same as the input if it happens to be an instance of this class.
      */
     public static SVContext of(final VariantContext vc) {
-        if (vc instanceof SVContext) {
-            return (SVContext) vc;
+        if (vc instanceof SVContext context) {
+            return context;
         }
         assertIsStructuralVariantContext(vc);
         return new SVContext(vc);

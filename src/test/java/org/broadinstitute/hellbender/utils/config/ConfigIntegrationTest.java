@@ -14,7 +14,6 @@ import org.testng.annotations.Test;
 
 import java.io.*;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -102,7 +101,7 @@ public class ConfigIntegrationTest extends CommandLineProgramTest {
                 { getSafeNonExistentPath("nonExistentConfig.config") },
 
                 // Config file with overrides:
-                { Paths.get(publicTestDir + "org/broadinstitute/hellbender/utils/config/" + "TestGATKConfigOverrides.properties") },
+                { Path.of(publicTestDir + "org/broadinstitute/hellbender/utils/config/" + "TestGATKConfigOverrides.properties") },
         };
     }
 

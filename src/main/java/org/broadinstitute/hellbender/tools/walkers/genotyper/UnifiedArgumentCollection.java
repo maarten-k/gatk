@@ -7,7 +7,10 @@ import org.broadinstitute.barclay.argparser.Hidden;
 import org.broadinstitute.hellbender.engine.FeatureInput;
 import org.broadinstitute.hellbender.utils.pairhmm.PairHMM;
 
+import java.io.Serial;
+
 public final class UnifiedArgumentCollection extends StandardCallerArgumentCollection {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Argument(fullName = "genotype_likelihoods_model", shortName = "glm", doc = "Genotype likelihoods calculation model to employ -- SNP is the default option, while INDEL is also available for calling indels and BOTH is available for calling both together", optional = true)

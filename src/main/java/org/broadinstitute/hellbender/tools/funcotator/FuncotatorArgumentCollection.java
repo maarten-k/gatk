@@ -6,6 +6,7 @@ import org.broadinstitute.barclay.argparser.Hidden;
 import org.broadinstitute.hellbender.cmdline.StandardArgumentDefinitions;
 
 import java.io.File;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,6 +19,7 @@ import java.util.Set;
  * Created by jonn on 9/12/18.
  */
 public class FuncotatorArgumentCollection implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     //-----------------------------------------------------

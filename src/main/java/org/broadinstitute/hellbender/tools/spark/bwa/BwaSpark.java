@@ -19,6 +19,7 @@ import org.broadinstitute.hellbender.utils.read.GATKRead;
 import org.broadinstitute.hellbender.utils.read.ReadsWriteFormat;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,6 +30,7 @@ import java.util.List;
 @BetaFeature
 public final class BwaSpark extends GATKSparkTool {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Argument(doc = "the output bam",

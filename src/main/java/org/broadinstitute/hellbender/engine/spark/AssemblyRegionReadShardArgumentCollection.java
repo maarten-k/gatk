@@ -2,9 +2,11 @@ package org.broadinstitute.hellbender.engine.spark;
 
 import org.broadinstitute.barclay.argparser.Argument;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 public class AssemblyRegionReadShardArgumentCollection implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public static final int DEFAULT_READSHARD_SIZE = 5000;

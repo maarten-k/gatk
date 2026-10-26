@@ -3,6 +3,8 @@ package org.broadinstitute.hellbender.utils.recalibration.covariates;
 import htsjdk.samtools.SAMFileHeader;
 import org.broadinstitute.hellbender.utils.recalibration.RecalibrationArgumentCollection;
 import org.broadinstitute.hellbender.utils.QualityUtils;
+
+import java.io.Serial;
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 import org.broadinstitute.hellbender.utils.read.ReadUtils;
 
@@ -10,6 +12,7 @@ import org.broadinstitute.hellbender.utils.read.ReadUtils;
  * The Reported Quality Score covariate.
  */
 public final class QualityScoreCovariate implements Covariate {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public QualityScoreCovariate(final RecalibrationArgumentCollection RAC){
@@ -41,10 +44,10 @@ public final class QualityScoreCovariate implements Covariate {
 
     @Override
     public int keyFromValue(final Object value) {
-        if ( value instanceof String ){
-            return Byte.parseByte((String) value);
-        } else if ( value instanceof Long ) {
-            return ((Long) value).intValue();
+        if ( value instanceof String string ){
+            return Byte.parseByte(string);
+        } else if ( value instanceof Long long1 ) {
+            return long1.intValue();
         } else {
             return (int)(Byte) value;
         }

@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import org.broadinstitute.hellbender.utils.reference.ReferenceBases;
 import org.broadinstitute.hellbender.utils.variant.GATKVariant;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
  * ReferenceBases and Variants, either of which can be null. This is intended to be a simple data storage class.
  */
 public class ReadContextData implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final ReferenceBases referenceBases;

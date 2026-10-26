@@ -16,6 +16,7 @@ import org.broadinstitute.hellbender.utils.recalibration.covariates.ReadCovariat
 import org.broadinstitute.hellbender.utils.recalibration.covariates.StandardCovariateList;
 
 import java.io.File;
+import java.io.Serial;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -25,6 +26,7 @@ import static org.broadinstitute.hellbender.utils.QualityUtils.boundQual;
 import static org.broadinstitute.hellbender.utils.recalibration.RecalDatum.MAX_RECALIBRATED_Q_SCORE;
 
 public final class BQSRReadTransformer implements ReadTransformer {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final QuantizationInfo quantizationInfo; // histogram containing the map for qual quantization (calculated after recalibration is done)

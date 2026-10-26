@@ -10,6 +10,7 @@ import org.broadinstitute.hellbender.engine.filters.ReadFilter;
 import org.broadinstitute.hellbender.tools.spark.pipelines.metrics.MetricsCollectorSparkTool;
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 
+import java.io.Serial;
 import java.util.List;
 
 /**
@@ -36,6 +37,7 @@ import java.util.List;
 public final class ExampleCollectSingleMetricsSpark
         extends MetricsCollectorSparkTool<ExampleSingleMetricsArgumentCollection> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

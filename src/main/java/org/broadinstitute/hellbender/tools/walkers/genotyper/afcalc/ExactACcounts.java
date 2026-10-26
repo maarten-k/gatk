@@ -27,7 +27,7 @@ public final class ExactACcounts {
 
     @Override
     public boolean equals(final Object obj) {
-        return (obj instanceof ExactACcounts) && Arrays.equals(counts, ((ExactACcounts) obj).counts);
+        return (obj instanceof ExactACcounts eac) && Arrays.equals(counts, eac.counts);
     }
 
     @Override

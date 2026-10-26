@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -202,7 +201,7 @@ abstract class ExternalCommandlineProgramModule {
                                    final File workingDir,
                                    final boolean enableSTDIOCapture) {
         // intake program path
-        final Path sgaPath = Paths.get(sgaPathString);
+        final Path sgaPath = Path.of(sgaPathString);
         // instantiate the desired module, and provide appropriate parameters
         final SGAModule module = new SGAModule(moduleName);
         final List<String> moduleArgs = new ArrayList<>();

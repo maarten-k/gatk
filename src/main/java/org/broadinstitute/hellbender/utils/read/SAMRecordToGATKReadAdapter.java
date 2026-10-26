@@ -5,6 +5,7 @@ import htsjdk.samtools.util.Locatable;
 import org.broadinstitute.hellbender.exceptions.GATKException;
 import org.broadinstitute.hellbender.utils.Utils;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.Arrays;
@@ -20,6 +21,7 @@ import java.util.Objects;
  * wrapping.
  */
 public class SAMRecordToGATKReadAdapter implements GATKRead, Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
@@ -610,8 +612,8 @@ public class SAMRecordToGATKReadAdapter implements GATKRead, Serializable {
         if ( attributeValue == null ) {
             return null;
         }
-        else if ( attributeValue instanceof Integer ) {
-            return (Integer)attributeValue;
+        else if ( attributeValue instanceof Integer integer ) {
+            return integer;
         }
         else {
             try {
@@ -627,10 +629,9 @@ public class SAMRecordToGATKReadAdapter implements GATKRead, Serializable {
     public String getAttributeAsString( final String attributeName ) {
         ReadUtils.assertAttributeNameIsLegal(attributeName);
         final Object attributeValue = samRecord.getAttribute(attributeName);
-        if ( attributeValue instanceof byte[]) {
+        if ( attributeValue instanceof byte[] val) {
             // in case that the attribute is a byte[] array, the toString method will format it as name@hashCode
             // for a good representation of the byte[] as String, it encodes the bytes with the default charset (UTF-8)
-            final byte[] val = (byte[]) attributeValue;
             return (val.length == 0) ? "" : new String(val, DEFAULT_CHARSET);
         }
         // otherwise, just use the toString() method unless it is null
@@ -645,14 +646,13 @@ public class SAMRecordToGATKReadAdapter implements GATKRead, Serializable {
         if ( attributeValue == null ) {
             return null;
         }
-        else if ( attributeValue instanceof byte[] ) {
+        else if ( attributeValue instanceof byte[] ret ) {
             // In the case where the attribute value is already a byte[], make a defensive
             // copy before returning to guard against modification of the return value.
-            final byte[] ret = (byte[])attributeValue;
             return Arrays.copyOf(ret, ret.length);
         }
-        else if ( attributeValue instanceof String ) {
-            return ((String)attributeValue).getBytes(DEFAULT_CHARSET);
+        else if ( attributeValue instanceof String string ) {
+            return string.getBytes(DEFAULT_CHARSET);
         }
         else {
             throw new GATKException.ReadAttributeTypeMismatch(attributeName, "byte array");

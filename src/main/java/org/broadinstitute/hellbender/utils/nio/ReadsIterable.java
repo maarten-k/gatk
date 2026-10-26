@@ -15,6 +15,7 @@ import org.broadinstitute.hellbender.utils.gcs.BucketUtils;
 import org.broadinstitute.hellbender.utils.io.IOUtils;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -28,6 +29,7 @@ import java.util.NoSuchElementException;
  */
 public class ReadsIterable implements Iterable<SAMRecord>, Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
     private final String path;
     private final byte[] index;

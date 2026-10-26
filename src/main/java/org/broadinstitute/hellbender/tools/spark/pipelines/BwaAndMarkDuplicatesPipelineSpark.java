@@ -23,6 +23,7 @@ import org.broadinstitute.hellbender.utils.read.ReadsWriteFormat;
 import picard.sam.markduplicates.util.OpticalDuplicateFinder;
 
 import java.io.IOException;
+import java.io.Serial;
 
 /**
  * Runs BWA and MarkDuplicates on Spark. It's an example of how to compose those two tools.
@@ -37,6 +38,7 @@ import java.io.IOException;
 @BetaFeature
 public final class BwaAndMarkDuplicatesPipelineSpark extends GATKSparkTool {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Override

@@ -13,6 +13,7 @@ import org.broadinstitute.hellbender.utils.read.GATKRead;
 import org.broadinstitute.hellbender.utils.reference.ReferenceBases;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -21,6 +22,7 @@ import java.io.Serializable;
  * This class needs to subclassed by test code, so it cannot be declared final.
  */
 public class ReferenceMultiSparkSource implements ReferenceSparkSource, Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private ReferenceSparkSource referenceSource;

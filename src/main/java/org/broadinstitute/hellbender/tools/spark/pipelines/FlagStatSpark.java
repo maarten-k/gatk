@@ -14,6 +14,7 @@ import org.broadinstitute.hellbender.utils.gcs.BucketUtils;
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 
 import java.io.PrintStream;
+import java.io.Serial;
 
 /**
  * Spark tool to accumulate flag statistics given a BAM file, e.g. total number of reads with QC failure flag set, number of
@@ -53,6 +54,7 @@ import java.io.PrintStream;
 )
 public final class FlagStatSpark extends GATKSparkTool {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Override

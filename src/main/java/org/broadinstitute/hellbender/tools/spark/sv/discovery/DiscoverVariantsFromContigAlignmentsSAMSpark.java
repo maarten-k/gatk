@@ -25,8 +25,9 @@ import org.broadinstitute.hellbender.tools.spark.sv.utils.SVIntervalTree;
 import org.broadinstitute.hellbender.tools.spark.sv.utils.SVUtils;
 import org.broadinstitute.hellbender.tools.spark.sv.utils.SVVCFWriter;
 
+import java.io.Serial;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 
@@ -77,18 +78,20 @@ import static org.broadinstitute.hellbender.tools.spark.sv.StructuralVariationDi
 @CommandLineProgramProperties(
         oneLineSummary = "(Internal) Examines aligned contigs from local assemblies and calls structural variants",
         summary =
-        "This tool is used in development and should not be of interest to most researchers.  It packages structural" +
-        " variant calling as a separate tool, independent of the generation of local assemblies." +
-        " Most researchers will run StructuralVariationDiscoveryPipelineSpark, which both generates local assemblies" +
-        " of interesting genomic regions, and then calls structural variants from these assemblies." +
-        " This tool takes a SAM/BAM/CRAM containing the alignments of assembled contigs from local assemblies" +
-        " and searches it for split alignments indicating the presence of structural variations. To do so the tool parses" +
-        " primary and supplementary alignments; secondary alignments are ignored. To be considered valid evidence of an SV," +
-        " two alignments from the same contig must have mapping quality 60, and both alignments must have length greater than" +
-        " or equal to min-alignment-length. Imprecise variants with approximate locations are also called.\n" +
-        " The input file is typically the output file produced by FindBreakpointEvidenceSpark.",
+        """
+        This tool is used in development and should not be of interest to most researchers.  It packages structural\
+         variant calling as a separate tool, independent of the generation of local assemblies.\
+         Most researchers will run StructuralVariationDiscoveryPipelineSpark, which both generates local assemblies\
+         of interesting genomic regions, and then calls structural variants from these assemblies.\
+         This tool takes a SAM/BAM/CRAM containing the alignments of assembled contigs from local assemblies\
+         and searches it for split alignments indicating the presence of structural variations. To do so the tool parses\
+         primary and supplementary alignments; secondary alignments are ignored. To be considered valid evidence of an SV,\
+         two alignments from the same contig must have mapping quality 60, and both alignments must have length greater than\
+         or equal to min-alignment-length. Imprecise variants with approximate locations are also called.
+         The input file is typically the output file produced by FindBreakpointEvidenceSpark.""",
         programGroup = StructuralVariantDiscoveryProgramGroup.class)
 public final class DiscoverVariantsFromContigAlignmentsSAMSpark extends GATKSparkTool {
+    @Serial
     private static final long serialVersionUID = 1L;
     private final Logger localLogger = LogManager.getLogger(DiscoverVariantsFromContigAlignmentsSAMSpark.class);
 
@@ -155,8 +158,8 @@ public final class DiscoverVariantsFromContigAlignmentsSAMSpark extends GATKSpar
     }
 
     private String getVcfOutputPath() {
-        if ( Files.exists(Paths.get(prefixForOutput)) ) {
-            if ( Files.isDirectory(Paths.get(prefixForOutput)) ) // existing directory
+        if ( Files.exists(Path.of(prefixForOutput)) ) {
+            if ( Files.isDirectory(Path.of(prefixForOutput)) ) // existing directory
                 return prefixForOutput + (prefixForOutput.endsWith("/") ? "" : "/") + SVUtils.getSampleId(getHeaderForReads()) + "_inv_del_ins.vcf";
             else
                 throw new UserException("Provided prefix for output is pointing to an existing file: " + prefixForOutput); // to avoid accidental override of a file

@@ -6,6 +6,7 @@ import org.broadinstitute.hellbender.cmdline.ReadFilterArgumentDefinitions;
 import org.broadinstitute.hellbender.utils.help.HelpConstants;
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -13,6 +14,7 @@ import java.io.Serializable;
  */
 @DocumentedFeature(groupName= HelpConstants.DOC_CAT_READFILTERS, groupSummary=HelpConstants.DOC_CAT_READFILTERS_SUMMARY, summary = "Keep only reads whose length is within a certain range")
 public final class ReadLengthReadFilter extends ReadFilter implements Serializable{
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Argument(fullName = ReadFilterArgumentDefinitions.MAX_READ_LENGTH_ARG_NAME,

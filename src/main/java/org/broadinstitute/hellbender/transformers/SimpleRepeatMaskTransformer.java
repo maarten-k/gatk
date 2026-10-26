@@ -6,10 +6,13 @@ import org.broadinstitute.hellbender.utils.clipping.ClippingRepresentation;
 import org.broadinstitute.hellbender.utils.clipping.ReadClipper;
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 
+import java.io.Serial;
+
 /**
  * Masks read bases with a supra-threshold number of A/T's or G/C's within a given window size.
  */
 public final class SimpleRepeatMaskTransformer implements ReadTransformer {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final int windowSize;

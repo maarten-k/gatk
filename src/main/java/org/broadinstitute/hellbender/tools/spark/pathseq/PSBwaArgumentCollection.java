@@ -2,9 +2,11 @@ package org.broadinstitute.hellbender.tools.spark.pathseq;
 
 import org.broadinstitute.barclay.argparser.Argument;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 public final class PSBwaArgumentCollection implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public static final String MICROBE_BWA_IMAGE_LONG_NAME = "microbe-bwa-image";

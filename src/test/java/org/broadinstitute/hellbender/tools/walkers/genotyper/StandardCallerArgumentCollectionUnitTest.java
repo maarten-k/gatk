@@ -28,7 +28,7 @@ public final class StandardCallerArgumentCollectionUnitTest extends GATKBaseTest
     @Test(dataProvider="collectionClasses")
     public void testParameterLessInitialization(final Class<? extends StandardCallerArgumentCollection> clazz) {
            try {
-               clazz.newInstance();
+               clazz.getDeclaredConstructor().newInstance();
            } catch (final Exception ex) {
                Assert.fail();
            }

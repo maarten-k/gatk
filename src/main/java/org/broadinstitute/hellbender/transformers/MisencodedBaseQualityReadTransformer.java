@@ -3,12 +3,15 @@ package org.broadinstitute.hellbender.transformers;
 import org.broadinstitute.hellbender.exceptions.UserException;
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 
+import java.io.Serial;
+
 /**
  * Checks for and errors out (or fixes if requested) when it detects reads with base qualities that are not encoded with
  * phred-scaled quality scores.  Q0 == ASCII 33 according to the SAM specification, whereas Illumina encoding starts at
  * Q64.  The idea here is simple: if we are asked to fix the scores then we just subtract 31 from every quality score.
  */
 public final class MisencodedBaseQualityReadTransformer implements ReadTransformer {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private static final int ILLUMINA_ENCODING_FIX_VALUE = 31;  // Illumina_64 - PHRED_33

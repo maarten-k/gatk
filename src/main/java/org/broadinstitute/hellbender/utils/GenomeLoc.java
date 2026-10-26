@@ -4,6 +4,7 @@ import htsjdk.samtools.SAMFileHeader;
 import htsjdk.samtools.util.Locatable;
 import org.broadinstitute.hellbender.exceptions.GATKException;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.*;
 
@@ -15,6 +16,7 @@ import java.util.*;
  * This class is not intended to be extended outside of the core GATK engine and tests.
  */
 public class GenomeLoc implements Comparable<GenomeLoc>, Serializable, HasGenomeLocation, Locatable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
@@ -334,8 +336,7 @@ public class GenomeLoc implements Comparable<GenomeLoc>, Serializable, HasGenome
         if(other == null) {
             return false;
         }
-        if(other instanceof GenomeLoc) {
-            final GenomeLoc otherGenomeLoc = (GenomeLoc)other;
+        if(other instanceof GenomeLoc otherGenomeLoc) {
             return this.contigIndex == otherGenomeLoc.contigIndex &&
                     this.start == otherGenomeLoc.start &&
                     this.stop == otherGenomeLoc.stop;

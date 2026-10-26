@@ -3,6 +3,7 @@ package org.broadinstitute.hellbender.metrics;
 import htsjdk.samtools.SamPairUtil.PairOrientation;
 import org.broadinstitute.hellbender.metrics.MultiLevelMetrics;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -13,6 +14,7 @@ import java.io.Serializable;
  */
 public final class InsertSizeMetrics extends MultiLevelMetrics implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

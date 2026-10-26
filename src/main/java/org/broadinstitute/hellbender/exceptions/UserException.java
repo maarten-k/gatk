@@ -10,6 +10,7 @@ import org.broadinstitute.hellbender.utils.read.GATKRead;
 import org.broadinstitute.hellbender.utils.read.ReadUtils;
 
 import java.io.File;
+import java.io.Serial;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -20,6 +21,7 @@ import java.util.List;
  * This exception is for errors that are due to user mistakes, such as non-existent or malformed files.
  */
 public class UserException extends RuntimeException {
+    @Serial
     private static final long serialVersionUID = 0L;
 
     public UserException() {
@@ -50,6 +52,7 @@ public class UserException extends RuntimeException {
      * For generic errors opening/reading from input files
      */
     public static class CouldNotReadInputFile extends UserException {
+        @Serial
         private static final long serialVersionUID = 0L;
 
         public CouldNotReadInputFile(String message, Exception e) {
@@ -98,12 +101,14 @@ public class UserException extends RuntimeException {
     }
 
     public static class MissingReference extends UserException {
+        @Serial
         private static final long serialVersionUID = 0L;
 
         public MissingReference(String message) { super(message); }
     }
 
     public static class MissingIndex extends UserException {
+        @Serial
         private static final long serialVersionUID = 0L;
 
         public MissingIndex(String message){
@@ -116,6 +121,7 @@ public class UserException extends RuntimeException {
     }
 
     public static class CannotHandleGzippedRef extends UserException {
+        @Serial
         private static final long serialVersionUID = 0L;
 
         public CannotHandleGzippedRef() {
@@ -130,6 +136,7 @@ public class UserException extends RuntimeException {
      * For generic errors writing to output files
      */
     public static class CouldNotCreateOutputFile extends UserException {
+        @Serial
         private static final long serialVersionUID = 0L;
 
 
@@ -159,6 +166,7 @@ public class UserException extends RuntimeException {
     }
 
     public static class MalformedRead extends UserException {
+        @Serial
         private static final long serialVersionUID = 0L;
 
         public MalformedRead( GATKRead read, String message ) {
@@ -171,6 +179,7 @@ public class UserException extends RuntimeException {
     }
 
     public static class MisencodedQualityScoresRead extends MalformedRead {
+        @Serial
         private static final long serialVersionUID = 0L;
 
         public MisencodedQualityScoresRead( GATKRead read, String message ) {
@@ -179,6 +188,7 @@ public class UserException extends RuntimeException {
     }
 
     public static class BadInput extends UserException {
+        @Serial
         private static final long serialVersionUID = 0L;
 
         public BadInput(String message, Throwable cause){
@@ -192,6 +202,7 @@ public class UserException extends RuntimeException {
 
 
     public static class BadTempDir extends UserException {
+        @Serial
         private static final long serialVersionUID = 0L;
 
         private static final String MESSAGE_FORMAT_STRING = "Failure working with the tmp directory %s. Try changing the tmp dir with with --" + StandardArgumentDefinitions.TMP_DIR_NAME + " on the command line.  Exact error was %s";
@@ -210,6 +221,7 @@ public class UserException extends RuntimeException {
     }
 
     public static class MalformedGenomeLoc extends UserException {
+        @Serial
         private static final long serialVersionUID = 0L;
 
         public MalformedGenomeLoc(String message) {
@@ -228,6 +240,7 @@ public class UserException extends RuntimeException {
      * For errors parsing files
      */
     public static class MalformedFile extends UserException {
+        @Serial
         private static final long serialVersionUID = 0L;
 
         public MalformedFile(String message) {
@@ -252,6 +265,7 @@ public class UserException extends RuntimeException {
     }
 
     public static class MissingReferenceFaiFile extends UserException {
+        @Serial
         private static final long serialVersionUID = 0L;
         public MissingReferenceFaiFile( final Path indexPath, final Path fastaPath ) {
             super(String.format("Fasta index file %s for reference %s does not exist. Please see %s for help creating it.",
@@ -261,6 +275,7 @@ public class UserException extends RuntimeException {
     }
 
     public static class MissingReferenceGziFile extends UserException {
+        @Serial
         private static final long serialVersionUID = 0L;
         public MissingReferenceGziFile( final Path gziPath, final Path fastaPath ) {
             super(String.format("Fasta bgzip index file %s for reference %s does not exist. A gzi index can be created using bgzip.",
@@ -269,6 +284,7 @@ public class UserException extends RuntimeException {
     }
 
     public static class MissingReferenceDictFile extends UserException {
+        @Serial
         private static final long serialVersionUID = 0L;
         public MissingReferenceDictFile( final Path dictFile, final Path fastaFile ) {
             super(String.format("Fasta dict file %s for reference %s does not exist. Please see %s for help creating it.",
@@ -284,6 +300,7 @@ public class UserException extends RuntimeException {
     }
 
     public static class IncompatibleRecalibrationTableParameters extends UserException {
+        @Serial
         private static final long serialVersionUID = 0L;
         public IncompatibleRecalibrationTableParameters(String s) {
             super(s);
@@ -291,6 +308,7 @@ public class UserException extends RuntimeException {
     }
 
     public static class EmptyIntersection extends UserException {
+        @Serial
         private static final long serialVersionUID = 0L;
         public EmptyIntersection(String s) {
             super(s);
@@ -298,6 +316,7 @@ public class UserException extends RuntimeException {
     }
 
     public static class CannotExecuteScript extends UserException {
+        @Serial
         private static final long serialVersionUID = 0L;
         public CannotExecuteScript(final String scriptExecutor, String message) {
             super(String.format("Unable to execute %s command: %s", scriptExecutor, message));
@@ -305,6 +324,7 @@ public class UserException extends RuntimeException {
     }
 
     public static class MalformedBAM extends UserException {
+        @Serial
         private static final long serialVersionUID = 1l;
 
         public MalformedBAM(GATKRead read, String message) {
@@ -321,6 +341,7 @@ public class UserException extends RuntimeException {
     }
 
     public static class FailsStrictValidation extends UserException {
+        @Serial
         private static final long serialVersionUID = 0L;
 
         public final ValidateVariants.ValidationType type;
@@ -332,6 +353,7 @@ public class UserException extends RuntimeException {
     }
 
     public static class MissingContigInSequenceDictionary extends UserException {
+        @Serial
         private static final long serialVersionUID = 1L;
         public MissingContigInSequenceDictionary(String contigName, SAMSequenceDictionary dict1) {
             super(String.format("Contig %s not present in the sequence dictionary %s\n",
@@ -346,6 +368,7 @@ public class UserException extends RuntimeException {
      * For errors parsing files
      */
     public static class IncompatibleSequenceDictionaries extends UserException {
+        @Serial
         private static final long serialVersionUID = 0L;
 
         public IncompatibleSequenceDictionaries(String message,
@@ -361,6 +384,7 @@ public class UserException extends RuntimeException {
     }
 
     public static class LexicographicallySortedSequenceDictionary extends UserException {
+        @Serial
         private static final long serialVersionUID = 0L;
 
         public LexicographicallySortedSequenceDictionary(String name, SAMSequenceDictionary dict) {
@@ -374,6 +398,7 @@ public class UserException extends RuntimeException {
     }
 
     public static final class Require2BitReferenceForBroadcast extends BadInput {
+        @Serial
         private static final long serialVersionUID = 0L;
         public Require2BitReferenceForBroadcast() {
             super("Running this tool with BROADCAST strategy requires a 2bit reference. To create a 2bit reference from an existing fasta file, download faToTwoBit from the link on https://genome.ucsc.edu/goldenPath/help/twoBit.html, then run faToTwoBit in.fasta out.2bit");
@@ -381,6 +406,7 @@ public class UserException extends RuntimeException {
     }
 
     public static final class NoSuitableCodecs extends  UserException {
+        @Serial
         private static final long serialVersionUID = 0L;
 
         public NoSuitableCodecs(final Path file) {
@@ -389,6 +415,7 @@ public class UserException extends RuntimeException {
     }
 
     public static final class WrongFeatureType extends UserException {
+        @Serial
         private static final long serialVersionUID = 0L;
 
         public WrongFeatureType( final File featureFile, final Class<? extends Feature> requiredFeatureType ) {
@@ -403,6 +430,7 @@ public class UserException extends RuntimeException {
     }
 
     public static final class ReadMissingReadGroup extends MalformedBAM {
+        @Serial
         private static final long serialVersionUID = 0L;
 
         public ReadMissingReadGroup(final GATKRead read) {
@@ -411,6 +439,7 @@ public class UserException extends RuntimeException {
     }
 
     public static final class HeaderMissingReadGroup extends MalformedBAM {
+        @Serial
         private static final long serialVersionUID = 0L;
 
         public HeaderMissingReadGroup(final GATKRead read) {
@@ -419,6 +448,7 @@ public class UserException extends RuntimeException {
     }
 
     public static final class HardwareFeatureException extends UserException {
+        @Serial
         private static final long serialVersionUID = 0L;
 
         public HardwareFeatureException(String message) {
@@ -431,6 +461,7 @@ public class UserException extends RuntimeException {
     }
 
     public static final class CouldNotIndexFile extends UserException {
+        @Serial
         private static final long serialVersionUID = 0L;
 
         public CouldNotIndexFile(final File file, final Exception e) {
@@ -440,6 +471,7 @@ public class UserException extends RuntimeException {
     }
 
     public static final class UnimplementedFeature extends UserException {
+        @Serial
         private static final long serialVersionUID = 0L;
 
         public UnimplementedFeature(String message){

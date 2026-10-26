@@ -3,6 +3,7 @@ package org.broadinstitute.hellbender.utils.variant;
 import htsjdk.variant.variantcontext.VariantContext;
 import org.broadinstitute.hellbender.utils.SimpleInterval;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -10,6 +11,7 @@ import java.io.Serializable;
  * used with the {@link GATKVariant} API.
  */
 public class VariantContextVariantAdapter implements GATKVariant, Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final VariantContext variantContext;

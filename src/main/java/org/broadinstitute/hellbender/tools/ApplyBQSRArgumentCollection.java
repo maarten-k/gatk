@@ -3,10 +3,13 @@ package org.broadinstitute.hellbender.tools;
 import org.broadinstitute.barclay.argparser.Argument;
 import org.broadinstitute.hellbender.utils.QualityUtils;
 
+import java.io.Serial;
+
 /**
  * The collection of all arguments needed for ApplyBQSR.
  */
 public class ApplyBQSRArgumentCollection extends ApplyBQSRUniqueArgumentCollection {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

@@ -8,6 +8,7 @@ import org.broadinstitute.hellbender.utils.Utils;
 import org.jgrapht.EdgeFactory;
 
 import java.io.File;
+import java.io.Serial;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,6 +20,7 @@ public final class SeqGraph extends BaseGraph<SeqVertex, BaseEdge> {
 
     private final Logger logger = LogManager.getLogger(SeqGraph.class);
 
+    @Serial
     private static final long serialVersionUID = 1l;
 
     @Override

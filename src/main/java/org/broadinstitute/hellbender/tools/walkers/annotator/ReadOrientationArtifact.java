@@ -129,7 +129,7 @@ public class ReadOrientationArtifact extends GenotypeAnnotation implements Orien
 
         final Optional<ArtifactPrior> artifactPrior = artifactPriorCollection.get(refContext);
 
-        if (! artifactPrior.isPresent()){
+        if (artifactPrior.isEmpty()){
             return;
         }
         

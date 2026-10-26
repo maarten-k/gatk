@@ -1,5 +1,6 @@
 package org.broadinstitute.hellbender.tools;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Iterator;
 import org.broadinstitute.hellbender.engine.Shard;
@@ -14,6 +15,7 @@ import org.broadinstitute.hellbender.utils.read.GATKRead;
  * A simple shard implementation intended to be used for splitting reads by partition in Spark tools
  */
 public final class DownsampleableSparkReadShard implements Shard<GATKRead>, Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final ShardBoundary boundaries;

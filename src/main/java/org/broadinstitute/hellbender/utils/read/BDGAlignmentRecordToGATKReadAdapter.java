@@ -7,6 +7,8 @@ import org.bdgenomics.adam.models.RecordGroupDictionary;
 import org.bdgenomics.adam.models.SAMFileHeaderWritable;
 import org.bdgenomics.formats.avro.AlignmentRecord;
 
+import java.io.Serial;
+
 /**
  * Implementation of the {@link GATKRead} interface for the {@link AlignmentRecord} class.
  *
@@ -25,6 +27,7 @@ import org.bdgenomics.formats.avro.AlignmentRecord;
  * to {@link SAMRecordToGATKReadAdapter}.
  */
 public final class BDGAlignmentRecordToGATKReadAdapter extends SAMRecordToGATKReadAdapter {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final AlignmentRecord alignmentRecord;

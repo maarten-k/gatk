@@ -125,7 +125,7 @@ public class SVKmerLong extends SVKmer implements Comparable<SVKmerLong>  {
     public final int lastTrimer() { return (int)valLow & 0x3F; }
     @Override
     public boolean equals( final Object obj ) {
-        return obj instanceof SVKmerLong && equals((SVKmerLong)obj);
+        return obj instanceof SVKmerLong svkl && equals(svkl);
     }
 
     public final boolean equals( final SVKmerLong that ) {

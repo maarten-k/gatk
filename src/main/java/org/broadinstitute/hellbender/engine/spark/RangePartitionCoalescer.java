@@ -7,6 +7,7 @@ import org.apache.spark.rdd.RDD;
 import scala.collection.JavaConversions;
 import scala.collection.Seq;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
  */
 class RangePartitionCoalescer implements PartitionCoalescer, Serializable, scala.Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private List<Integer> maxEndPartitionIndexes;

@@ -5,6 +5,7 @@ import org.broadinstitute.hellbender.engine.Shard;
 import org.broadinstitute.hellbender.utils.SimpleInterval;
 import org.broadinstitute.hellbender.utils.Utils;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Iterator;
@@ -16,6 +17,7 @@ import java.util.List;
  * this is a temporary shim until we can fully adopt MultiIntervalShard in HaplotypeCallerSpark
  */
 public class ShardToMultiIntervalShardAdapter<T> implements MultiIntervalShard<T>, Shard<T>, Serializable {
+    @Serial
     private static final long serialVersionUID = 0L;
     private final Shard<T> shard;
 

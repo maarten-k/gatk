@@ -4,6 +4,7 @@ import org.broadinstitute.barclay.argparser.Argument;
 import org.broadinstitute.barclay.argparser.ArgumentCollection;
 import org.broadinstitute.hellbender.cmdline.argumentcollections.MetricAccumulationLevelArgumentCollection;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 // TODO: filter reads based on only isReverseStrand/mateIsReverseStrand (strand bias)
@@ -19,6 +20,7 @@ import java.io.Serializable;
  */
 public class InsertSizeMetricsArgumentCollection extends MetricsArgumentCollection implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Argument(

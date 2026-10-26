@@ -6,8 +6,10 @@ import org.broadinstitute.barclay.argparser.Hidden;
 import org.broadinstitute.hellbender.tools.walkers.haplotypecaller.readthreading.ReadThreadingAssembler;
 
 import java.io.File;
+import java.io.Serial;
 
 public class HaplotypeCallerReadThreadingAssemblerArgumentCollection extends ReadThreadingAssemblerArgumentCollection {
+    @Serial
     private static final long serialVersionUID = 6520834L;
     /**
      * A single edge multiplicity cutoff for pruning doesn't work in samples with variable depths, for example exomes

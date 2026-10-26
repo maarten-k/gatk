@@ -16,6 +16,8 @@ import org.broadinstitute.hellbender.tools.spark.pathseq.loggers.PSFilterLogger;
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 import scala.Tuple2;
 
+import java.io.Serial;
+
 /**
  * Filters low complexity, low quality, duplicate, and host reads. First step in the PathSeq pipeline.
  *
@@ -123,6 +125,7 @@ import scala.Tuple2;
 @DocumentedFeature
 public final class PathSeqFilterSpark extends GATKSparkTool {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public static final String PAIRED_OUTPUT_LONG_NAME = "paired-output";

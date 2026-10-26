@@ -3,9 +3,11 @@ package org.broadinstitute.hellbender.engine.spark;
 import org.broadinstitute.barclay.argparser.Advanced;
 import org.broadinstitute.barclay.argparser.Argument;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 public abstract class AssemblyRegionArgumentCollection implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Argument(fullName = "minAssemblyRegionSize", shortName = "minAssemblyRegionSize", doc = "Minimum size of an assembly region", optional = true)

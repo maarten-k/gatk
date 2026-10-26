@@ -6,6 +6,7 @@ import org.broadinstitute.hellbender.utils.help.HelpConstants;
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 import org.broadinstitute.hellbender.utils.read.ReadUtils;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -20,6 +21,7 @@ import java.io.Serializable;
  */
 @DocumentedFeature(groupName= HelpConstants.DOC_CAT_READFILTERS, groupSummary=HelpConstants.DOC_CAT_READFILTERS_SUMMARY, summary = "Filters out reads where the alignment does not match the contents of the header")
 public final class AlignmentAgreesWithHeaderReadFilter extends ReadFilter implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1l;
 
     public AlignmentAgreesWithHeaderReadFilter( ) {}

@@ -58,7 +58,7 @@ public final class XReadLines implements Iterator<String>, Iterable<String>, Aut
      * @param commentPrefix prefix for comments or null if no prefix is set
      */
     public XReadLines(final Reader reader, final boolean trimWhitespace, final String commentPrefix) {
-        this.in = (reader instanceof BufferedReader) ? (BufferedReader)reader : new BufferedReader(reader);
+        this.in = (reader instanceof BufferedReader br) ? br : new BufferedReader(reader);
         this.trimWhitespace = trimWhitespace;
         this.commentPrefix = commentPrefix;
         try {

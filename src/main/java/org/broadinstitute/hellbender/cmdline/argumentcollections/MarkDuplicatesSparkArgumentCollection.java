@@ -5,6 +5,7 @@ import org.broadinstitute.hellbender.cmdline.StandardArgumentDefinitions;
 import org.broadinstitute.hellbender.utils.read.markduplicates.MarkDuplicatesScoringStrategy;
 import picard.sam.markduplicates.MarkDuplicates;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 
@@ -13,6 +14,7 @@ import java.io.Serializable;
  * duplicates.
  */
 public final class MarkDuplicatesSparkArgumentCollection implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public static final String DO_NOT_MARK_UNMAPPED_MATES_LONG_NAME = "do-not-mark-unmapped-mates";

@@ -4,11 +4,14 @@ import htsjdk.samtools.Cigar;
 import org.broadinstitute.hellbender.engine.filters.ReadFilter;
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 
+import java.io.Serial;
+
 /**
  * Filters out reads above a threshold identity (number of matches less deletions), given in bases.
  */
 public final class HostAlignmentReadFilter extends ReadFilter {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final int minIdentity;

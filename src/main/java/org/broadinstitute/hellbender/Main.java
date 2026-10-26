@@ -344,8 +344,8 @@ public class Main {
                 try {
                     final Object commandLineProgram = clazz.newInstance();
                     // wrap Picard CommandLinePrograms in a PicardCommandLineProgramExecutor
-                    return commandLineProgram instanceof picard.cmdline.CommandLineProgram ?
-                            new PicardCommandLineProgramExecutor((picard.cmdline.CommandLineProgram) commandLineProgram) :
+                    return commandLineProgram instanceof picard.cmdline.CommandLineProgram clp ?
+                            new PicardCommandLineProgramExecutor(clp) :
                             (CommandLineProgram) commandLineProgram;
                 } catch (final InstantiationException | IllegalAccessException e) {
                     throw new RuntimeException(e);

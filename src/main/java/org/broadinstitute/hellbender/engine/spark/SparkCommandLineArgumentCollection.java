@@ -5,6 +5,7 @@ import org.broadinstitute.barclay.argparser.Argument;
 import org.broadinstitute.barclay.argparser.CommandLineException;
 import org.broadinstitute.hellbender.cmdline.StandardArgumentDefinitions;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -15,6 +16,7 @@ import java.util.Map;
  * Command line arguments needed for configuring a spark context
  */
 public final class SparkCommandLineArgumentCollection implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Argument(fullName = "spark-master", doc="URL of the Spark Master to submit jobs to when using the Spark pipeline runner.", optional = true)

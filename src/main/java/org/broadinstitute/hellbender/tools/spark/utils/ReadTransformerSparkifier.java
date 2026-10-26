@@ -4,8 +4,11 @@ import org.apache.spark.api.java.function.Function;
 import org.broadinstitute.hellbender.transformers.ReadTransformer;
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 
+import java.io.Serial;
+
 public class ReadTransformerSparkifier implements Function<GATKRead, GATKRead> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final ReadTransformer transformer;

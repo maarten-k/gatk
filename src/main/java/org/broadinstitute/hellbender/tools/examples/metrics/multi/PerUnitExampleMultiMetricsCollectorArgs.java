@@ -1,5 +1,6 @@
 package org.broadinstitute.hellbender.tools.examples.metrics.multi;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -12,6 +13,7 @@ import java.io.Serializable;
  */
 final class PerUnitExampleMultiMetricsCollectorArgs implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

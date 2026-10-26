@@ -15,6 +15,7 @@ import org.broadinstitute.hellbender.engine.spark.datasources.VariantsSparkSourc
 import org.broadinstitute.hellbender.utils.gcs.BucketUtils;
 
 import java.io.PrintStream;
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +26,7 @@ import java.util.List;
 @BetaFeature
 public final class CountVariantsSpark extends GATKSparkTool {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Argument(doc = "uri for the input file: a local file path",

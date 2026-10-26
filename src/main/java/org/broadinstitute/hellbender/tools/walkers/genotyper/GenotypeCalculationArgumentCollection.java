@@ -8,12 +8,14 @@ import org.broadinstitute.hellbender.tools.walkers.variantutils.CalculateGenotyp
 import org.broadinstitute.hellbender.utils.Utils;
 import org.broadinstitute.hellbender.utils.variant.HomoSapiensConstants;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public final class GenotypeCalculationArgumentCollection implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public static final String SUPPORTING_CALLSET_LONG_NAME = "population-callset";

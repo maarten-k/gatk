@@ -11,7 +11,6 @@ import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Random;
 import org.broadinstitute.hellbender.utils.gcs.BucketUtils;
 import org.broadinstitute.hellbender.GATKBaseTest;
@@ -33,7 +32,7 @@ public final class GcsNioIntegrationTest extends GATKBaseTest {
 
     @Test(groups={"bucket"})
     public void openPublicFile() throws IOException {
-        try (InputStream inputStream = Files.newInputStream(Paths.get(URI.create(
+        try (InputStream inputStream = Files.newInputStream(Path.of(URI.create(
                 "gs://pgp-harvard-data-public/hu011C57/GS000018120-DID/GS000015172-ASM/manifest.all.sig")))) {
             int firstByte = inputStream.read();
         }
@@ -74,7 +73,7 @@ public final class GcsNioIntegrationTest extends GATKBaseTest {
         final String privateFile = getGCPTestInputPath() + privateFilePath;
 
         try {
-            Path path = Paths.get(URI.create((privateFile)));
+            Path path = Path.of(URI.create((privateFile)));
             int firstByte = Files.newInputStream(path).read();
         } catch (Exception x) {
             System.err.println("Unable to open " + privateFile);
@@ -126,7 +125,7 @@ public final class GcsNioIntegrationTest extends GATKBaseTest {
         int firstByte = Files.newInputStream(path).read();
 
         // now let's open another private file. It shouldn't work.
-        path = Paths.get(URI.create((privateFile2)));
+        path = Path.of(URI.create((privateFile2)));
         firstByte = Files.newInputStream(path).read();
     }
 
@@ -135,7 +134,7 @@ public final class GcsNioIntegrationTest extends GATKBaseTest {
     public void testCloseWhilePrefetching() throws Exception {
         final String large = getGCPTestInputPath() + largeFilePath;
         SeekableByteChannel chan = new SeekableByteChannelPrefetcher(
-            Files.newByteChannel(Paths.get(URI.create(large))), 10*1024*1024);
+            Files.newByteChannel(Path.of(URI.create(large))), 10*1024*1024);
         // read just 1 byte, get the prefetching going
         ByteBuffer one = ByteBuffer.allocate(1);
         chan.read(one);

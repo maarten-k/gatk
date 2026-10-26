@@ -2,8 +2,11 @@ package org.broadinstitute.hellbender.transformers;
 
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 
+import java.io.Serial;
+
 public final class BaseQualityReadTransformer implements ReadTransformer {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private int BASE_QUALITY_THRESHOLD = 15;

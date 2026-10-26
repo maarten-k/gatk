@@ -22,7 +22,6 @@ import org.testng.annotations.Test;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,8 +30,8 @@ import java.util.List;
  * Basic unit test for CachingIndexedFastaSequenceFile
  */
 public final class CachingIndexedFastaSequenceFileUnitTest extends GATKBaseTest {
-    private Path simpleFasta = Paths.get(publicTestDir + "/exampleFASTA.fasta");
-    private Path simpleBGZippedFasta = Paths.get(publicTestDir + "/exampleFASTA.fasta.gz");
+    private Path simpleFasta = Path.of(publicTestDir + "/exampleFASTA.fasta");
+    private Path simpleBGZippedFasta = Path.of(publicTestDir + "/exampleFASTA.fasta.gz");
     private static final int STEP_SIZE = 1;
 
     private static final List<Integer> QUERY_SIZES = Arrays.asList(1, 10, 100);

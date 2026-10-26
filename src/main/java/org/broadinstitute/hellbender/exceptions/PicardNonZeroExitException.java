@@ -2,10 +2,13 @@ package org.broadinstitute.hellbender.exceptions;
 
 import org.broadinstitute.hellbender.utils.Utils;
 
+import java.io.Serial;
+
 /**
  * Exception used to propagate non-zero return values from Picard tools.
  */
 public class PicardNonZeroExitException extends RuntimeException {
+    @Serial
     private static final long serialVersionUID = 0L;
     private final int picardToolReturnCode;
 

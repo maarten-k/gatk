@@ -5,10 +5,12 @@ import org.broadinstitute.hellbender.utils.Utils;
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 import org.broadinstitute.hellbender.utils.read.ReadUtils;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /** A set of metrics used to describe the general quality of a BAM file */
 public final class QualityYieldMetrics extends MetricBase implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1;
 
     private boolean useOriginalQualities;

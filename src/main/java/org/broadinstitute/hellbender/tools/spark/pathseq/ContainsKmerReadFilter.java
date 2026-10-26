@@ -7,6 +7,8 @@ import org.broadinstitute.hellbender.tools.spark.sv.utils.SVKmerShort;
 import org.broadinstitute.hellbender.tools.spark.sv.utils.SVKmerizer;
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 
+import java.io.Serial;
+
 /**
  * Keep reads that do NOT contain one or more kmers from a set of SVKmerShorts
  */
@@ -14,6 +16,7 @@ public class ContainsKmerReadFilter extends ReadFilter {
 
     protected final Logger logger = LogManager.getLogger(this.getClass());
 
+    @Serial
     private static final long serialVersionUID = 1L;
     private static volatile PSKmerCollection kmerLib = null; //Must be volatile for proper initialization
     private final int kSize, kmerCountThreshold;

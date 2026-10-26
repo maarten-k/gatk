@@ -9,6 +9,7 @@ import org.broadinstitute.hellbender.cmdline.StandardArgumentDefinitions;
 import org.broadinstitute.hellbender.cmdline.argumentcollections.DbsnpArgumentCollection;
 import org.broadinstitute.hellbender.engine.FeatureInput;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,6 +19,7 @@ import java.util.List;
  * Set of arguments for the {@link HaplotypeCallerEngine}
  */
 public class HaplotypeCallerArgumentCollection extends AssemblyBasedCallerArgumentCollection implements Serializable{
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public static final String MAX_MNP_DISTANCE_LONG_NAME = "max-mnp-distance";

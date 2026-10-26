@@ -5,6 +5,7 @@ import org.broadinstitute.hellbender.utils.read.GATKRead;
 import org.broadinstitute.hellbender.utils.read.ReadUtils;
 import picard.sam.DuplicationMetrics;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -12,7 +13,8 @@ import java.io.Serializable;
  * within a stream of SAMRecords.
  */
 public final class GATKDuplicationMetrics extends DuplicationMetrics implements Serializable {
-   @NoMergingKeepsValue //Currently picard requires all fields to be annotated.
+    @NoMergingKeepsValue
+    @Serial //Currently picard requires all fields to be annotated.
     private static final long serialVersionUID = 1L;
 
     public GATKDuplicationMetrics copy() {

@@ -113,7 +113,7 @@ public class SVKmerShort extends SVKmer implements Comparable<SVKmerShort> {
 
     @Override
     public boolean equals(final Object obj) {
-        return obj instanceof SVKmerShort && equals((SVKmerShort) obj);
+        return obj instanceof SVKmerShort svks && equals(svks);
     }
 
     public final boolean equals(final SVKmerShort that) {

@@ -513,7 +513,7 @@ public final class IOUtils {
                         removeFileWithWarning(extractedEntryPath);
                     }
 
-                    Files.createSymbolicLink(extractedEntryPath, Paths.get(linkName));
+                    Files.createSymbolicLink(extractedEntryPath, Path.of(linkName));
                 }
                 else if ( entry.isLink() ) {
                     // Handle a hard link:
@@ -524,7 +524,7 @@ public final class IOUtils {
                         removeFileWithWarning(extractedEntryPath);
                     }
 
-                    Files.createLink(extractedEntryPath, Paths.get(linkName));
+                    Files.createLink(extractedEntryPath, Path.of(linkName));
                 }
                 else if ( entry.isFile() ) {
                     // Handle a (default) file entry:
@@ -761,14 +761,14 @@ public final class IOUtils {
             uri = URI.create(uriString);
         } catch (IllegalArgumentException x) {
             // not a valid URI. Caller probably just gave us a file name.
-            return Paths.get(uriString);
+            return Path.of(uriString);
         }
         try {
             // special case GCS, in case the filesystem provider wasn't installed properly but is available.
             if (CloudStorageFileSystem.URI_SCHEME.equals(uri.getScheme())) {
                 return BucketUtils.getPathOnGcs(uriString);
             }
-            return uri.getScheme() == null ? Paths.get(uriString) : Paths.get(uri);
+            return uri.getScheme() == null ? Path.of(uriString) : Path.of(uri);
         } catch (FileSystemNotFoundException e) {
             try {
                 ClassLoader cl = Thread.currentThread().getContextClassLoader();
@@ -779,7 +779,7 @@ public final class IOUtils {
             }
             catch (ProviderNotFoundException x) {
                 // not a valid URI. Caller probably just gave us a file name or "chr1:1-2".
-                return Paths.get(uriString);
+                return Path.of(uriString);
             }
             catch ( IOException io ) {
                 throw new UserException(uriString + " is not a supported path", io);

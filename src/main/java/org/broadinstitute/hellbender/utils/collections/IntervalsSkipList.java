@@ -3,6 +3,7 @@ package org.broadinstitute.hellbender.utils.collections;
 import htsjdk.samtools.util.Locatable;
 import org.broadinstitute.hellbender.utils.SimpleInterval;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.*;
 
@@ -13,6 +14,7 @@ import java.util.*;
  * This version allows intervals to lie on different contigs.
  */
 public final class IntervalsSkipList<T extends Locatable> implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final Map<String, IntervalsSkipListOneContig<T>> intervals;

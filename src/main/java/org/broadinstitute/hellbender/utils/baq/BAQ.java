@@ -16,6 +16,7 @@ import org.broadinstitute.hellbender.utils.Utils;
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 import org.broadinstitute.hellbender.utils.read.ReadUtils;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /*
@@ -44,6 +45,7 @@ import java.io.Serializable;
    state[i] being wrong.
  */
 public final class BAQ implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private static final Logger logger = LogManager.getLogger(BAQ.class);

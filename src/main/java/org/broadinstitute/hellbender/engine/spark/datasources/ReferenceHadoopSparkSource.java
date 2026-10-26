@@ -8,12 +8,14 @@ import org.broadinstitute.hellbender.utils.SimpleInterval;
 import org.broadinstitute.hellbender.utils.io.IOUtils;
 import org.broadinstitute.hellbender.utils.reference.ReferenceBases;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
  * Class to load a reference sequence from a fasta file on HDFS.
  */
 public class ReferenceHadoopSparkSource implements ReferenceSparkSource, Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final String referencePath;

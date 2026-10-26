@@ -4,6 +4,7 @@ import org.broadinstitute.hellbender.exceptions.GATKException;
 import org.broadinstitute.hellbender.utils.SimpleInterval;
 import org.broadinstitute.hellbender.utils.Utils;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -12,6 +13,7 @@ import java.util.Arrays;
  * This class requires the bases to be encoded at 8 bits per base.
  */
 public final class ReferenceBases implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final byte[] bases;

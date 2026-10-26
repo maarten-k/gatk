@@ -3,12 +3,15 @@ package org.broadinstitute.hellbender.tools.spark.sv.evidence;
 import biz.k11i.xgboost.util.FVec;
 import com.google.common.annotations.VisibleForTesting;
 
+import java.io.Serial;
+
 /**
  * FVec ("Feature Vector") is used by XGBoost Predictor to store feature information as floating point numbers. This
  * subclass is a lightweight implementation that is basically a wrapper on an array with a few access functions,
  * including the necessary override of fvalue().
  */
 public class EvidenceFeatures  implements FVec {
+    @Serial
     private static final long serialVersionUID = 1L;
     private final double[] values;
 

@@ -22,7 +22,6 @@ import java.io.PrintStream;
 import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -460,7 +459,7 @@ public abstract class BaseTest {
      * @throws IOException
      */
     protected FileSystem getAuthenticatedGcs(final String bucket) throws IOException {
-        final byte[] creds = Files.readAllBytes(Paths.get(getGoogleServiceAccountKeyPath()));
+        final byte[] creds = Files.readAllBytes(Path.of(getGoogleServiceAccountKeyPath()));
         return BucketUtils.getAuthenticatedGcs(getGCPTestProject(), bucket, creds);
     }
 
@@ -476,7 +475,7 @@ public abstract class BaseTest {
             return;
         }
         System.err.println("$" + key + " = " + credsFile);
-        Path credsPath = Paths.get(credsFile);
+        Path credsPath = Path.of(credsFile);
         boolean exists = Files.exists(credsPath);
         System.err.println("File exists: " + exists);
         if (exists) {

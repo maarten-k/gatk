@@ -943,7 +943,7 @@ public final class SVIntervalTree<V> implements Iterable<SVIntervalTree.Entry<V>
         /** equality of iterators is defined as having the same current position in the tree */
         @Override
         public boolean equals( final Object obj ) {
-            return obj instanceof SVIntervalTree<?>.IteratorBase && ((SVIntervalTree<?>.IteratorBase)obj).next == next;
+            return obj instanceof SVIntervalTree<?>.IteratorBase ib && ib.next == next;
         }
 
         @Override

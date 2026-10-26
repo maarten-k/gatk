@@ -297,8 +297,8 @@ public class ApplyVQSR extends MultiVariantWalker {
      */
     private void checkForPreviousApplyRecalRun(final Set<VCFHeaderLine> inputHeaders) {
         for(final VCFHeaderLine header : inputHeaders) {
-            if(header instanceof VCFFilterHeaderLine) {
-                final String filterName = ((VCFFilterHeaderLine)header).getID();
+            if(header instanceof VCFFilterHeaderLine line) {
+                final String filterName = line.getID();
                 //TODO: clean up these magic numbers
                 if(filterName.length() < 12 || !filterName.substring(0, 11).equalsIgnoreCase(trancheFilterString)) {
                     continue;

@@ -3,6 +3,7 @@ package org.broadinstitute.hellbender.utils.read;
 import htsjdk.samtools.SAMFileHeader;
 import htsjdk.samtools.SAMRecord;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Comparator;
 
@@ -11,6 +12,7 @@ import java.util.Comparator;
  * {@link htsjdk.samtools.SAMRecordCoordinateComparator}
  */
 public final class HeaderlessSAMRecordCoordinateComparator implements Comparator<SAMRecord>, Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final SAMFileHeader header;

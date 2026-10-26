@@ -2,6 +2,7 @@ package org.broadinstitute.hellbender.engine;
 
 import org.broadinstitute.hellbender.utils.SimpleInterval;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
  */
 public class TraversalParameters implements Serializable{
 
+    @Serial
     private static final long serialVersionUID = 1l;
 
     private final List<SimpleInterval> intervalsForTraversal;

@@ -4,12 +4,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.broadinstitute.hellbender.utils.Utils;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public final class NestedIntegerArray<T extends Serializable> implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private static final Logger logger = LogManager.getLogger(NestedIntegerArray.class);
@@ -182,8 +184,8 @@ public final class NestedIntegerArray<T extends Serializable> implements Seriali
         for ( final Object value : array ) {
             if ( value == null )
                 continue;
-            if ( value instanceof Object[] )
-                fillAllValues((Object[])value, result);
+            if ( value instanceof Object[] objects )
+                fillAllValues(objects, result);
             else
                 result.add((T)value);
         }
@@ -212,8 +214,8 @@ public final class NestedIntegerArray<T extends Serializable> implements Seriali
             if ( value == null )
                 continue;
             final int[] newPath = appendToPath(path, key);
-            if ( value instanceof Object[] ) {
-                fillAllLeaves((Object[]) value, newPath, result);
+            if ( value instanceof Object[] objects ) {
+                fillAllLeaves(objects, newPath, result);
             } else {
                 result.add(new Leaf<>(newPath, (T)value));
             }

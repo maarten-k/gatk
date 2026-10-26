@@ -182,7 +182,7 @@ public abstract class TableReader<R> implements Closeable, Iterable<R> {
         Utils.nonNull(sourceReader, "the reader cannot be null");
 
         this.source = sourceName;
-        this.reader = sourceReader instanceof LineNumberReader ? (LineNumberReader) sourceReader : new LineNumberReader(sourceReader);
+        this.reader = sourceReader instanceof LineNumberReader lnr ? lnr : new LineNumberReader(sourceReader);
         this.csvReader = new CSVReader(this.reader, TableUtils.COLUMN_SEPARATOR, TableUtils.QUOTE_CHARACTER, TableUtils.ESCAPE_CHARACTER);
         findAndProcessHeaderLine();
         this.nextRecordFetched = false;

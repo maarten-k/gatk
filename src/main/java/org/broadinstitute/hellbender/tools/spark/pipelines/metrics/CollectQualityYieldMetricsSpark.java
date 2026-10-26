@@ -14,6 +14,7 @@ import org.broadinstitute.hellbender.engine.filters.ReadFilterLibrary;
 import org.broadinstitute.hellbender.metrics.QualityYieldMetricsArgumentCollection;
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 
+import java.io.Serial;
 import java.util.Collections;
 import java.util.List;
 
@@ -39,6 +40,7 @@ import java.util.List;
 @BetaFeature
 public final class CollectQualityYieldMetricsSpark extends MetricsCollectorSparkTool<QualityYieldMetricsArgumentCollection> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @ArgumentCollection

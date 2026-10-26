@@ -11,6 +11,7 @@ import org.broadinstitute.hellbender.exceptions.GATKException;
 import org.broadinstitute.hellbender.exceptions.UserException;
 import org.broadinstitute.hellbender.utils.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.List;
  */
 public abstract class IntervalArgumentCollection implements Serializable {
     private static final Logger logger = LogManager.getLogger(IntervalArgumentCollection.class);
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public static final String EXCLUDE_INTERVALS_LONG_NAME = "exclude-intervals";

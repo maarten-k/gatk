@@ -8,6 +8,7 @@ import org.broadinstitute.hellbender.utils.Utils;
 import org.broadinstitute.hellbender.utils.io.IOUtils;
 
 import java.io.File;
+import java.io.Serial;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.Arrays;
@@ -44,6 +45,7 @@ import java.util.Map;
  */
 public final class FeatureInput<T extends Feature> implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

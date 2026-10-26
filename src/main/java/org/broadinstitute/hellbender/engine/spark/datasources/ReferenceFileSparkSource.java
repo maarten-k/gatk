@@ -7,13 +7,13 @@ import htsjdk.samtools.reference.ReferenceSequenceFileFactory;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import org.broadinstitute.hellbender.exceptions.UserException;
 import org.broadinstitute.hellbender.utils.SimpleInterval;
 import org.broadinstitute.hellbender.utils.io.IOUtils;
 import org.broadinstitute.hellbender.utils.reference.ReferenceBases;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -22,6 +22,7 @@ import java.util.Map;
  * Class to load a reference sequence from a fasta file on Spark.
  */
 public class ReferenceFileSparkSource implements ReferenceSparkSource, Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final URI referenceUri;
@@ -50,7 +51,7 @@ public class ReferenceFileSparkSource implements ReferenceSparkSource, Serializa
 
     private synchronized Path getReferencePath() {
         if (null == referencePath) {
-            this.referencePath = Paths.get(referenceUri);
+            this.referencePath = Path.of(referenceUri);
         }
         return referencePath;
     }

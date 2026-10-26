@@ -72,7 +72,7 @@ public final class QNameAndInterval implements Map.Entry<String, Integer> {
 
     @Override
     public boolean equals( final Object obj ) {
-        return obj instanceof QNameAndInterval && equals((QNameAndInterval) obj);
+        return obj instanceof QNameAndInterval qnai && equals(qnai);
     }
 
     public boolean equals( final QNameAndInterval that ) {

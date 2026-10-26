@@ -12,6 +12,7 @@ import org.broadinstitute.hellbender.metrics.*;
 import org.broadinstitute.hellbender.utils.Utils;
 
 import java.io.File;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
@@ -28,6 +29,7 @@ public final class ExampleMultiMetricsCollector
                     PerUnitExampleMultiMetricsCollector>
         implements Serializable
 {
+    @Serial
     private static final long serialVersionUID = 1L;
     private static final Logger log = LogManager.getLogger(ExampleMultiMetricsCollector.class);
 

@@ -3,6 +3,8 @@ package org.broadinstitute.hellbender.exceptions;
 import htsjdk.samtools.SAMRecord;
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 
+import java.io.Serial;
+
 /**
  * <p/>
  * Class GATKException.
@@ -11,6 +13,7 @@ import org.broadinstitute.hellbender.utils.read.GATKRead;
  * and "this should never happen" kinds of scenarios.
  */
 public class GATKException extends RuntimeException {
+    @Serial
     private static final long serialVersionUID = 0L;
 
     public GATKException( String msg ) {
@@ -30,6 +33,7 @@ public class GATKException extends RuntimeException {
      * For wrapping errors that are believed to never be reachable
      */
     public static class ShouldNeverReachHereException extends GATKException {
+        @Serial
         private static final long serialVersionUID = 0L;
         public ShouldNeverReachHereException( final String s ) {
             super(s);
@@ -42,6 +46,7 @@ public class GATKException extends RuntimeException {
 
 
     public static class MissingReadField extends GATKException {
+        @Serial
         private static final long serialVersionUID = 0L;
 
         public MissingReadField( final String fieldName ) {
@@ -58,6 +63,7 @@ public class GATKException extends RuntimeException {
     }
 
     public static class ReadAttributeTypeMismatch extends GATKException {
+        @Serial
         private static final long serialVersionUID = 0L;
 
         public ReadAttributeTypeMismatch( final String attributeName, final String targetType ) {

@@ -34,7 +34,7 @@ public final class ExactACset {
 
     @Override
     public boolean equals(final Object obj) {
-        return (obj instanceof ExactACset) && acCounts.equals(((ExactACset) obj).acCounts);
+        return (obj instanceof ExactACset eac) && acCounts.equals(eac.acCounts);
     }
 
     @Override

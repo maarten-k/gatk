@@ -5,10 +5,13 @@ import org.broadinstitute.hellbender.utils.clipping.ClippingRepresentation;
 import org.broadinstitute.hellbender.utils.clipping.ReadClipper;
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 
+import java.io.Serial;
+
 /**
  * Clips reads on both ends using base quality scores
  */
 public final class BaseQualityClipReadTransformer implements ReadTransformer {
+    @Serial
     private static final long serialVersionUID = 1L;
     private int qTrimmingThreshold = 15;
 

@@ -13,17 +13,17 @@ import org.testng.Assert;
 
 import java.io.IOException;
 import java.io.ByteArrayOutputStream;
-import java.nio.file.*;
+import java.nio.file.Path;
 import java.util.*;
 
 import org.apache.log4j.*;
 
 
 public class LeftAlignAndTrimVariantsIntegrationTest extends CommandLineProgramTest {
-    final Path testDataDir = Paths.get(getToolTestDataDir());
+    final Path testDataDir = Path.of(getToolTestDataDir());
 
     private Object[] getTestSet(String expectedVcf, String Options) {
-        return new Object[]{testDataDir.resolve("test_left_align_hg38.vcf"), Paths.get(b38_reference_20_21), testDataDir.resolve(expectedVcf), Options};
+        return new Object[]{testDataDir.resolve("test_left_align_hg38.vcf"), Path.of(b38_reference_20_21), testDataDir.resolve(expectedVcf), Options};
     }
 
     @DataProvider(name = "LeftAlignDataProvider")

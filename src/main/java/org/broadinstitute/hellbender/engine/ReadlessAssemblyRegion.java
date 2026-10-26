@@ -2,6 +2,7 @@ package org.broadinstitute.hellbender.engine;
 
 import org.broadinstitute.hellbender.utils.SimpleInterval;
 
+import java.io.Serial;
 import java.util.Objects;
 
 /**
@@ -9,6 +10,7 @@ import java.util.Objects;
  * {@link org.broadinstitute.hellbender.engine.spark.FindAssemblyRegionsSpark}.
  */
 public class ReadlessAssemblyRegion extends ShardBoundary {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final boolean isActive;

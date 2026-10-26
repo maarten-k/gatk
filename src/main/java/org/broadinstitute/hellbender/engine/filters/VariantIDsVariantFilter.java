@@ -3,6 +3,7 @@ package org.broadinstitute.hellbender.engine.filters;
 import htsjdk.variant.variantcontext.VariantContext;
 import org.broadinstitute.hellbender.utils.Utils;
 
+import java.io.Serial;
 import java.util.Set;
 import java.util.LinkedHashSet;
 import java.util.*;
@@ -13,6 +14,7 @@ import java.util.stream.*;
  * Matching is done by case-sensitive exact match.
  */
 public final class VariantIDsVariantFilter implements VariantFilter {
+    @Serial
     private final static long serialVersionUID = 1L;
 
     private final Set<String> includeIDs = new LinkedHashSet<>();

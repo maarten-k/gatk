@@ -12,10 +12,7 @@ import org.broadinstitute.hellbender.utils.recalibration.covariates.StandardCova
 import org.broadinstitute.hellbender.utils.reference.ReferenceBases;
 import org.broadinstitute.hellbender.utils.variant.GATKVariant;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -24,6 +21,7 @@ import java.util.Iterator;
  * Takes in reads + contextual data (overlapping reference bases and variants), spits out RecalibrationTables.
  */
 public final class BaseRecalibratorEngineSparkWrapper implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private Broadcast<SAMFileHeader> headerBcast;

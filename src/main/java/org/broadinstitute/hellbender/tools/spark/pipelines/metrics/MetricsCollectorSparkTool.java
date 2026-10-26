@@ -14,6 +14,7 @@ import org.broadinstitute.hellbender.metrics.MetricsArgumentCollection;
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 import org.broadinstitute.hellbender.utils.read.ReadUtils;
 
+import java.io.Serial;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,6 +33,7 @@ import java.util.List;
 public abstract class MetricsCollectorSparkTool<T extends MetricsArgumentCollection>
         extends GATKSparkTool {
 
+    @Serial
     private static final long serialVersionUID = 1l;
 
     /**

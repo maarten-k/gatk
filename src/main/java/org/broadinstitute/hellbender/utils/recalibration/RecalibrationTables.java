@@ -5,6 +5,7 @@ import org.broadinstitute.hellbender.utils.recalibration.covariates.StandardCova
 import org.broadinstitute.hellbender.utils.Utils;
 import org.broadinstitute.hellbender.utils.collections.NestedIntegerArray;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -16,6 +17,7 @@ import java.util.Map;
  * Utility class to facilitate base quality score recalibration.
  */
 public final class RecalibrationTables implements Serializable, Iterable<NestedIntegerArray<RecalDatum>> {
+    @Serial
     private static final long serialVersionUID = 1L;
     private final int qualDimension;
     private final int eventDimension = EventType.values().length;

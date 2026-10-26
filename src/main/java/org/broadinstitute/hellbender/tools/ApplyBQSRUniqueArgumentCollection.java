@@ -4,6 +4,7 @@ import org.broadinstitute.barclay.argparser.Argument;
 import org.broadinstitute.barclay.argparser.Advanced;
 import org.broadinstitute.hellbender.cmdline.StandardArgumentDefinitions;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
  * The collection of those arguments for ApplyBQSR that are not already defined in RecalibrationArgumentCollection.
  */
 public class ApplyBQSRUniqueArgumentCollection implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

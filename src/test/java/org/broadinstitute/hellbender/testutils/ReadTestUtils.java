@@ -12,7 +12,7 @@ import org.broadinstitute.hellbender.utils.Utils;
 import org.broadinstitute.hellbender.utils.param.ParamUtils;
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -109,7 +109,7 @@ public final class ReadTestUtils {
     public static Pair<SAMFileHeader, List<GATKRead>> readEntireBamIntoMemory(final String bamPath) {
         Utils.nonNull(bamPath);
 
-        try ( final ReadsDataSource bamReader = new ReadsDataSource(Paths.get(bamPath)) ) {
+        try ( final ReadsDataSource bamReader = new ReadsDataSource(Path.of(bamPath)) ) {
             final SAMFileHeader header = bamReader.getHeader();
 
             final List<GATKRead> reads = new ArrayList<>();

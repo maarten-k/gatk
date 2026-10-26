@@ -5,6 +5,7 @@ import org.broadinstitute.hellbender.utils.collections.IntervalsSkipListOneConti
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 import org.broadinstitute.hellbender.utils.variant.GATKVariant;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
  * all the variants and reference bases that overlap those reads, but that's up the callers.
  */
 public class ContextShard implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     // the interval covered by this shard

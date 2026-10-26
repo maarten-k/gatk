@@ -18,6 +18,7 @@ import org.broadinstitute.hellbender.utils.Utils;
 import org.broadinstitute.hellbender.utils.io.Resource;
 
 import java.io.File;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,7 @@ public final class InsertSizeMetricsCollector
         extends MultiLevelReducibleCollector<InsertSizeMetrics, Integer, InsertSizeMetricsCollectorArgs, PerUnitInsertSizeMetricsCollector>
         implements Serializable
 {
+    @Serial
     private static final long serialVersionUID = 1L;
     private static final Logger log = LogManager.getLogger(InsertSizeMetricsCollector.class);
 

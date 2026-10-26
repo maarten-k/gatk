@@ -279,11 +279,14 @@ public final class PSBuildReferenceTaxonomyUtils {
             }
         }
         if (relevantNodes.isEmpty()) {
-            throw new UserException.BadInput("Did not find any taxa corresponding to reference sequence names.\n\n"
-                    + "Check that reference names follow one of the required formats:\n\n"
-                    + "\t...|ref|<accession.version>|...\n"
-                    + "\t...|taxid|<taxonomy_id>|...\n"
-                    + "\t<accession.version><mask>...");
+            throw new UserException.BadInput("""
+                    Did not find any taxa corresponding to reference sequence names.
+                    
+                    Check that reference names follow one of the required formats:
+                    
+                    \t...|ref|<accession.version>|...
+                    \t...|taxid|<taxonomy_id>|...
+                    \t<accession.version><mask>...""");
         }
         tree.retainNodes(relevantNodes);
 

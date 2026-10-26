@@ -8,11 +8,13 @@ import org.broadinstitute.hellbender.engine.filters.AmbiguousBaseReadFilter;
 import org.broadinstitute.hellbender.engine.filters.ReadFilter;
 import org.broadinstitute.hellbender.engine.filters.ReadLengthReadFilter;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
 public final class PSFilterArgumentCollection implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
     public final int bwaThreads = 1;
 

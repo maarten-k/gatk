@@ -10,6 +10,8 @@ import org.broadinstitute.barclay.help.DocumentedFeature;
 import org.broadinstitute.hellbender.cmdline.StandardArgumentDefinitions;
 import picard.cmdline.programgroups.ReadDataManipulationProgramGroup;
 import org.broadinstitute.hellbender.engine.spark.GATKSparkTool;
+
+import java.io.Serial;
 import org.broadinstitute.hellbender.exceptions.UserException;
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 
@@ -18,6 +20,7 @@ import org.broadinstitute.hellbender.utils.read.GATKRead;
 @BetaFeature
 public final class PrintReadsSpark extends GATKSparkTool {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Override

@@ -43,7 +43,7 @@ public final class KmerAndInterval extends SVKmerLong implements Map.Entry<SVKme
 
     @Override
     public boolean equals( final Object obj ) {
-        return obj instanceof KmerAndInterval && equals((KmerAndInterval)obj);
+        return obj instanceof KmerAndInterval kai && equals(kai);
     }
 
     public boolean equals( final KmerAndInterval that ) {

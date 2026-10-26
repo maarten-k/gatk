@@ -20,7 +20,6 @@ import org.testng.annotations.Test;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 public class FuncotatorEngineUnitTest extends GATKBaseTest {
@@ -68,7 +67,7 @@ public class FuncotatorEngineUnitTest extends GATKBaseTest {
         for (int i = 0; i < entireVcf.getRight().size(); i++) {
             final VariantContext vc = entireVcf.getRight().get(i);
             final SimpleInterval variantInterval = new SimpleInterval(vc.getContig(), vc.getStart(), vc.getEnd());
-            final ReferenceContext referenceContext = new ReferenceContext(ReferenceDataSource.of(Paths.get(FuncotatorReferenceTestUtils.retrieveHg19Chr3Ref())), variantInterval);
+            final ReferenceContext referenceContext = new ReferenceContext(ReferenceDataSource.of(Path.of(FuncotatorReferenceTestUtils.retrieveHg19Chr3Ref())), variantInterval);
             final FeatureContext featureContext = FuncotatorTestUtils.createFeatureContext(funcotatorEngine.getFuncotationFactories(), "TEST", variantInterval,
                     0,0,0, null);
             final FuncotationMap funcotationMap = funcotatorEngine.createFuncotationMapForVariant(vc, referenceContext, featureContext);

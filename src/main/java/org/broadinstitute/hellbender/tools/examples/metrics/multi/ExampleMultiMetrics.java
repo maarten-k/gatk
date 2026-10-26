@@ -5,6 +5,7 @@ import org.broadinstitute.hellbender.metrics.MultiLevelMetrics;
 import org.broadinstitute.hellbender.utils.Utils;
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -12,6 +13,7 @@ import java.io.Serializable;
  */
 public class ExampleMultiMetrics extends MultiLevelMetrics implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1;
 
     // The final metric collected for each level and for all reads. This variable is public, and

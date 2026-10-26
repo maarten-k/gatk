@@ -4,6 +4,7 @@ import org.broadinstitute.barclay.argparser.Advanced;
 import org.broadinstitute.barclay.argparser.Argument;
 import org.broadinstitute.hellbender.cmdline.ReadFilterArgumentDefinitions;
 
+import java.io.Serial;
 import java.util.*;
 
 /**
@@ -16,6 +17,7 @@ import java.util.*;
  * @author Daniel Gomez-Sanchez (magicDGS)
  */
 public class DefaultGATKReadFilterArgumentCollection extends GATKReadFilterArgumentCollection {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Argument(fullName = ReadFilterArgumentDefinitions.READ_FILTER_LONG_NAME,

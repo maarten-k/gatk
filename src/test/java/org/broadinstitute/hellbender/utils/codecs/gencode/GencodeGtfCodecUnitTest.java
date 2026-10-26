@@ -3391,9 +3391,11 @@ public class GencodeGtfCodecUnitTest extends GATKBaseTest {
         // Hand-done results:
         final GencodeGtfGeneFeature gene = createGencodeGtfGene_gencode_valid1();
 
-        final String expected = "chr1\tENSEMBL\tgene\t30366\t30503\t.\t+\t.\tgene_id \"ENSG00000284332.1\"; gene_type \"miRNA\"; gene_name \"MIR1302-2\"; level 3;\n" +
-                "chr1\tENSEMBL\ttranscript\t30366\t30503\t.\t+\t.\tgene_id \"ENSG00000284332.1\"; transcript_id \"ENST00000607096.1\"; gene_type \"miRNA\"; gene_name \"MIR1302-2\"; transcript_type \"miRNA\"; transcript_name \"MIR1302-2-201\"; level 3; transcript_support_level \"NA\"; tag \"basic\";\n" +
-                "chr1\tENSEMBL\texon\t30366\t30503\t.\t+\t.\tgene_id \"ENSG00000284332.1\"; transcript_id \"ENST00000607096.1\"; gene_type \"miRNA\"; gene_name \"MIR1302-2\"; transcript_type \"miRNA\"; transcript_name \"MIR1302-2-201\"; exon_number 1; exon_id \"ENSE00003695741.1\"; level 3; transcript_support_level \"NA\"; tag \"basic\";";
+        final String expected = """
+                chr1\tENSEMBL\tgene\t30366\t30503\t.\t+\t.\tgene_id "ENSG00000284332.1"; gene_type "miRNA"; gene_name "MIR1302-2"; level 3;
+                chr1\tENSEMBL\ttranscript\t30366\t30503\t.\t+\t.\tgene_id "ENSG00000284332.1"; transcript_id "ENST00000607096.1"; gene_type "miRNA"; gene_name "MIR1302-2"; transcript_type "miRNA"; transcript_name "MIR1302-2-201"; level 3; transcript_support_level "NA"; tag "basic";
+                chr1\tENSEMBL\texon\t30366\t30503\t.\t+\t.\tgene_id "ENSG00000284332.1"; transcript_id "ENST00000607096.1"; gene_type "miRNA"; gene_name "MIR1302-2"; transcript_type "miRNA"; transcript_name "MIR1302-2-201"; exon_number 1; exon_id "ENSE00003695741.1"; level 3; transcript_support_level "NA"; tag "basic";\
+                """;
 
         return new Object[][] {
                 {gene, expected},

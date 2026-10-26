@@ -25,6 +25,7 @@ import org.broadinstitute.hellbender.utils.variant.GATKVariant;
 import picard.cmdline.programgroups.ReadDataManipulationProgramGroup;
 
 import java.io.PrintStream;
+import java.io.Serial;
 import java.util.List;
 
 /**
@@ -86,6 +87,7 @@ import java.util.List;
 @DocumentedFeature
 @BetaFeature
 public class BaseRecalibratorSpark extends GATKSparkTool {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     static final String USAGE_ONE_LINE_SUMMARY = "Generate recalibration table for Base Quality Score Recalibration (BQSR) on Spark";

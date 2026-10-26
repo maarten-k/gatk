@@ -4,6 +4,7 @@ import htsjdk.samtools.metrics.MetricsFile;
 import org.broadinstitute.hellbender.metrics.PerUnitMetricCollector;
 import org.broadinstitute.hellbender.utils.Utils;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -17,6 +18,7 @@ public final class PerUnitExampleMultiMetricsCollector
             Integer,
             PerUnitExampleMultiMetricsCollectorArgs>, Serializable
 {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     // the metrics container for this level

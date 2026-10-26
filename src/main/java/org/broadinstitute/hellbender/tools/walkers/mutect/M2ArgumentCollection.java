@@ -7,8 +7,10 @@ import org.broadinstitute.hellbender.engine.FeatureInput;
 import org.broadinstitute.hellbender.tools.walkers.haplotypecaller.AssemblyBasedCallerArgumentCollection;
 
 import java.io.File;
+import java.io.Serial;
 
 public class M2ArgumentCollection extends AssemblyBasedCallerArgumentCollection {
+    @Serial
     private static final long serialVersionUID = 9341L;
     public static final String TUMOR_SAMPLE_LONG_NAME = "tumor-sample";
     public static final String TUMOR_SAMPLE_SHORT_NAME = "tumor";

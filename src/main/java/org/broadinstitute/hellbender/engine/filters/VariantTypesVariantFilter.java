@@ -3,12 +3,14 @@ package org.broadinstitute.hellbender.engine.filters;
 import htsjdk.variant.variantcontext.VariantContext;
 import org.broadinstitute.hellbender.utils.Utils;
 
+import java.io.Serial;
 import java.util.Set;
 
 /**
  * Keep only variants with any of these variant types.
  */
 public final class VariantTypesVariantFilter implements VariantFilter {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final Set<VariantContext.Type> sampleTypes;

@@ -11,6 +11,7 @@ import org.broadinstitute.hellbender.tools.walkers.genotyper.afcalc.AFCalculator
 import org.broadinstitute.hellbender.utils.Utils;
 
 import java.io.File;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Map;
@@ -19,6 +20,7 @@ import java.util.Map;
  * This is pulled out so that every caller isn't exposed to the arguments from every other caller.
  */
 public class StandardCallerArgumentCollection implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

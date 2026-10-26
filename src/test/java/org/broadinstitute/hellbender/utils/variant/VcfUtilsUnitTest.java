@@ -43,8 +43,7 @@ public class VcfUtilsUnitTest extends GATKBaseTest {
 
         Assert.assertEquals(resultLines.size(), referencePath == null ? 2 : 3);
         for (VCFHeaderLine resultLine : resultLines) {
-            if (resultLine instanceof VCFContigHeaderLine) {
-                VCFContigHeaderLine headerLine = (VCFContigHeaderLine) resultLine;
+            if (resultLine instanceof VCFContigHeaderLine headerLine) {
                 SAMSequenceRecord samSeqRec = headerLine.getSAMSequenceRecord();
                 if (samSeqRec.getSequenceName().equals("contig1")) {
                     Assert.assertEquals(samSeqRec.getSequenceLength(), 100);

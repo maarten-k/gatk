@@ -13,6 +13,7 @@ import org.broadinstitute.hellbender.engine.filters.ReadFilter;
 import org.broadinstitute.hellbender.metrics.InsertSizeMetricsArgumentCollection;
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 
+import java.io.Serial;
 import java.util.List;
 
 /**
@@ -46,6 +47,7 @@ import java.util.List;
 public final class CollectInsertSizeMetricsSpark
         extends MetricsCollectorSparkTool<InsertSizeMetricsArgumentCollection> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @ArgumentCollection

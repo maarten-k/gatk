@@ -2,12 +2,14 @@ package org.broadinstitute.hellbender.utils.variant;
 
 import org.broadinstitute.hellbender.utils.SimpleInterval;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
  * MinimalVariant is a minimal implementation of the {@link GATKVariant} interface.
  */
 public class MinimalVariant implements GATKVariant, Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final SimpleInterval interval;

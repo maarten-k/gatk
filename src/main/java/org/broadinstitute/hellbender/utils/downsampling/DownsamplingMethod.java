@@ -2,12 +2,14 @@ package org.broadinstitute.hellbender.utils.downsampling;
 
 import org.broadinstitute.hellbender.exceptions.UserException;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
  * Describes the method for downsampling reads at a given locus.
  */
 public final class DownsamplingMethod implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
     /**
      * Type of downsampling to perform.

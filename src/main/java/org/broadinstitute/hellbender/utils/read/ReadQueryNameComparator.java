@@ -3,6 +3,7 @@ package org.broadinstitute.hellbender.utils.read;
 import htsjdk.samtools.SAMRecordQueryNameComparator;
 import htsjdk.samtools.SAMTag;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Comparator;
 
@@ -11,6 +12,7 @@ import java.util.Comparator;
  * duplicates the exact ordering of {@link SAMRecordQueryNameComparator}
  */
 public class ReadQueryNameComparator implements Comparator<GATKRead>, Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Override

@@ -30,7 +30,7 @@ import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.*;
 
 public final class ReadThreadingAssemblerUnitTest extends GATKBaseTest {
@@ -42,7 +42,7 @@ public final class ReadThreadingAssemblerUnitTest extends GATKBaseTest {
 
     @BeforeClass
     public void setup() {
-        seq = new CachingIndexedFastaSequenceFile(Paths.get(hg19_chr1_1M_Reference));
+        seq = new CachingIndexedFastaSequenceFile(Path.of(hg19_chr1_1M_Reference));
         header = ArtificialReadUtils.createArtificialSamHeader(seq.getSequenceDictionary());
     }
 

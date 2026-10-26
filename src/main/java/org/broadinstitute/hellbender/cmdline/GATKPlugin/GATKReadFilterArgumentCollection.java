@@ -1,5 +1,6 @@
 package org.broadinstitute.hellbender.cmdline.GATKPlugin;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
  * @see org.broadinstitute.hellbender.cmdline.GATKPlugin.GATKReadFilterPluginDescriptor
  */
 public abstract class GATKReadFilterArgumentCollection implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

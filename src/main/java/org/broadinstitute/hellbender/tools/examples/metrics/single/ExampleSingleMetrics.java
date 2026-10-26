@@ -3,9 +3,11 @@ package org.broadinstitute.hellbender.tools.examples.metrics.single;
 import htsjdk.samtools.metrics.MetricBase;
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 public class ExampleSingleMetrics extends MetricBase implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1;
 
     // The final metric collected for each level and for all reads. This variable is public, and

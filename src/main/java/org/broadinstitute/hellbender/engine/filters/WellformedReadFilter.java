@@ -5,6 +5,8 @@ import org.broadinstitute.barclay.help.DocumentedFeature;
 import org.broadinstitute.hellbender.utils.help.HelpConstants;
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 
+import java.io.Serial;
+
 /**
  * Tests whether a read is &quot;well-formed&quot; -- that is, is free of major internal inconsistencies and issues that could lead
  * to errors downstream. If a read passes this filter, the rest of the engine should be able to process it without
@@ -41,6 +43,7 @@ import org.broadinstitute.hellbender.utils.read.GATKRead;
         }
 )
 public final class WellformedReadFilter extends ReadFilter {
+    @Serial
     private static final long serialVersionUID = 1l;
 
     private ReadFilter wellFormedFilter = null;

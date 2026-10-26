@@ -17,6 +17,8 @@ import org.broadinstitute.hellbender.utils.read.GATKRead;
 import org.broadinstitute.hellbender.utils.recalibration.RecalibrationReport;
 import picard.cmdline.programgroups.ReadDataManipulationProgramGroup;
 
+import java.io.Serial;
+
 /**
  * Apply base quality score recalibration with Spark.
  * <p>
@@ -60,6 +62,7 @@ import picard.cmdline.programgroups.ReadDataManipulationProgramGroup;
 @DocumentedFeature
 @BetaFeature
 public final class ApplyBQSRSpark extends GATKSparkTool {
+    @Serial
     private static final long serialVersionUID = 0l;
     static final String USAGE_ONE_LINE_SUMMARY = "Apply base quality score recalibration on Spark";
     static final String USAGE_SUMMARY = "Apply a linear base quality recalibration model trained with the BaseRecalibrator tool on Spark.";

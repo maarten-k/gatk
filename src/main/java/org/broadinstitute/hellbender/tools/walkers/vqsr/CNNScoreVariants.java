@@ -112,9 +112,10 @@ public class CNNScoreVariants extends TwoPassVariantWalker {
             "2D models look at aligned reads, reference sequence, and variant annotations." +
             "2D models require a BAM file as input as well as the tensor-type argument to be set.";
     static final String DISABLE_AVX_CHECK_NAME = "disable-avx-check";
-    static final String AVXREQUIRED_ERROR = "This tool requires AVX instruction set support by default due to its dependency on recent versions of the TensorFlow library.\n" +
-            " If you have an older (pre-1.6) version of TensorFlow installed that does not require AVX you may attempt to re-run the tool with the %s argument to bypass this check.\n" +
-            " Note that such configurations are not officially supported.";
+    static final String AVXREQUIRED_ERROR = """
+            This tool requires AVX instruction set support by default due to its dependency on recent versions of the TensorFlow library.
+             If you have an older (pre-1.6) version of TensorFlow installed that does not require AVX you may attempt to re-run the tool with the %s argument to bypass this check.
+             Note that such configurations are not officially supported.""";
 
     private static final int CONTIG_INDEX = 0;
     private static final int POS_INDEX = 1;

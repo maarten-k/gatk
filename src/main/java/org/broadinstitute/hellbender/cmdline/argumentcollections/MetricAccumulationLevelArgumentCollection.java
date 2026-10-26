@@ -4,12 +4,14 @@ import org.broadinstitute.barclay.argparser.Argument;
 import org.broadinstitute.hellbender.cmdline.StandardArgumentDefinitions;
 import org.broadinstitute.hellbender.metrics.MetricAccumulationLevel;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.EnumSet;
 import java.util.Set;
 
 public class MetricAccumulationLevelArgumentCollection implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Argument(

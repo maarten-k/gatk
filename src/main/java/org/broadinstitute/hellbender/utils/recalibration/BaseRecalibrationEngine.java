@@ -26,10 +26,12 @@ import org.broadinstitute.hellbender.utils.recalibration.covariates.CovariateKey
 import org.broadinstitute.hellbender.utils.recalibration.covariates.ReadCovariates;
 import org.broadinstitute.hellbender.utils.recalibration.covariates.StandardCovariateList;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Arrays;
 
 public final class BaseRecalibrationEngine implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     protected static final Logger logger = LogManager.getLogger(BaseRecalibrationEngine.class);
@@ -49,6 +51,7 @@ public final class BaseRecalibrationEngine implements Serializable {
      * Implemented as a static class rather than an anonymous class or lambda due to serialization issues in spark.
      */
     public static final class BQSRReferenceWindowFunction implements SerializableFunction<GATKRead, SimpleInterval> {
+        @Serial
         private static final long serialVersionUID = 1L;
 
         @Override

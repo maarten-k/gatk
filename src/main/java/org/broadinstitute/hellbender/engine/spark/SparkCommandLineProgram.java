@@ -5,10 +5,12 @@ import org.broadinstitute.barclay.argparser.Argument;
 import org.broadinstitute.barclay.argparser.ArgumentCollection;
 import org.broadinstitute.hellbender.cmdline.CommandLineProgram;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 
 public abstract class SparkCommandLineProgram extends CommandLineProgram implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
     public static final String SPARK_PROGRAM_NAME_LONG_NAME = "program-name";
 

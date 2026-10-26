@@ -2,6 +2,7 @@ package org.broadinstitute.hellbender.utils.read;
 
 import htsjdk.samtools.SAMFileHeader;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Comparator;
 
@@ -19,6 +20,7 @@ import java.util.Comparator;
  * mates with the mapped reads.
  */
 public final class ReadCoordinateComparator implements Comparator<GATKRead>, Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final SAMFileHeader header;

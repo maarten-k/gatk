@@ -8,6 +8,7 @@ import com.google.common.annotations.VisibleForTesting;
 import org.broadinstitute.hellbender.tools.spark.sv.utils.SVUtils;
 import org.broadinstitute.hellbender.utils.Utils;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.*;
 
@@ -20,6 +21,7 @@ import java.util.*;
 @DefaultSerializer(LargeLongHopscotchSet.Serializer.class)
 public final class LargeLongHopscotchSet implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
     private final List<LongHopscotchSet> sets;
     private final int numSets;

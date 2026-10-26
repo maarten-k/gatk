@@ -4,6 +4,7 @@ import htsjdk.samtools.SAMFileHeader;
 import htsjdk.samtools.SAMReadGroupRecord;
 import org.broadinstitute.hellbender.utils.Utils;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -13,6 +14,7 @@ import java.io.Serializable;
  */
 public class SimpleSampleMetadata implements SampleMetadata, Serializable {
 
+    @Serial
     private static final long serialVersionUID = 0L;
 
     private final String sampleName;

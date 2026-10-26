@@ -5,6 +5,7 @@ import org.broadinstitute.hellbender.cmdline.StandardArgumentDefinitions;
 import org.broadinstitute.hellbender.utils.io.IOUtils;
 
 import java.io.File;
+import java.io.Serial;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
  * (eg., BAM/SAM/CRAM files), and require at least one such input.
  */
 public final class RequiredReadInputArgumentCollection extends ReadInputArgumentCollection {
+    @Serial
     private static final long serialVersionUID = 1L;
     @Argument(fullName = StandardArgumentDefinitions.INPUT_LONG_NAME, shortName = StandardArgumentDefinitions.INPUT_SHORT_NAME, doc = "BAM/SAM/CRAM file containing reads", optional = false, common = true)
     public List<String> readFilesNames;

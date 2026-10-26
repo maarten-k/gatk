@@ -3,12 +3,14 @@ package org.broadinstitute.hellbender.tools.spark.bwa;
 import org.broadinstitute.barclay.argparser.Argument;
 import org.broadinstitute.hellbender.tools.BwaMemIndexImageCreator;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
  * A collection of the arguments that are used for BWA.
  */
 public class BwaArgumentCollection implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public static final String SINGLE_END_ALIGNMENT_FULL_NAME = "single-end-alignment";

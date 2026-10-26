@@ -14,7 +14,10 @@ import org.broadinstitute.hellbender.utils.clipping.ReadClipper;
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 import org.broadinstitute.hellbender.utils.recalibration.RecalibrationArgumentCollection;
 
+import java.io.Serial;
+
 public final class ContextCovariate implements Covariate {
+    @Serial
     private static final long serialVersionUID = 1L;
     private static final Logger logger = LogManager.getLogger(ContextCovariate.class);
 

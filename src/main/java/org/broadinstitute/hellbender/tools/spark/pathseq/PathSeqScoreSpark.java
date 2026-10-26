@@ -23,6 +23,7 @@ import org.broadinstitute.hellbender.utils.read.ReadsWriteFormat;
 import scala.Tuple2;
 
 import java.io.IOException;
+import java.io.Serial;
 
 /**
  * Classify reads and estimate abundances of each taxon in the reference. This is the third and final step of the PathSeq pipeline.
@@ -102,6 +103,7 @@ import java.io.IOException;
 @DocumentedFeature
 public class PathSeqScoreSpark extends GATKSparkTool {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public static final String PAIRED_INPUT_LONG_NAME = "paired-input";

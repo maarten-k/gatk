@@ -15,6 +15,7 @@ import org.broadinstitute.hellbender.utils.gcs.BucketUtils;
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 
 import java.io.PrintStream;
+import java.io.Serial;
 import java.util.Collections;
 import java.util.List;
 
@@ -55,6 +56,7 @@ import java.util.List;
 )
 public final class CountReadsSpark extends GATKSparkTool {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Override

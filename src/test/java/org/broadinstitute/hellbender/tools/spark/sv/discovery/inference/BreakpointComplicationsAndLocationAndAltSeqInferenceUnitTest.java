@@ -182,23 +182,21 @@ public class BreakpointComplicationsAndLocationAndAltSeqInferenceUnitTest extend
         Assert.assertTrue(levenshteinDistance <= 2);
 
         // more tests if more complications available
-        if (actualComplication instanceof BreakpointComplications.SmallDuplicationBreakpointComplications) {
-            BreakpointComplications.SmallDuplicationBreakpointComplications actualSmallDupComplication = (BreakpointComplications.SmallDuplicationBreakpointComplications) actualComplication;
+        if (actualComplication instanceof BreakpointComplications.SmallDuplicationBreakpointComplications actualSmallDupComplication) {
             BreakpointComplications.SmallDuplicationBreakpointComplications expectedSmallDupComplication = (BreakpointComplications.SmallDuplicationBreakpointComplications) expectedComplication;
 
             Assert.assertEquals(actualSmallDupComplication.getDupSeqOrientationsOnCtg(), expectedSmallDupComplication.getDupSeqOrientationsOnCtg());
             Assert.assertEquals(actualSmallDupComplication.getDupSeqRepeatNumOnCtg(), expectedSmallDupComplication.getDupSeqRepeatNumOnCtg());
             Assert.assertEquals(actualSmallDupComplication.getDupSeqRepeatNumOnRef(), expectedSmallDupComplication.getDupSeqRepeatNumOnRef());
             Assert.assertEquals(actualSmallDupComplication.getDupSeqRepeatUnitRefSpan(), expectedSmallDupComplication.getDupSeqRepeatUnitRefSpan());
-            if (actualComplication instanceof BreakpointComplications.SmallDuplicationWithPreciseDupRangeBreakpointComplications) {
-                Assert.assertEquals(((BreakpointComplications.SmallDuplicationWithPreciseDupRangeBreakpointComplications) actualComplication).getCigarStringsForDupSeqOnCtgForwardStrandRep(),
+            if (actualComplication instanceof BreakpointComplications.SmallDuplicationWithPreciseDupRangeBreakpointComplications complications) {
+                Assert.assertEquals(complications.getCigarStringsForDupSeqOnCtgForwardStrandRep(),
                                     ((BreakpointComplications.SmallDuplicationWithPreciseDupRangeBreakpointComplications) expectedComplication).getCigarStringsForDupSeqOnCtgForwardStrandRep());
             } else {
                 Assert.assertEquals(((BreakpointComplications.SmallDuplicationWithImpreciseDupRangeBreakpointComplications) actualComplication).getImpreciseDupAffectedRefRange(),
                                     ((BreakpointComplications.SmallDuplicationWithImpreciseDupRangeBreakpointComplications) expectedComplication).getImpreciseDupAffectedRefRange());
             }
-        } else if (actualComplication instanceof BreakpointComplications.InvertedDuplicationBreakpointComplications) {
-            BreakpointComplications.InvertedDuplicationBreakpointComplications actualIntraChrSSComplication = (BreakpointComplications.InvertedDuplicationBreakpointComplications) actualComplication;
+        } else if (actualComplication instanceof BreakpointComplications.InvertedDuplicationBreakpointComplications actualIntraChrSSComplication) {
             BreakpointComplications.InvertedDuplicationBreakpointComplications expectedIntraChrSSComplication = (BreakpointComplications.InvertedDuplicationBreakpointComplications) expectedComplication;
 
             Assert.assertEquals(actualIntraChrSSComplication.getDupSeqRepeatUnitRefSpan(), expectedIntraChrSSComplication.getDupSeqRepeatUnitRefSpan());

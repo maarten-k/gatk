@@ -157,7 +157,7 @@ public interface SampleList  {
             @Override
             public boolean contains(final Object obj) {
                 //note: this handles null too (instanceof returns false)
-                return (obj instanceof String) && SampleList.this.indexOfSample(((String) obj)) >= 0;
+                return (obj instanceof String s) && SampleList.this.indexOfSample(s) >= 0;
             }
         };
     }

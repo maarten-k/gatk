@@ -5,9 +5,11 @@ import htsjdk.variant.variantcontext.VariantContext;
 import org.broadinstitute.barclay.argparser.Argument;
 import org.broadinstitute.hellbender.engine.FeatureInput;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 public final class DbsnpArgumentCollection implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

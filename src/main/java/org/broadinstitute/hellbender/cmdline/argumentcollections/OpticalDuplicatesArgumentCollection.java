@@ -3,6 +3,7 @@ package org.broadinstitute.hellbender.cmdline.argumentcollections;
 import org.broadinstitute.barclay.argparser.Argument;
 import picard.sam.markduplicates.util.OpticalDuplicateFinder;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 
@@ -11,6 +12,7 @@ import java.io.Serializable;
  * duplicates.
  */
 public final class OpticalDuplicatesArgumentCollection implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public static final String READ_NAME_REGEX_LONG_NAME = "read-name-regex";

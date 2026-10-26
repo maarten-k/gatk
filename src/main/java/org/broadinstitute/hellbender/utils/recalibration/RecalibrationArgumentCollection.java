@@ -8,6 +8,7 @@ import org.broadinstitute.hellbender.utils.baq.BAQ;
 import org.broadinstitute.hellbender.utils.report.GATKReportTable;
 
 import java.io.File;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -18,6 +19,7 @@ import java.util.Map;
  */
 
 public final class RecalibrationArgumentCollection implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     // We always use the same covariates. The field is retained for compatibility with GATK3 reports.

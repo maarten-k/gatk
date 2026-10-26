@@ -6,6 +6,7 @@ import org.broadinstitute.hellbender.utils.clipping.ClippingRepresentation;
 import org.broadinstitute.hellbender.utils.clipping.ReadClipper;
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 
+import java.io.Serial;
 import java.util.List;
 
 /**
@@ -14,6 +15,7 @@ import java.util.List;
  * the adapter that occurs earliest in the read.
  */
 public final class AdapterTrimTransformer implements ReadTransformer {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private final int maxMismatches;

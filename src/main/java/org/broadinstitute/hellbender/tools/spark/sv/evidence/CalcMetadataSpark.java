@@ -17,6 +17,7 @@ import org.broadinstitute.hellbender.tools.spark.sv.StructuralVariationDiscovery
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Serial;
 import java.util.Collections;
 
 /**
@@ -61,6 +62,7 @@ import java.util.Collections;
         " fragment length statistics by read group, mean length, coverage, partition statistics, etc.",
         programGroup = DiagnosticsAndQCProgramGroup.class)
 public class CalcMetadataSpark extends GATKSparkTool {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Argument(doc = "output file for metadata", shortName = StandardArgumentDefinitions.OUTPUT_SHORT_NAME,

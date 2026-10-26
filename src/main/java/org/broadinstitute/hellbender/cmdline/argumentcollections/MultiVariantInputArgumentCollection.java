@@ -4,6 +4,7 @@ import org.broadinstitute.barclay.argparser.Argument;
 import org.broadinstitute.hellbender.cmdline.StandardArgumentDefinitions;
 import org.broadinstitute.hellbender.engine.MultiVariantWalker;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
  * subclasses of {@link MultiVariantWalker} can override {@link MultiVariantWalker#getMultiVariantInputArgumentCollection} and provide their own argument pattern.
  */
 public abstract class MultiVariantInputArgumentCollection implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
@@ -21,6 +23,7 @@ public abstract class MultiVariantInputArgumentCollection implements Serializabl
     abstract public List<String> getDrivingVariantPaths();
 
     public static class DefaultMultiVariantInputArgumentCollection extends MultiVariantInputArgumentCollection {
+        @Serial
         private static final long serialVersionUID = 1L;
 
         // NOTE: using List<String> rather than List<FeatureInput> here so that we can initialize the driving source of variants separately

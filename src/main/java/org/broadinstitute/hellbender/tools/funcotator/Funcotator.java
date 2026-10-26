@@ -178,8 +178,9 @@ import java.util.*;
  * <p>A complete list of known open issues can be found on <a href="https://github.com/broadinstitute/gatk/issues?q=is%3Aopen+is%3Aissue+label%3AFuncotator">the GATK github entry for funcotator here.</a></p>
  */
 @CommandLineProgramProperties(
-        summary = "Create functional annotations on given variants cross-referenced by a given set of data sources.\n" +
-                "A GATK functional annotation tool.",
+        summary = """
+                Create functional annotations on given variants cross-referenced by a given set of data sources.
+                A GATK functional annotation tool.""",
         oneLineSummary = "Functional Annotator",
         programGroup = VariantEvaluationProgramGroup.class
 )

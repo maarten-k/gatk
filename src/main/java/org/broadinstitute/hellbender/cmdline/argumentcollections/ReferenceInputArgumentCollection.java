@@ -3,6 +3,7 @@ package org.broadinstitute.hellbender.cmdline.argumentcollections;
 import org.broadinstitute.hellbender.utils.io.IOUtils;
 
 import java.io.File;
+import java.io.Serial;
 import java.io.Serializable;
 import java.nio.file.Path;
 
@@ -10,6 +11,7 @@ import java.nio.file.Path;
  * An abstract ArgumentCollection for specifying a reference sequence file
  */
 public abstract class ReferenceInputArgumentCollection implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

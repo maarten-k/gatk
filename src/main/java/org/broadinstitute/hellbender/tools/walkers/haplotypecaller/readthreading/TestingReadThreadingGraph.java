@@ -3,6 +3,7 @@ package org.broadinstitute.hellbender.tools.walkers.haplotypecaller.readthreadin
 import org.broadinstitute.hellbender.tools.walkers.haplotypecaller.graphs.MultiSampleEdge;
 import org.broadinstitute.hellbender.utils.Utils;
 
+import java.io.Serial;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -17,6 +18,7 @@ public final class TestingReadThreadingGraph extends ReadThreadingGraph {
     private static final Pattern PROPERTIES_PATTERN = Pattern.compile("^\\s*\\[[^\\]]*\\]");
     private static final Pattern PATH_PATTERN = Pattern.compile("\\{((\\S+):)?([^\\}]*)\\}");
     private static final Pattern KMERSIZE_EXTRACTOR_PATTERN = Pattern.compile("^\\s*\\[[^\\]]*(ks|kmerSize)\\s*=\\s*(\\d+)\\s*[,\\]]");
+    @Serial
     private static final long serialVersionUID = 1l;
 
 

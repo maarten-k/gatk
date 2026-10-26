@@ -6,6 +6,8 @@ import org.apache.commons.math3.special.Beta;
 import org.apache.commons.math3.util.CombinatoricsUtils;
 import org.broadinstitute.hellbender.utils.param.ParamUtils;
 
+import java.io.Serial;
+
 import static java.lang.Math.max;
 
 /**
@@ -17,6 +19,7 @@ import static java.lang.Math.max;
  */
 public class BetaBinomialDistribution extends AbstractIntegerDistribution {
 
+    @Serial
     private final static long serialVersionUID = 2325;
     /**
      * Beta distribution shape parameter

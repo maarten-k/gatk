@@ -106,8 +106,8 @@ public final class Sample implements Comparable<Sample> {
         if (o == null) {
             return false;
         }
-        else if (o instanceof Sample) {
-            return 0 == this.compareTo((Sample) o);
+        else if (o instanceof Sample sample) {
+            return 0 == this.compareTo(sample);
         }
         return false;
     }

@@ -79,9 +79,11 @@ public class PythonScriptExecutorUnitTest extends GATKBaseTest {
     @Test(groups = "python", dependsOnMethods = "testPythonExists")
     public void testExecuteAsScriptWithScriptArguments() {
         final String SCRIPT_WITH_ARGUMENTS =
-                "import fileinput\n" +
-                "for line in fileinput.input():\n" +
-                "    print(line)\n";
+                """
+                import fileinput
+                for line in fileinput.input():
+                    print(line)
+                """;
         final File scriptFile = writeTemporaryScriptFile(SCRIPT_WITH_ARGUMENTS, PythonScriptExecutor.PYTHON_EXTENSION);
         final PythonScriptExecutor executor = new PythonScriptExecutor(true);
         final boolean ret = executor.executeScript(

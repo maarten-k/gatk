@@ -5,6 +5,7 @@ import org.broadinstitute.barclay.argparser.Advanced;
 import org.broadinstitute.barclay.argparser.Argument;
 import org.broadinstitute.hellbender.cmdline.StandardArgumentDefinitions;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
  * for tools that process variants objects.
  */
 public class DefaultGATKVariantAnnotationArgumentCollection extends GATKAnnotationArgumentCollection {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

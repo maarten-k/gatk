@@ -2,12 +2,15 @@ package org.broadinstitute.hellbender.transformers;
 
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 
+import java.io.Serial;
+
 /**
  * A read transformer to modify the mapping quality of reads with MQ=255 to reads with MQ=60
  *
  *
  */
 public class MappingQualityReadTransformer implements ReadTransformer {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private int fromQuality = 255;

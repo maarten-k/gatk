@@ -12,6 +12,7 @@ import org.broadinstitute.hellbender.utils.nio.NioBam;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.io.Serial;
 
 /**
  * Example of how to use Spark on Google Cloud Storage directly, without using the GCS Hadoop Connector.
@@ -23,6 +24,7 @@ import java.io.PrintStream;
     omitFromCommandLine = true
 )
 public class ExampleNioCountReads extends SparkCommandLineProgram {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Argument(fullName = StandardArgumentDefinitions.OUTPUT_LONG_NAME, shortName = StandardArgumentDefinitions.OUTPUT_SHORT_NAME, doc = "Output file (if not provided, defaults to STDOUT)", common = false, optional = true)

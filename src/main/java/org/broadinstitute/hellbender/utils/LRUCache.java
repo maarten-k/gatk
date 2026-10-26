@@ -1,5 +1,6 @@
 package org.broadinstitute.hellbender.utils;
 
+import java.io.Serial;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -8,6 +9,7 @@ import java.util.Map;
  */
 public final class LRUCache<K,V> extends LinkedHashMap<K,V> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
     private final int maxCapacity; // Maximum number of items in the cache.
 

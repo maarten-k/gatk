@@ -43,11 +43,11 @@ public class PathSeqScoreIntegrationTest extends CommandLineProgramTest {
             final PSPathogenTaxonScore score = new PSPathogenTaxonScore();
             final String taxonId = tok[0];
             score.setKingdomTaxonId(Math.abs(tok[4].hashCode()));
-            score.addSelfScore(new Double(tok[5]));
-            score.addScoreNormalized(new Double(tok[6]));
-            score.addTotalReads(new Integer(tok[7]));
-            score.addUnambiguousReads(new Integer(tok[8]));
-            score.setReferenceLength(new Long(tok[9]));
+            score.addSelfScore(Double.valueOf(tok[5]));
+            score.addScoreNormalized(Double.valueOf(tok[6]));
+            score.addTotalReads(Integer.valueOf(tok[7]));
+            score.addUnambiguousReads(Integer.valueOf(tok[8]));
+            score.setReferenceLength(Long.valueOf(tok[9]));
             Assert.assertFalse(scores.containsKey(taxonId), "Found more than one entry for taxon ID " + taxonId);
             scores.put(taxonId, score);
         }

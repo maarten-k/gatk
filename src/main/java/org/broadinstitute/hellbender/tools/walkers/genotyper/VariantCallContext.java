@@ -2,11 +2,14 @@ package org.broadinstitute.hellbender.tools.walkers.genotyper;
 
 import htsjdk.variant.variantcontext.VariantContext;
 
+import java.io.Serial;
+
 /**
  * Useful helper class to communicate the results of calculateGenotype to framework
  */
 public final class VariantCallContext extends VariantContext {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     // Was the site called confidently, either reference or variant?

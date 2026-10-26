@@ -5,8 +5,10 @@ import org.broadinstitute.barclay.argparser.Argument;
 import org.broadinstitute.hellbender.tools.walkers.haplotypecaller.readthreading.ReadThreadingAssembler;
 
 import java.io.File;
+import java.io.Serial;
 
 public class MutectReadThreadingAssemblerArgumentCollection extends ReadThreadingAssemblerArgumentCollection {
+    @Serial
     private static final long serialVersionUID = 5304L;
 
     /**

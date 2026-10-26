@@ -9,15 +9,17 @@ import org.apache.logging.log4j.Logger;
 import org.broadinstitute.hellbender.exceptions.GATKException;
 import org.broadinstitute.hellbender.exceptions.UserException;
 
+import java.io.Serial;
 import java.io.Serializable;
 
- /**
+/**
  * Minimal immutable class representing a 1-based closed ended genomic interval
  * SimpleInterval does not allow null contig names.  It cannot represent an unmapped Locatable.
  *
  *@warning 0 length intervals are NOT currently allowed, but support may be added in the future
  */
 public final class SimpleInterval implements Locatable, Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
     public static final char CONTIG_SEPARATOR = ':';
     public static final char START_END_SEPARATOR = '-';

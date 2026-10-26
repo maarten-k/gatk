@@ -6,6 +6,7 @@ import org.broadinstitute.hellbender.cmdline.ReadFilterArgumentDefinitions;
 import org.broadinstitute.hellbender.utils.help.HelpConstants;
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -19,6 +20,7 @@ import java.io.Serializable;
  */
 @DocumentedFeature(groupName= HelpConstants.DOC_CAT_READFILTERS, groupSummary=HelpConstants.DOC_CAT_READFILTERS_SUMMARY, summary = "Keep only reads with mapping qualities within a specified range", extraDocs = {ReadFilterLibrary.MappingQualityAvailableReadFilter.class})
 public final class MappingQualityReadFilter extends ReadFilter implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Argument(fullName=ReadFilterArgumentDefinitions.MINIMUM_MAPPING_QUALITY_NAME, doc = "Minimum mapping quality to keep (inclusive)", optional=true)

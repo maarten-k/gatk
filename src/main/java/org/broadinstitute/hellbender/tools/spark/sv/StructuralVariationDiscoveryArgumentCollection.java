@@ -7,15 +7,18 @@ import org.broadinstitute.barclay.argparser.Hidden;
 import org.broadinstitute.hellbender.exceptions.UserException;
 import org.broadinstitute.hellbender.utils.param.ParamUtils;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 
 public class StructuralVariationDiscoveryArgumentCollection implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public static final int STRUCTURAL_VARIANT_SIZE_LOWER_BOUND = 50;
 
     public static class FindBreakpointEvidenceSparkArgumentCollection implements Serializable {
+        @Serial
         private static final long serialVersionUID = 1L;
 
         public static final int KMER_SIZE = 51;
@@ -270,6 +273,7 @@ public class StructuralVariationDiscoveryArgumentCollection implements Serializa
     public enum SvEvidenceFilterType {DENSITY, XGBOOST}
 
     public static class DiscoverVariantsFromContigAlignmentsSparkArgumentCollection implements Serializable {
+        @Serial
         private static final long serialVersionUID = 1L;
 
         public static final int GAPPED_ALIGNMENT_BREAK_DEFAULT_SENSITIVITY = STRUCTURAL_VARIANT_SIZE_LOWER_BOUND; // alignment with gap of size >= 50 will be broken apart.

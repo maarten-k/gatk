@@ -143,6 +143,30 @@ public final class ReferenceConfidenceModelUnitTest extends GATKBaseTest {
     }
 
     @Test
+    public void testCalcNIndelInformativeReadsCacheMatchesFreshReads() {
+        final String ref = "TTAAAATT";
+        final String[] readBases = {"TTAAAAT", "TTAAATT"};
+        final List<GATKRead> cachedReads = new ArrayList<>();
+        for (final String bases : readBases) {
+            cachedReads.add(ArtificialReadUtils.createArtificialRead(bases.getBytes(), Utils.dupBytes((byte)30, bases.length()), bases.length() + "M"));
+        }
+
+        for (int offset = 0; offset < readBases[0].length(); offset++) {
+            final SimpleInterval loc = new SimpleInterval("20", offset + 1, offset + 1);
+            final ReadPileup cachedPileup = new ReadPileup(loc, cachedReads, offset);
+            final int cachedCount = model.calcNIndelInformativeReads(cachedPileup, offset, ref.getBytes(), 2);
+
+            final List<GATKRead> freshReads = new ArrayList<>();
+            for (final String bases : readBases) {
+                freshReads.add(ArtificialReadUtils.createArtificialRead(bases.getBytes(), Utils.dupBytes((byte)30, bases.length()), bases.length() + "M"));
+            }
+            final ReadPileup freshPileup = new ReadPileup(loc, freshReads, offset);
+            final int freshCount = model.calcNIndelInformativeReads(freshPileup, offset, ref.getBytes(), 2);
+            Assert.assertEquals(cachedCount, freshCount, "cached result differed at position " + offset);
+        }
+    }
+
+    @Test
     public void testWorstGL() {
         final GenotypeLikelihoods gq10 = GenotypeLikelihoods.fromPLField("0,10,100");
         final GenotypeLikelihoods gq20 = GenotypeLikelihoods.fromPLField("0,20,200");

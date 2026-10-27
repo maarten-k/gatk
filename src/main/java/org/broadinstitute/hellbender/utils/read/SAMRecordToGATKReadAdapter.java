@@ -358,7 +358,16 @@ public class SAMRecordToGATKReadAdapter implements GATKRead, Serializable {
         // It's surprising and bizarre, but profiling reveals that caching the cigar length
         // actually helps performance in some cases (eg., the HaplotypeCaller)
         if ( cachedCigarLength == null ) {
-            cachedCigarLength = samRecord.getCigar() == null ? 0 : samRecord.getCigarLength();
+            if ( samRecord instanceof BAMRecord ) {
+                cachedCigarLength = samRecord.getCigarLength();
+                if ( cachedCigarLength == 2 ) {
+                    // A two-element BAM CIGAR may be the sentinel for a long CIGAR.
+                    final Cigar cigar = samRecord.getCigar();
+                    cachedCigarLength = cigar == null ? 0 : cigar.numCigarElements();
+                }
+            } else {
+                cachedCigarLength = samRecord.getCigar() == null ? 0 : samRecord.getCigarLength();
+            }
         }
         return cachedCigarLength;
     }
@@ -367,12 +376,18 @@ public class SAMRecordToGATKReadAdapter implements GATKRead, Serializable {
     public void setCigar( final Cigar cigar ) {
         clearCachedValues();
         samRecord.setCigar(cigar);
+        if ( cigar == null ) {
+            cachedCigarLength = 0;
+        }
     }
 
     @Override
     public void setCigar( final String cigarString ) {
         clearCachedValues();
         samRecord.setCigarString(cigarString);
+        if ( cigarString == null || "*".equals(cigarString) ) {
+            cachedCigarLength = 0;
+        }
     }
 
     @Override

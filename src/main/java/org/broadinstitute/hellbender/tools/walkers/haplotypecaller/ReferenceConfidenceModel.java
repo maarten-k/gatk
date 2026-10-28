@@ -25,7 +25,6 @@ import org.broadinstitute.hellbender.utils.pileup.ReadPileup;
 import org.broadinstitute.hellbender.utils.read.AlignmentUtils;
 import org.broadinstitute.hellbender.utils.read.GATKRead;
 import org.broadinstitute.hellbender.utils.read.ReadCoordinateComparator;
-import org.broadinstitute.hellbender.utils.read.SAMRecordToGATKReadAdapter;
 import org.broadinstitute.hellbender.utils.variant.GATKVCFConstants;
 import org.broadinstitute.hellbender.utils.variant.GATKVariantContextUtils;
 import org.broadinstitute.hellbender.utils.variant.HomoSapiensConstants;
@@ -42,9 +41,6 @@ import java.util.stream.DoubleStream;
  *
  */
 public final class ReferenceConfidenceModel {
-
-    private static final String INDEL_INFORMATIVE_BASES_CACHE_ATTRIBUTE_NAME = "IDL";
-    private static final boolean USE_CACHED_READ_INDEL_INFORMATIVENESS_VALUES = true;
 
     private final SampleList samples;
     private final int indelInformativeDepthIndelSize;
@@ -543,131 +539,58 @@ public final class ReferenceConfidenceModel {
         return matchedPriors;
     }
 
-    private static int[] calculateBaselineMMQualities(final byte[] readBases,
-                                                       final byte[] readQuals,
-                                                       final int readStart,
-                                                       final byte[] refBases,
-                                                       final int refStart) {
+    @VisibleForTesting
+    int sumMismatchingQualities(final byte[] readBases,
+                                final byte[] readQuals,
+                                final int readStart,
+                                final byte[] refBases,
+                                final int refStart,
+                                final int maxSum) {
         final int n = Math.min(readBases.length - readStart, refBases.length - refStart);
-        final int[] results = new int[n];
         int sum = 0;
 
-        for (int i = n - 1; i >= 0; i--) {
+        for ( int i = 0; i < n; i++ ) {
             final byte readBase = readBases[readStart + i];
-            final byte refBase = refBases[refStart + i];
-            if (isMismatchAndNotAnAlignmentGap(readBase, refBase)) {
+            final byte refBase  = refBases[refStart + i];
+            if ( !Nucleotide.intersect(readBase, refBase) && !(readBase == AlignmentUtils.GAP_CHARACTER)) {
                 sum += readQuals[readStart + i];
+                if ( sum > maxSum ) {
+                    return sum;
+                }
             }
-            results[i] = sum;
         }
 
-        return results;
+        return sum;
     }
 
     /**
-     * Determines whether the read has no plausible indels of size up to {@code maxIndelSize} at {@code refStart}.
-     * Results for later read offsets are computed together and cached on the read. The cache is valid when calls
-     * progress through reference positions in ascending order.
+    * Compute whether a read is informative to eliminate an indel of size <= maxIndelSize segregating at readStart/refStart
      */
-    private static boolean readHasNoPlausibleIndelsOfSize(final GATKRead read,
-                                                           final int readStart,
-                                                           final byte[] refBases,
-                                                           final int refStart,
-                                                           final int maxIndelSize,
-                                                           final boolean useCachedResults) {
-        BitSet cachedResult = (BitSet) ((SAMRecordToGATKReadAdapter) read).getTransientAttribute(INDEL_INFORMATIVE_BASES_CACHE_ATTRIBUTE_NAME);
-        if (cachedResult == null || !useCachedResults) {
-            Utils.validate(readStart >= 0, "readStart must >= 0");
-            Utils.validate(refStart >= 0, "refStart must >= 0");
-            final BitSet informativeBases = new BitSet(read.getLength());
-
-            if (read.getLength() - readStart >= maxIndelSize && refBases.length - refStart >= maxIndelSize) {
-                // Preserve the legacy boundary behavior tracked in issue #5646.
-                final int secondaryReadBreakPosition = read.getLength() - maxIndelSize;
-                final Pair<byte[], byte[]> readBasesAndBaseQualities = AlignmentUtils.getBasesAndBaseQualitiesAlignedOneToOne(read);
-                final byte[] readBases = readBasesAndBaseQualities.getLeft();
-                final byte[] readQualities = readBasesAndBaseQualities.getRight();
-
-                // Deletions in the CIGAR can make aligned bases shorter than read.getLength().
-                if (readBases.length - readStart > maxIndelSize) {
-                    final int lastReadBaseToMarkAsIndelRelevant;
-                    final boolean referenceWasShorter;
-                    if (readBases.length < refBases.length - refStart + readStart + 1) {
-                        lastReadBaseToMarkAsIndelRelevant = readBases.length - maxIndelSize;
-                        referenceWasShorter = false;
-                    } else {
-                        lastReadBaseToMarkAsIndelRelevant = refBases.length - refStart + readStart - maxIndelSize + 1;
-                        referenceWasShorter = true;
-                    }
-
-                    final int[] baselineMisMatchSums = calculateBaselineMMQualities(readBases, readQualities, readStart, refBases, refStart);
-                    for (int indelSize = 1; indelSize <= maxIndelSize; indelSize++) {
-                        traverseEndOfReadForIndelMismatches(informativeBases, readStart, readBases, readQualities,
-                                lastReadBaseToMarkAsIndelRelevant, secondaryReadBreakPosition, refStart, refBases,
-                                baselineMisMatchSums, indelSize, false);
-                        traverseEndOfReadForIndelMismatches(informativeBases, readStart, readBases, readQualities,
-                                lastReadBaseToMarkAsIndelRelevant, secondaryReadBreakPosition, refStart, refBases,
-                                baselineMisMatchSums, indelSize, true);
-                    }
-
-                    if (lastReadBaseToMarkAsIndelRelevant <= secondaryReadBreakPosition) {
-                        informativeBases.flip(0, lastReadBaseToMarkAsIndelRelevant);
-                        if (referenceWasShorter) {
-                            informativeBases.set(lastReadBaseToMarkAsIndelRelevant - 1, false);
-                        }
-                    } else {
-                        informativeBases.flip(0, secondaryReadBreakPosition + 1);
-                    }
-                }
-            }
-            cachedResult = informativeBases;
-            ((SAMRecordToGATKReadAdapter) read).setTransientAttribute(INDEL_INFORMATIVE_BASES_CACHE_ATTRIBUTE_NAME, informativeBases);
+    @VisibleForTesting
+    boolean isReadInformativeAboutIndelsOfSize(final GATKRead read,
+                                             final int readStart,
+                                             final byte[] refBases,
+                                             final int refStart,
+                                             final int maxIndelSize) {
+        if( read.getLength() - readStart < maxIndelSize || refBases.length - refStart < maxIndelSize ) {
+            return false;
         }
-        return cachedResult.get(readStart);
-    }
 
-    private static void traverseEndOfReadForIndelMismatches(final BitSet informativeBases,
-                                                             final int readStart,
-                                                             final byte[] readBases,
-                                                             final byte[] readQuals,
-                                                             final int lastReadBaseToMarkAsIndelRelevant,
-                                                             final int secondaryReadBreakPosition,
-                                                             final int refStart,
-                                                             final byte[] refBases,
-                                                             final int[] baselineMMSums,
-                                                             final int indelSize,
-                                                             final boolean insertion) {
-        final int globalMismatchCostForReadAlignedToReference = baselineMMSums[0];
-        int baseQualitySum = 0;
-        final int insertionLength = insertion ? indelSize : 0;
-        final int deletionLength = insertion ? 0 : indelSize;
-        final int numberOfBasesToDirectlyCompare = Math.min(readBases.length - readStart - insertionLength,
-                refBases.length - refStart - deletionLength);
+        final Pair<byte[], byte[]> readBasesAndBaseQualities = AlignmentUtils.getBasesAndBaseQualitiesAlignedOneToOne(read);
+        final byte[] readBases = readBasesAndBaseQualities.getLeft();
+        final byte[] readQuals = readBasesAndBaseQualities.getRight();
+        final int baselineMMSum = sumMismatchingQualities(readBases, readQuals, readStart, refBases, refStart, Integer.MAX_VALUE);
 
-        for (int readOffset = numberOfBasesToDirectlyCompare + insertionLength - 1,
-             refOffset = numberOfBasesToDirectlyCompare + deletionLength - 1;
-             readOffset >= 0 && refOffset >= 0;
-             readOffset--, refOffset--) {
-            final byte readBase = readBases[readStart + readOffset];
-            final byte refBase = refBases[refStart + refOffset];
-            if (isMismatchAndNotAnAlignmentGap(readBase, refBase)) {
-                baseQualitySum += readQuals[readStart + readOffset];
-                if (baseQualitySum > globalMismatchCostForReadAlignedToReference) {
-                    break;
-                }
+        for ( int indelSize = 1; indelSize <= maxIndelSize; indelSize++ ) {
+            if (sumMismatchingQualities(readBases, readQuals, readStart + indelSize, refBases, refStart, baselineMMSum) <= baselineMMSum) {
+                return false;
             }
-            final int siteOfRealComparisonPoint = Math.min(readOffset, refOffset);
-            if (readBases[readStart + siteOfRealComparisonPoint] != AlignmentUtils.GAP_CHARACTER &&
-                    readStart + siteOfRealComparisonPoint < lastReadBaseToMarkAsIndelRelevant &&
-                    readStart + siteOfRealComparisonPoint <= secondaryReadBreakPosition &&
-                    baselineMMSums[siteOfRealComparisonPoint] >= baseQualitySum) {
-                informativeBases.set(readStart + siteOfRealComparisonPoint, true);
+            if (sumMismatchingQualities(readBases, readQuals, readStart, refBases, refStart + indelSize, baselineMMSum) <= baselineMMSum) {
+                return false;
             }
         }
-    }
 
-    private static boolean isMismatchAndNotAnAlignmentGap(final byte readBase, final byte refBase) {
-        return !Nucleotide.intersect(readBase, refBase) && readBase != AlignmentUtils.GAP_CHARACTER;
+        return true;
     }
 
     /**
@@ -690,8 +613,7 @@ public final class ReferenceConfidenceModel {
 
             final int offset = getCigarModifiedOffset(p);
 
-            if (readHasNoPlausibleIndelsOfSize(p.getRead(), offset, ref, pileupOffsetIntoRef,
-                    maxIndelSize, USE_CACHED_READ_INDEL_INFORMATIVENESS_VALUES)) {
+                if (isReadInformativeAboutIndelsOfSize(p.getRead(), offset, ref, pileupOffsetIntoRef, maxIndelSize)) {
                 nInformative++;
                 if( nInformative > MAX_N_INDEL_INFORMATIVE_READS ) {
                     return MAX_N_INDEL_INFORMATIVE_READS;

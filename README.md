@@ -18,6 +18,6 @@ Initial benchmarks ran `HaplotypeCaller` on chromosome 22 on an AMD Ryzen 7 3700
 | Java version | JAR version (GATK 4.0.12.0-…) | Smith-Waterman | User time (s) | Percentage | Peak memory (Max RSS) |
 | --- | --- | --- | --- | --- | --- |
 | Java 8 | orignal\_java8 | JAVA | 2369.52 | 100.00% | ~6.49 GB |
-| Java 17 | 20-g62b2bb6-SNAPSHOT-local | FASTEST\_AVAILABLE | 1057.1 | 44.61% | ~1.78 GB |
-| GraalVM 25.4.4.1.1 | 20-g62b2bb6-SNAPSHOT-local\_java\_graal | FASTEST\_AVAILABLE | 891.12 | 37.61% | ~1.70 GB |
-| GraalVM 25.4.4.1.1 | 23-gfbcd18d-SNAPSHOT-local\_java\_graal | FASTEST\_AVAILABLE | 877.37 | 37.03% | 2.09 GB |
+| Java 17 | 20-g62b2bb6 | FASTEST\_AVAILABLE | 1057.1 | 44.61% | ~1.78 GB |
+| GraalVM 25.4.4.1.1 | 20-g62b2bb6 | FASTEST\_AVAILABLE | 891.12 | 37.61% | ~1.70 GB |
+| GraalVM 25.4.4.1.1 | 23-gfbcd18d | FASTEST\_AVAILABLE | 877.37 | 37.03% | 2.09 GB |

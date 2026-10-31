@@ -19,6 +19,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public final class ReadThreadingGraphUnitTest extends GATKBaseTest {
     private static final boolean DEBUG = false;
@@ -339,6 +340,22 @@ public final class ReadThreadingGraphUnitTest extends GATKBaseTest {
         final ReadThreadingGraph.DanglingChainMergeHelper result = new ReadThreadingGraph.DanglingChainMergeHelper(null, null, "AXXXXX".getBytes(), "AAAAAA".getBytes(), TextCigarCodec.decode("5I1M"));
         final int mergeResult = rtgraph.mergeDanglingTail(result);
         Assert.assertEquals(mergeResult, 0);
+    }
+
+    private static GATKRead readWithUnusableMiddleBase() {
+        final byte[] bases = "ACGTACGTACGTACGTACGT".getBytes();
+        final byte[] quals = Utils.dupBytes((byte) 30, bases.length);
+        quals[10] = 0;
+        return ArtificialReadUtils.createArtificialRead(bases, quals, bases.length + "M");
+    }
+
+    @Test
+    public void readSegmentsAreNamedByReadAndBoundsWhenDebuggingGraphTransformations() {
+        final ReadThreadingGraph graph = new ReadThreadingGraph(5, true, (byte) 6, 1);
+        final GATKRead read = readWithUnusableMiddleBase();
+        graph.addRead(read, ArtificialReadUtils.createArtificialSamHeader());
+        final List<String> names = graph.getAllPendingSequences().stream().map(s -> s.name).collect(Collectors.toList());
+        Assert.assertEquals(names, Arrays.asList(read.getName() + "_0_10", read.getName() + "_11_20"));
     }
 
     @Test

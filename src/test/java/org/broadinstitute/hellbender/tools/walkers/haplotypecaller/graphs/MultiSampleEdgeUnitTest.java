@@ -75,7 +75,7 @@ public final class MultiSampleEdgeUnitTest extends GATKBaseTest {
         Assert.assertEquals(edge.getPruningMultiplicity(), prune);
     }
 
-    /** An edge seen 3, 5 and 2 times in three samples, with a sample in progress and two reference path indexes. */
+    /** An edge seen 3, 5 and 2 times in three samples, with a sample in progress. */
     private static MultiSampleEdge edgeWithSampleHistory() {
         final MultiSampleEdge edge = new MultiSampleEdge(true, 3, 2);
         edge.flushSingleSampleMultiplicity();
@@ -84,13 +84,11 @@ public final class MultiSampleEdgeUnitTest extends GATKBaseTest {
         edge.incMultiplicity(2);
         edge.flushSingleSampleMultiplicity();
         edge.incMultiplicity(4);
-        edge.addReferenceIndex(7);
-        edge.addReferenceIndex(11);
         return edge;
     }
 
     @Test
-    public void aDuplicateKeepsThePerSampleStateAndReferenceIndexes() {
+    public void aDuplicateKeepsThePerSampleState() {
         final MultiSampleEdge edge = edgeWithSampleHistory();
         final MultiSampleEdge duplicate = edge.duplicate();
         Assert.assertNotSame(duplicate, edge);
@@ -98,7 +96,6 @@ public final class MultiSampleEdgeUnitTest extends GATKBaseTest {
         Assert.assertEquals(duplicate.getMultiplicity(), edge.getMultiplicity());
         Assert.assertEquals(duplicate.getPruningMultiplicity(), edge.getPruningMultiplicity());
         Assert.assertEquals(duplicate.getCurrentSingleSampleMultiplicity(), edge.getCurrentSingleSampleMultiplicity());
-        Assert.assertEquals(duplicate.getReferencePathIndexes(), edge.getReferencePathIndexes());
         Assert.assertEquals(duplicate.getDotLabel(), edge.getDotLabel());
     }
 
@@ -121,6 +118,5 @@ public final class MultiSampleEdgeUnitTest extends GATKBaseTest {
         Assert.assertEquals(copy.getMultiplicity(), 14);
         Assert.assertEquals(copy.getPruningMultiplicity(), 14);
         Assert.assertEquals(copy.getCurrentSingleSampleMultiplicity(), 14);
-        Assert.assertTrue(copy.getReferencePathIndexes().isEmpty());
     }
 }

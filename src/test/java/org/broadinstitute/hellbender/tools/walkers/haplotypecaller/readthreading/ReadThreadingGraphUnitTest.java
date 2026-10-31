@@ -19,6 +19,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public final class ReadThreadingGraphUnitTest extends GATKBaseTest {
     private static final boolean DEBUG = false;
@@ -350,7 +351,7 @@ public final class ReadThreadingGraphUnitTest extends GATKBaseTest {
 
     @Test
     public void readSegmentsAreNamedByReadAndBoundsWhenDebuggingGraphTransformations() {
-        final ReadThreadingGraph graph = new ReadThreadingGraph(5, true, (byte) 6, 1, -1);
+        final ReadThreadingGraph graph = new ReadThreadingGraph(5, true, (byte) 6, 1);
         final GATKRead read = readWithUnusableMiddleBase();
         graph.addRead(read, ArtificialReadUtils.createArtificialSamHeader());
         final List<String> names = graph.getAllPendingSequences().stream().map(s -> s.name).collect(Collectors.toList());

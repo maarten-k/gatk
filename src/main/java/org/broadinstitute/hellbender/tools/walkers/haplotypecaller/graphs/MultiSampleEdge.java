@@ -50,8 +50,8 @@ public final class MultiSampleEdge extends BaseEdge {
 
     /**
      * Create a new edge with this edge's reference flag, multiplicity and sample capacity, as if its whole
-     * multiplicity had been seen in one sample: the per-sample multiplicities and reference path indexes are not
-     * copied. {@link #duplicate()} copies them too.
+    * multiplicity had been seen in one sample: the per-sample multiplicities are not copied.
+    * {@link #duplicate()} copies them too.
      */
     @Override
     public MultiSampleEdge copy() {
@@ -64,7 +64,6 @@ public final class MultiSampleEdge extends BaseEdge {
         duplicate.currentSingleSampleMultiplicity = currentSingleSampleMultiplicity;
         duplicate.singleSampleMultiplicities.clear();
         duplicate.singleSampleMultiplicities.addAll(singleSampleMultiplicities);
-        duplicate.referencePathIndexes.addAll(referencePathIndexes);
         return duplicate;
     }
 

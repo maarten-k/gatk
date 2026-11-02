@@ -27,7 +27,7 @@ Initial benchmarks ran `HaplotypeCaller` on chromosome 22 on an AMD Ryzen 7 3700
 ### Further optimisations
 
  LLM assisted backports from [tfenne/gatk — `high_performance_germline_calling`](https://github.com/tfenne/gatk/tree/high_performance_germline_calling)
-Since difference are small, chr22 is ran 7 times
+Since the differences are small, the chr22 benchmark is run seven times.
 
 |Java| branch | Mean ± sd | Range | Faster than baseline |  changes |
 | --- | --- | --- | --- | --- | --- |

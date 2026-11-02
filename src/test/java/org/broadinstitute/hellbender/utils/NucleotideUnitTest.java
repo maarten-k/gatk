@@ -286,6 +286,12 @@ public class NucleotideUnitTest {
         }
     }
 
+    @Test
+    public void testIntersectsEqualInvalidBytes() {
+        Assert.assertFalse(Nucleotide.intersect((byte) '?', (byte) '?'));
+        Assert.assertFalse(Nucleotide.intersect((byte) '-', (byte) '-'));
+    }
+
     @Test(dataProvider = "values")
     public void testComplement(final Nucleotide nuc) {
         final boolean thisA = nuc.includes(Nucleotide.A);

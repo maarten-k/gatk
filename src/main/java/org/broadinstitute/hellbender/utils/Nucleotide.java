@@ -383,6 +383,9 @@ public enum Nucleotide {
      * @return {@code true} iff the input nucleotides intersect.
      */
     public static boolean intersect(final byte a, final byte b) {
+        if (a == b) {
+            return baseToMask[0xFF & a] != 0;
+        }
         return (baseToMask[0xFF & a] & baseToMask[0xFF & b]) != 0;
     }
 

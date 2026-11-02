@@ -277,6 +277,8 @@ public class NucleotideUnitTest {
             final boolean otherT = other.includes(Nucleotide.T);
             final Nucleotide intersect = nuc.intersect(other);
             Assert.assertNotNull(intersect);
+            Assert.assertEquals(Nucleotide.intersect(nuc.encodeAsByte(), other.encodeAsByte()),
+                    intersect != Nucleotide.INVALID);
             Assert.assertEquals(intersect.includes(Nucleotide.A), thisA && otherA);
             Assert.assertEquals(intersect.includes(Nucleotide.C), thisC && otherC);
             Assert.assertEquals(intersect.includes(Nucleotide.G), thisG && otherG);

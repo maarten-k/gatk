@@ -6,7 +6,7 @@ import org.broadinstitute.hellbender.exceptions.UserException;
 import org.broadinstitute.hellbender.utils.Utils;
 import org.jgrapht.EdgeFactory;
 import org.jgrapht.alg.CycleDetector;
-import org.jgrapht.graph.DefaultDirectedGraph;
+import org.jgrapht.graph.DirectedPseudograph;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -18,8 +18,12 @@ import java.util.stream.Collectors;
 
 /**
  * Common code for graphs used for local assembly.
+ *
+ * A graph never holds two edges between the same pair of vertices, and an edge object joins one pair of vertices for
+ * life (see {@link BaseEdge}). The graph refuses parallel edges itself rather than through jgrapht, so jgrapht's
+ * {@link #isAllowingMultipleEdges()} and {@link #getType()} report that parallel edges are allowed.
  */
-public abstract class BaseGraph<V extends BaseVertex, E extends BaseEdge> extends DefaultDirectedGraph<V, E> {
+public abstract class BaseGraph<V extends BaseVertex, E extends BaseEdge> extends DirectedPseudograph<V, E> {
     private static final long serialVersionUID = 1l;
     protected final int kmerSize;
 
@@ -42,18 +46,80 @@ public abstract class BaseGraph<V extends BaseVertex, E extends BaseEdge> extend
     }
 
     /**
+     * Adds an edge from {@code source} to {@code target}, unless the graph already has an edge between them.
+     *
+     * An edge stores its endpoints (see {@link BaseEdge}), so an edge object that already joins other vertices, in
+     * this graph or another, is rejected rather than silently re-pointed wherever it is held.
+     *
+     * @return true if the edge was added, false if the graph already had an edge from {@code source} to {@code target}
+     * @throws NullPointerException if {@code e} is null
+     * @throws IllegalArgumentException if {@code e} already joins vertices other than {@code source} and {@code target},
+     *                                  in this graph or another
+     */
+    @Override
+    public boolean addEdge(final V source, final V target, final E e) {
+        Objects.requireNonNull(e);
+        rejectEdgeJoiningOtherVertices(source, target, e);
+        return !containsEdge(source, target) && super.addEdge(source, target, e);
+    }
+
+    /**
+     * Adds an edge from {@code source} to {@code target} when the caller has already established that the graph has no
+     * edge between them, skipping the search for one that {@link #addEdge(BaseVertex, BaseVertex, BaseEdge)} makes.
+     *
+     * @return true if the edge was added, false if the graph already contains {@code e}
+     * @throws NullPointerException if {@code e} is null
+     * @throws IllegalArgumentException if {@code e} already joins vertices other than {@code source} and {@code target},
+     *                                  in this graph or another
+     */
+    protected final boolean addEdgeWhereNoneExists(final V source, final V target, final E e) {
+        Objects.requireNonNull(e);
+        rejectEdgeJoiningOtherVertices(source, target, e);
+        // The precondition is checked only where assertions are enabled, as in tests.
+        assert !containsEdge(source, target) : "an edge from " + source + " to " + target + " already exists";
+        return super.addEdge(source, target, e);
+    }
+
+    /**
+     * Adds a new edge from {@code source} to {@code target}, made by the graph's edge factory, unless the graph already
+     * has an edge between them.
+     *
+     * @return the new edge, or null if the graph already had an edge from {@code source} to {@code target}
+     */
+    @Override
+    public E addEdge(final V source, final V target) {
+        return containsEdge(source, target) ? null : super.addEdge(source, target);
+    }
+
+    private static void rejectEdgeJoiningOtherVertices(final BaseVertex source, final BaseVertex target, final BaseEdge e) {
+        if (e.joinsOtherVertices(source, target)) {
+            throw new IllegalArgumentException("edge " + e + " already joins " + e.describeJoinedVertices()
+                    + "; add its duplicate() to join " + source + " -> " + target);
+        }
+    }
+
+    /**
      * @param v the vertex to test
      * @return  true if this vertex is a reference node (meaning that it appears on the reference path in the graph)
      */
     public final boolean isReferenceNode( final V v ) {
         Utils.nonNull(v, "Attempting to test a null vertex.");
 
-        if (edgesOf(v).stream().anyMatch(e -> e.isRef())){
+        if (hasRefEdge(incomingEdgesOf(v)) || hasRefEdge(outgoingEdgesOf(v))) {
             return true;
         }
 
         // edge case: if the graph only has one node then it's a ref node, otherwise it's not
         return vertexSet().size() == 1;
+    }
+
+    private boolean hasRefEdge(final Set<E> edges) {
+        for (final E e : edges) {
+            if (e.isRef()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -110,11 +176,13 @@ public abstract class BaseGraph<V extends BaseVertex, E extends BaseEdge> extend
             seqGraph.addVertex(sv);
         }
 
-        // walk through the nodes and connect them to their equivalent seq vertices
+        // walk through the nodes and connect them to their equivalent seq vertices. This graph has no parallel
+        // edges and every sequence vertex was created above for exactly one vertex here, so no copied edge can
+        // duplicate another: the copies are added without a duplicate-edge search.
         for( final E e : edgeSet() ) {
             final SeqVertex seqInV = vertexMap.get(getEdgeSource(e));
             final SeqVertex seqOutV = vertexMap.get(getEdgeTarget(e));
-            seqGraph.addEdge(seqInV, seqOutV, new BaseEdge(e.isRef(), e.getMultiplicity()));
+            seqGraph.addEdgeWhereNoneExists(seqInV, seqOutV, new BaseEdge(e.isRef(), e.getMultiplicity()));
         }
 
         return seqGraph;
@@ -138,12 +206,12 @@ public abstract class BaseGraph<V extends BaseVertex, E extends BaseEdge> extend
         Utils.nonNull(v, "Attempting to pull sequence from a null vertex.");
 
         // confirm that no incoming edges are reference edges
-        if (incomingEdgesOf(v).stream().anyMatch(e -> e.isRef())) {
+        if (hasRefEdge(incomingEdgesOf(v))) {
             return false;
         }
 
         // confirm that there is an outgoing reference edge
-        if (outgoingEdgesOf(v).stream().anyMatch(e -> e.isRef())) {
+        if (hasRefEdge(outgoingEdgesOf(v))) {
             return true;
         }
 
@@ -159,12 +227,12 @@ public abstract class BaseGraph<V extends BaseVertex, E extends BaseEdge> extend
         Utils.nonNull(v, "Attempting to pull sequence from a null vertex.");
 
         // confirm that no outgoing edges are reference edges
-        if (outgoingEdgesOf(v).stream().anyMatch(e -> e.isRef())) {
+        if (hasRefEdge(outgoingEdgesOf(v))) {
             return false;
         }
 
         // confirm that there is an incoming reference edge
-        if (incomingEdgesOf(v).stream().anyMatch(e -> e.isRef())) {
+        if (hasRefEdge(incomingEdgesOf(v))) {
             return true;
         }
 
@@ -176,14 +244,24 @@ public abstract class BaseGraph<V extends BaseVertex, E extends BaseEdge> extend
      * @return the reference source vertex pulled from the graph, can be null if it doesn't exist in the graph
      */
     public final V getReferenceSourceVertex( ) {
-        return vertexSet().stream().filter(v -> isRefSource(v)).findFirst().orElse(null);
+        for (final V v : vertexSet()) {
+            if (isRefSource(v)) {
+                return v;
+            }
+        }
+        return null;
     }
 
     /**
      * @return the reference sink vertex pulled from the graph, can be null if it doesn't exist in the graph
      */
     public final V getReferenceSinkVertex( ) {
-        return vertexSet().stream().filter(v -> isRefSink(v)).findFirst().orElse(null);
+        for (final V v : vertexSet()) {
+            if (isRefSink(v)) {
+                return v;
+            }
+        }
+        return null;
     }
 
     /**
@@ -331,7 +409,11 @@ public abstract class BaseGraph<V extends BaseVertex, E extends BaseEdge> extend
      */
     public final Set<V> outgoingVerticesOf(final V v) {
         Utils.nonNull(v);
-        return outgoingEdgesOf(v).stream().map(e -> getEdgeTarget(e)).collect(Collectors.toSet());
+        final Set<V> targets = new LinkedHashSet<>();
+        for (final E e : outgoingEdgesOf(v)) {
+            targets.add(getEdgeTarget(e));
+        }
+        return targets;
     }
 
     /**
@@ -341,7 +423,11 @@ public abstract class BaseGraph<V extends BaseVertex, E extends BaseEdge> extend
      */
     public final Set<V> incomingVerticesOf(final V v) {
         Utils.nonNull(v);
-        return incomingEdgesOf(v).stream().map(e -> getEdgeSource(e)).collect(Collectors.toSet());
+        final Set<V> sources = new LinkedHashSet<>();
+        for (final E e : incomingEdgesOf(v)) {
+            sources.add(getEdgeSource(e));
+        }
+        return sources;
     }
 
     /**
@@ -401,13 +487,16 @@ public abstract class BaseGraph<V extends BaseVertex, E extends BaseEdge> extend
      * Also removes all vertices that are orphaned by this process
      */
     public final void cleanNonRefPaths() {
-        if( getReferenceSourceVertex() == null || getReferenceSinkVertex() == null ) {
+        // Only non-reference edges are removed below, which cannot change which vertices are the reference source and sink.
+        final V refSource = getReferenceSourceVertex();
+        final V refSink = getReferenceSinkVertex();
+        if( refSource == null || refSink == null ) {
             return;
         }
 
         // Remove non-ref edges connected before and after the reference path
         final Collection<E> edgesToCheck = new HashSet<>();
-        edgesToCheck.addAll(incomingEdgesOf(getReferenceSourceVertex()));
+        edgesToCheck.addAll(incomingEdgesOf(refSource));
         while( !edgesToCheck.isEmpty() ) {
             final E e = edgesToCheck.iterator().next();
             if( !e.isRef() ) {
@@ -417,7 +506,7 @@ public abstract class BaseGraph<V extends BaseVertex, E extends BaseEdge> extend
             edgesToCheck.remove(e);
         }
 
-        edgesToCheck.addAll(outgoingEdgesOf(getReferenceSinkVertex()));
+        edgesToCheck.addAll(outgoingEdgesOf(refSink));
         while( !edgesToCheck.isEmpty() ) {
             final E e = edgesToCheck.iterator().next();
             if( !e.isRef() ) {
@@ -450,16 +539,9 @@ public abstract class BaseGraph<V extends BaseVertex, E extends BaseEdge> extend
      * regardless of its direction, from the reference source vertex
      */
     public final void removeVerticesNotConnectedToRefRegardlessOfEdgeDirection() {
-        final Collection<V> toRemove = new HashSet<>(vertexSet());
-
         final V refV = getReferenceSourceVertex();
-        if ( refV != null ) {
-            for ( final V v : new BaseGraphIterator<>(this, refV, true, true) ) {
-                toRemove.remove(v);
-            }
-        }
-
-        removeAllVertices(toRemove);
+        final Set<V> connected = refV == null ? Collections.emptySet() : verticesReachableFrom(refV, true, true);
+        removeAllVertices(verticesNotIn(connected));
     }
 
     /**
@@ -470,27 +552,16 @@ public abstract class BaseGraph<V extends BaseVertex, E extends BaseEdge> extend
      * paths that do not also meet eventually with the reference sink vertex
      */
     public final void removePathsNotConnectedToRef() {
-        if ( getReferenceSourceVertex() == null || getReferenceSinkVertex() == null ) {
+        final V refSource = getReferenceSourceVertex();
+        final V refSink = getReferenceSinkVertex();
+        if ( refSource == null || refSink == null ) {
             throw new IllegalStateException("Graph must have ref source and sink vertices");
         }
 
-        // get the set of vertices we can reach by going forward from the ref source
-        final Collection<V> onPathFromRefSource = new HashSet<>(vertexSet().size());
-        for ( final V v : new BaseGraphIterator<>(this, getReferenceSourceVertex(), false, true) ) {
-            onPathFromRefSource.add(v);
-        }
-
-        // get the set of vertices we can reach by going backward from the ref sink
-        final Collection<V> onPathFromRefSink = new HashSet<>(vertexSet().size());
-        for ( final V v : new BaseGraphIterator<>(this, getReferenceSinkVertex(), true, false) ) {
-            onPathFromRefSink.add(v);
-        }
-
-        // we want to remove anything that's not in both the sink and source sets
-        final Collection<V> verticesToRemove = new HashSet<>(vertexSet());
-        onPathFromRefSource.retainAll(onPathFromRefSink);
-        verticesToRemove.removeAll(onPathFromRefSource);
-        removeAllVertices(verticesToRemove);
+        // keep only the vertices reachable both forward from the ref source and backward from the ref sink
+        final Set<V> onPathFromRefSource = verticesReachableFrom(refSource, false, true);
+        onPathFromRefSource.retainAll(verticesReachableFrom(refSink, true, false));
+        removeAllVertices(verticesNotIn(onPathFromRefSource));
 
         // simple sanity checks that this algorithm is working.
         if ( getSinks().size() > 1 ) {
@@ -689,72 +760,48 @@ public abstract class BaseGraph<V extends BaseVertex, E extends BaseEdge> extend
     }
 
     /**
-     * General iterator that can iterate over all vertices in a BaseGraph, following either
-     * incoming, outgoing edge (as well as both or none) edges.  Supports traversal of graphs
-     * with cycles and other crazy structures.  Will only ever visit each vertex once.  The
-     * order in which the vertices are visited is undefined.
+     * Breadth-first search from one vertex along edges in the chosen directions.
+     *
+     * @param start the vertex to start from, which must be in this graph
+     * @param followIncomingEdges whether to follow edges backward, from target to source
+     * @param followOutgoingEdges whether to follow edges forward, from source to target
+     * @return every vertex reachable from start by following edges in the given directions, start included
      */
-    private static final class BaseGraphIterator<T extends BaseVertex, E extends BaseEdge> implements Iterator<T>, Iterable<T> {
-        final Collection<T> visited = new HashSet<>();
-        final Deque<T> toVisit = new LinkedList<>();
-        final BaseGraph<T,E> graph;
-        final boolean followIncomingEdges;
-        final boolean followOutgoingEdges;
-
-        /**
-         * Create a new BaseGraphIterator starting its traversal at start
-         *
-         * Note that if both followIncomingEdges and followOutgoingEdges are false, we simply return the
-         * start vertex
-         *
-         * @param graph the graph to iterator over.  Cannot be null
-         * @param start the vertex to start at.  Cannot be null
-         * @param followIncomingEdges should we follow incoming edges during our
-         *                            traversal? (goes backward through the graph)
-         * @param followOutgoingEdges should we follow outgoing edges during out traversal?
-         */
-        private BaseGraphIterator(final BaseGraph<T,E> graph, final T start,
-                                 final boolean followIncomingEdges, final boolean followOutgoingEdges) {
-            Utils.nonNull(graph, "graph cannot be null");
-            Utils.nonNull(start, "start cannot be null");
-            Utils.validateArg(graph.containsVertex(start), () -> "start " + start + " must be in graph but it isn't");
-            this.graph = graph;
-            this.followIncomingEdges = followIncomingEdges;
-            this.followOutgoingEdges = followOutgoingEdges;
-
-            toVisit.add(start);
-        }
-
-        @Override
-        public Iterator<T> iterator() {
-            return this;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return ! toVisit.isEmpty();
-        }
-
-        @Override
-        public T next() {
-            final T v = toVisit.pop();
-
-            if ( ! visited.contains(v) ) {
-                visited.add(v);
-                if ( followIncomingEdges ) {
-                    toVisit.addAll(graph.incomingVerticesOf(v));
-                }
-                if ( followOutgoingEdges ) {
-                    toVisit.addAll(graph.outgoingVerticesOf(v));
+    private Set<V> verticesReachableFrom(final V start, final boolean followIncomingEdges, final boolean followOutgoingEdges) {
+        final Set<V> reached = new HashSet<>();
+        final Deque<V> toVisit = new ArrayDeque<>();
+        reached.add(start);
+        toVisit.add(start);
+        while ( ! toVisit.isEmpty() ) {
+            final V v = toVisit.poll();
+            if ( followIncomingEdges ) {
+                for ( final E e : incomingEdgesOf(v) ) {
+                    final V source = getEdgeSource(e);
+                    if ( reached.add(source) ) {
+                        toVisit.add(source);
+                    }
                 }
             }
-
-            return v;
+            if ( followOutgoingEdges ) {
+                for ( final E e : outgoingEdgesOf(v) ) {
+                    final V target = getEdgeTarget(e);
+                    if ( reached.add(target) ) {
+                        toVisit.add(target);
+                    }
+                }
+            }
         }
+        return reached;
+    }
 
-        @Override
-        public void remove() {
-            throw new UnsupportedOperationException("Doesn't implement remove");
+    /** @return the vertices of this graph that are not in keep, in the graph's vertex order */
+    private List<V> verticesNotIn(final Set<V> keep) {
+        final List<V> others = new ArrayList<>();
+        for ( final V v : vertexSet() ) {
+            if ( ! keep.contains(v) ) {
+                others.add(v);
+            }
         }
+        return others;
     }
 }

@@ -21,3 +21,17 @@ Initial benchmarks ran `HaplotypeCaller` on chromosome 22 on an AMD Ryzen 7 3700
 | Java 17 | 20-g62b2bb6 | FASTEST\_AVAILABLE | 1057.1 | 44.61% | ~1.78 GB |
 | GraalVM 25.4.4.1.1 | 20-g62b2bb6 | FASTEST\_AVAILABLE | 891.12 | 37.61% | ~1.70 GB |
 | GraalVM 25.4.4.1.1 | 23-gfbcd18d | FASTEST\_AVAILABLE | 877.37 | 37.03% | 2.09 GB |
+
+
+
+### Further optimisations
+
+ LLM assisted backports from [tfenne/gatk — `high_performance_germline_calling`](https://github.com/tfenne/gatk/tree/high_performance_germline_calling)
+Since the differences are small, the chr22 benchmark is run seven times.
+
+|Java| branch | Mean ± sd | Range | Faster than baseline in User time (s) |  changes |
+| --- | --- | --- | --- | --- | --- |
+| Java 17 | 23-gfbcd18d (baseline)| **1073.1 ± 18.2** | 1051.7 – 1104.9 | 0 | |
+| Java 17 | perfassembly-graph | **1015.7 ± 13.3** | 992.3 – 1032.1 | 57.5 | None
+| Java 17 | mann-whitney | 1034.8 ± 19.5 | 1019.9 – 1077.2 | 38.3 | change in PL in 1 line 162,0,2746,408,2788,3196 --> 162,0,2*817*,408,2*859*,3*267* |
+| Java 17 | packled\_nonuniquekmers | 1040.9 ± 10.2 | 1021.0 – 1050.3 | 32.3 | change in PL in 1 line 0,26,22*46*,223,22*67*,24*63* --> 0,26,2226,223,2247,244 |

@@ -31,14 +31,20 @@ public class SAMRecordToGATKReadAdapter implements GATKRead, Serializable {
     // Lazily computed values held as primitives rather than boxed Integers, because these accessors
     // run once per pileup element per locus in the HaplotypeCaller. UNCACHED marks a value not yet
     // computed: none of the four can be Integer.MAX_VALUE for a real read (Integer.MIN_VALUE is taken
-    // by ReadUtils.CANNOT_COMPUTE_ADAPTOR_BOUNDARY, and soft starts can be zero or negative). The
-    // fields are not transient: Java deserialization would otherwise leave them at 0, a valid value.
+    // by ReadUtils.CANNOT_COMPUTE_ADAPTOR_BOUNDARY, and soft starts can be zero or negative).
+    // Transient caches are reset explicitly after Java deserialization because 0 is a valid value.
     private static final int UNCACHED = Integer.MAX_VALUE;
 
-    private int cachedSoftStart = UNCACHED;
-    private int cachedSoftEnd = UNCACHED;
-    private int cachedAdaptorBoundary = UNCACHED;
-    private int cachedCigarLength = UNCACHED;
+    private transient int cachedSoftStart = UNCACHED;
+    private transient int cachedSoftEnd = UNCACHED;
+    private transient int cachedAdaptorBoundary = UNCACHED;
+    private transient int cachedCigarLength = UNCACHED;
+
+    @Serial
+    private void readObject(final java.io.ObjectInputStream input) throws java.io.IOException, ClassNotFoundException {
+        input.defaultReadObject();
+        clearCachedValues();
+    }
 
     private void clearCachedValues() {
         cachedSoftStart = UNCACHED;

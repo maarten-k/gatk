@@ -2,7 +2,7 @@
 
 This branch produces a faster build of the GATK `HaplotypeCaller` version that was used to create the UK Biobank 500k release whole-genome sequencing VCFs and their indices ([UKB Field 23370](https://biobank.ndph.ox.ac.uk/showcase/field.cgi?id=23370)).
 
-If you are not tied to the exact 4.0.12.0 calling pipeline, a modern maintained alternative is Tom Fennell's high-performance germline calling fork: [tfenne/gatk — `high_performance_germline_calling`](https://github.com/tfenne/gatk/tree/high_performance_germline_calling).
+If you are not tied to the exact 4.0.12.0 calling pipeline, a modern maintained alternative is Tim Fennell's high-performance germline calling fork: [tfenne/gatk — `high_performance_germline_calling`](https://github.com/tfenne/gatk/tree/high_performance_germline_calling).
 
 ## Changes
 

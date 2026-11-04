@@ -141,6 +141,33 @@ public final class PairHMMLikelihoodCalculationEngineUnitTest extends GATKBaseTe
         }
     }
 
+    @Test
+    public void testFindTandemRepeatLengthMatchesFindTandemRepeatUnits() {
+        final Random rng = new Random(42);
+        final byte[] alphabet = {'A', 'C', 'G', 'T'};
+        for (int iter = 0; iter < 5000; iter++) {
+            final int len = 1 + rng.nextInt(60);
+            final int alphabetSize = 1 + rng.nextInt(4);
+            final byte[] bases = new byte[len];
+            for (int i = 0; i < len; i++) {
+                bases[i] = alphabet[rng.nextInt(alphabetSize)];
+            }
+            // plant a repeat so longer units are exercised
+            if (len > 8 && rng.nextBoolean()) {
+                final int unit = 1 + rng.nextInt(8);
+                final int start = rng.nextInt(len - unit);
+                for (int i = start + unit; i < len; i++) {
+                    bases[i] = bases[i - unit];
+                }
+            }
+            for (int offset = 0; offset < len; offset++) {
+                Assert.assertEquals(PairHMMLikelihoodCalculationEngine.findTandemRepeatLength(bases, offset),
+                        (int) PairHMMLikelihoodCalculationEngine.findTandemRepeatUnits(bases, offset).getRight(),
+                        new String(bases) + " offset " + offset);
+            }
+        }
+    }
+
     //Private function to compare 2d arrays
     private static boolean compareDoubleArrays(final double[][] b1, final double[][] b2) {
         if( b1.length != b2.length ) {

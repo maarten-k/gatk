@@ -28,16 +28,29 @@ public class SAMRecordToGATKReadAdapter implements GATKRead, Serializable {
 
     private final SAMRecord samRecord;
 
-    private transient Integer cachedSoftStart = null;
-    private transient Integer cachedSoftEnd = null;
-    private transient Integer cachedAdaptorBoundary = null;
-    private transient Integer cachedCigarLength = null;
+    // Lazily computed values held as primitives rather than boxed Integers, because these accessors
+    // run once per pileup element per locus in the HaplotypeCaller. UNCACHED marks a value not yet
+    // computed: none of the four can be Integer.MAX_VALUE for a real read (Integer.MIN_VALUE is taken
+    // by ReadUtils.CANNOT_COMPUTE_ADAPTOR_BOUNDARY, and soft starts can be zero or negative).
+    // Transient caches are reset explicitly after Java deserialization because 0 is a valid value.
+    private static final int UNCACHED = Integer.MAX_VALUE;
+
+    private transient int cachedSoftStart = UNCACHED;
+    private transient int cachedSoftEnd = UNCACHED;
+    private transient int cachedAdaptorBoundary = UNCACHED;
+    private transient int cachedCigarLength = UNCACHED;
+
+    @Serial
+    private void readObject(final java.io.ObjectInputStream input) throws java.io.IOException, ClassNotFoundException {
+        input.defaultReadObject();
+        clearCachedValues();
+    }
 
     private void clearCachedValues() {
-        cachedSoftStart = null;
-        cachedSoftEnd = null;
-        cachedAdaptorBoundary = null;
-        cachedCigarLength = null;
+        cachedSoftStart = UNCACHED;
+        cachedSoftEnd = UNCACHED;
+        cachedAdaptorBoundary = UNCACHED;
+        cachedCigarLength = UNCACHED;
     }
 
     public SAMRecordToGATKReadAdapter( final SAMRecord samRecord ) {
@@ -151,7 +164,7 @@ public class SAMRecordToGATKReadAdapter implements GATKRead, Serializable {
 
     @Override
     public int getSoftStart() {
-        if ( cachedSoftStart == null ) {
+        if ( cachedSoftStart == UNCACHED ) {
             cachedSoftStart = ReadUtils.getSoftStart(this);
         }
 
@@ -160,7 +173,7 @@ public class SAMRecordToGATKReadAdapter implements GATKRead, Serializable {
 
     @Override
     public int getSoftEnd() {
-        if ( cachedSoftEnd == null ) {
+        if ( cachedSoftEnd == UNCACHED ) {
             cachedSoftEnd = ReadUtils.getSoftEnd(this);
         }
 
@@ -169,7 +182,7 @@ public class SAMRecordToGATKReadAdapter implements GATKRead, Serializable {
 
     @Override
     public int getAdaptorBoundary() {
-        if ( cachedAdaptorBoundary == null ) {
+        if ( cachedAdaptorBoundary == UNCACHED ) {
             cachedAdaptorBoundary = ReadUtils.getAdaptorBoundary(this);
         }
         return cachedAdaptorBoundary;
@@ -357,7 +370,7 @@ public class SAMRecordToGATKReadAdapter implements GATKRead, Serializable {
     public int numCigarElements() {
         // It's surprising and bizarre, but profiling reveals that caching the cigar length
         // actually helps performance in some cases (eg., the HaplotypeCaller)
-        if ( cachedCigarLength == null ) {
+        if ( cachedCigarLength == UNCACHED ) {
             if ( samRecord instanceof BAMRecord ) {
                 cachedCigarLength = samRecord.getCigarLength();
                 if ( cachedCigarLength == 2 ) {

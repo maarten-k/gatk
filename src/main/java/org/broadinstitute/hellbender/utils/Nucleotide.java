@@ -116,6 +116,11 @@ public enum Nucleotide {
     private static final Nucleotide[] baseToValue;
 
     /**
+     * Nucleotide masks indexed by their unsigned byte encodings. Non-valid encodings map to zero.
+     */
+    private static final int[] baseToMask;
+
+    /**
      * Values indexed by their mask.
      */
     private static final Nucleotide[] maskToValue;
@@ -130,6 +135,7 @@ public enum Nucleotide {
         final Nucleotide[] values = values();
         NUMBER_OF_CONSTANTS = values.length;
         baseToValue = new Nucleotide[1 << Byte.SIZE];
+        baseToMask = new int[1 << Byte.SIZE];
         maskToValue = new Nucleotide[1 << STANDARD_BASES.size()];
         baseToOrdinal = new int[1 << Byte.SIZE];
         Arrays.fill(baseToValue, INVALID);
@@ -142,10 +148,12 @@ public enum Nucleotide {
             final int upperCaseIndex = nucleotide.upperCaseByteEncoding & 0xFF;
             maskToValue[nucleotide.mask] = nucleotide;
             baseToValue[lowerCaseIndex] = baseToValue[upperCaseIndex] = nucleotide;
+            baseToMask[lowerCaseIndex] = baseToMask[upperCaseIndex] = nucleotide.mask;
             baseToOrdinal[lowerCaseIndex] = baseToOrdinal[upperCaseIndex] = nucleotide.ordinal();
         }
         // need to do u and U here as they are just aliases to T.
         baseToValue['u' & 0xFF] = baseToValue['U' & 0xFF] = U;
+        baseToMask['u' & 0xFF] = baseToMask['U' & 0xFF] = U.mask;
         baseToOrdinal['u' & 0xFF] = baseToOrdinal['U' & 0xFF] = U.ordinal();
     }
 
@@ -375,7 +383,10 @@ public enum Nucleotide {
      * @return {@code true} iff the input nucleotides intersect.
      */
     public static boolean intersect(final byte a, final byte b) {
-        return (baseToValue[0xFF & a].mask & baseToValue[0xFF & b].mask) != 0;
+        if (a == b) {
+            return baseToMask[0xFF & a] != 0;
+        }
+        return (baseToMask[0xFF & a] & baseToMask[0xFF & b]) != 0;
     }
 
     /**

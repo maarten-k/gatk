@@ -362,10 +362,74 @@ public final class PairHMMLikelihoodCalculationEngine implements ReadLikelihoodC
         }
 
         for ( int i = 1; i < readBases.length; i++ ) {
-            final int repeatLength = findTandemRepeatUnits(readBases, i-1).getRight();
+            final int repeatLength = findTandemRepeatLength(readBases, i-1);
             readInsQuals[i-1] = (byte) Math.min(0xff & readInsQuals[i - 1], 0xff & pcrIndelErrorModelCache[repeatLength]);
             readDelQuals[i-1] = (byte) Math.min(0xff & readDelQuals[i - 1], 0xff & pcrIndelErrorModelCache[repeatLength]);
         }
+    }
+
+    /** Same repeat length as {@link #findTandemRepeatUnits}, without allocation, copying or argument validation. */
+    static int findTandemRepeatLength(final byte[] bases, final int offset) {
+        final int len = bases.length;
+        final int end = offset + 1;
+
+        int bwStart = offset;
+        int bwLen = 1;
+        int maxBW = 0;
+        for (int str = 1; str <= MAX_STR_UNIT_LENGTH && end - str >= 0; str++) {
+            maxBW = countBackward(bases, end - str, str, end);
+            if (maxBW > 1) {
+                bwStart = end - str;
+                bwLen = str;
+                break;
+            }
+        }
+
+        int maxRL = maxBW;
+        if (offset < len - 1) {
+            int fwLen = 1;
+            int maxFW = 0;
+            for (int str = 1; str <= MAX_STR_UNIT_LENGTH && end + str <= len; str++) {
+                maxFW = countForward(bases, end, str, len);
+                if (maxFW > 1) {
+                    fwLen = str;
+                    break;
+                }
+            }
+            if (fwLen == bwLen && rangesEqual(bases, end, bwStart, fwLen)) {
+                maxRL = maxBW + maxFW;
+            } else {
+                maxRL = maxFW + countBackward(bases, end, fwLen, end);
+            }
+        }
+        return Math.min(maxRL, MAX_REPEAT_LENGTH);
+    }
+
+    private static boolean rangesEqual(final byte[] b, final int s1, final int s2, final int n) {
+        for (int k = 0; k < n; k++) {
+            if (b[s1 + k] != b[s2 + k]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /** Number of consecutive copies of b[unitStart, unitStart+unitLen) ending at {@code end}. */
+    private static int countBackward(final byte[] b, final int unitStart, final int unitLen, final int end) {
+        int count = 0;
+        for (int start = end - unitLen; start >= 0 && rangesEqual(b, start, unitStart, unitLen); start -= unitLen) {
+            count++;
+        }
+        return count;
+    }
+
+    /** Number of consecutive copies of b[from, from+unitLen) starting at {@code from}, not passing {@code len}. */
+    private static int countForward(final byte[] b, final int from, final int unitLen, final int len) {
+        int count = 0;
+        for (int start = from; start + unitLen <= len && rangesEqual(b, start, from, unitLen); start += unitLen) {
+            count++;
+        }
+        return count;
     }
 
     @VisibleForTesting

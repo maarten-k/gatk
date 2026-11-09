@@ -228,61 +228,31 @@ public final class BQSRReadTransformer implements ReadTransformer {
             ? constantQualityScorePrior 
             : readGroupDatum.getReportedQuality();
 
-        // OPTIMIZATION: Split loop based on useStaticQuantizedMapping to eliminate per-base check
-        if (useStaticQuantizedMapping) {
-            for (int offset = 0; offset < readLength; offset++) {
-                if (recalibratedQuals[offset] < preserveQLessThan) {
-                    continue;
-                }
-
-                final int[] covariatesAtOffset = covariatesForRead[offset];
-                final int reportedBaseQualityAtOffset = covariatesAtOffset[StandardCovariateList.BASE_QUALITY_COVARIATE_DEFAULT_INDEX];
-
-                // Datum for the tuple (read group, reported quality score).
-                final RecalDatum qualityScoreDatum = recalibrationTables.getQualityScoreTable()
-                        .get3Keys(rgKey, reportedBaseQualityAtOffset, BASE_SUBSTITUTION_INDEX);
-
-                // OPTIMIZATION: Set all positions explicitly instead of Arrays.fill + conditional
-                for (int j = StandardCovariateList.NUM_REQUIRED_COVARITES, k = 0; j < totalCovariateCount; j++, k++) {
-                    final int covValue = covariatesAtOffset[j];
-                    recalDatumsForSpecialCovariates[k] = covValue >= 0
-                            ? recalibrationTables.getTable(j).get4Keys(rgKey, reportedBaseQualityAtOffset, covValue, BASE_SUBSTITUTION_INDEX)
-                            : null;
-                }
-
-                final double rawRecalibratedQualityScore = hierarchicalBayesianQualityEstimate(
-                        priorQualityScoreForRead, readGroupDatum, qualityScoreDatum, recalDatumsForSpecialCovariates);
-                
-                // OPTIMIZATION: Inline getBoundedIntegerQual and use pre-computed array
-                recalibratedQuals[offset] = finalQuantizedQuals[boundQual(fastRound(rawRecalibratedQualityScore), MAX_RECALIBRATED_Q_SCORE)];
+        for (int offset = 0; offset < readLength; offset++) {
+            if (recalibratedQuals[offset] < preserveQLessThan) {
+                continue;
             }
-        } else {
-            for (int offset = 0; offset < readLength; offset++) {
-                if (recalibratedQuals[offset] < preserveQLessThan) {
-                    continue;
-                }
 
-                final int[] covariatesAtOffset = covariatesForRead[offset];
-                final int reportedBaseQualityAtOffset = covariatesAtOffset[StandardCovariateList.BASE_QUALITY_COVARIATE_DEFAULT_INDEX];
+            final int[] covariatesAtOffset = covariatesForRead[offset];
+            final int reportedBaseQualityAtOffset = covariatesAtOffset[StandardCovariateList.BASE_QUALITY_COVARIATE_DEFAULT_INDEX];
 
-                // Datum for the tuple (read group, reported quality score).
-                final RecalDatum qualityScoreDatum = recalibrationTables.getQualityScoreTable()
-                        .get3Keys(rgKey, reportedBaseQualityAtOffset, BASE_SUBSTITUTION_INDEX);
+            // Datum for the tuple (read group, reported quality score).
+            final RecalDatum qualityScoreDatum = recalibrationTables.getQualityScoreTable()
+                    .get3Keys(rgKey, reportedBaseQualityAtOffset, BASE_SUBSTITUTION_INDEX);
 
-                // OPTIMIZATION: Set all positions explicitly instead of Arrays.fill + conditional
-                for (int j = StandardCovariateList.NUM_REQUIRED_COVARITES, k = 0; j < totalCovariateCount; j++, k++) {
-                    final int covValue = covariatesAtOffset[j];
-                    recalDatumsForSpecialCovariates[k] = covValue >= 0
-                            ? recalibrationTables.getTable(j).get4Keys(rgKey, reportedBaseQualityAtOffset, covValue, BASE_SUBSTITUTION_INDEX)
-                            : null;
-                }
-
-                final double rawRecalibratedQualityScore = hierarchicalBayesianQualityEstimate(
-                        priorQualityScoreForRead, readGroupDatum, qualityScoreDatum, recalDatumsForSpecialCovariates);
-                
-                // OPTIMIZATION: Inline getBoundedIntegerQual and use byte array
-                recalibratedQuals[offset] = quantizedQualsArray[boundQual(fastRound(rawRecalibratedQualityScore), MAX_RECALIBRATED_Q_SCORE)];
+            // OPTIMIZATION: Set all positions explicitly instead of Arrays.fill + conditional
+            for (int j = StandardCovariateList.NUM_REQUIRED_COVARITES, k = 0; j < totalCovariateCount; j++, k++) {
+                final int covValue = covariatesAtOffset[j];
+                recalDatumsForSpecialCovariates[k] = covValue >= 0
+                        ? recalibrationTables.getTable(j).get4Keys(rgKey, reportedBaseQualityAtOffset, covValue, BASE_SUBSTITUTION_INDEX)
+                        : null;
             }
+
+            final double rawRecalibratedQualityScore = hierarchicalBayesianQualityEstimate(
+                    priorQualityScoreForRead, readGroupDatum, qualityScoreDatum, recalDatumsForSpecialCovariates);
+
+            // OPTIMIZATION: Inline getBoundedIntegerQual and use pre-computed array
+            recalibratedQuals[offset] = finalQuantizedQuals[boundQual(fastRound(rawRecalibratedQualityScore), MAX_RECALIBRATED_Q_SCORE)];
         }
 
         read.setBaseQualities(recalibratedQuals);

@@ -578,7 +578,7 @@ public class AlleleLikelihoods<EVIDENCE extends Locatable, A extends Allele> imp
                 }
                 sampleEvidence.set(r, replacement);
                 if (evidenceIndex != null) {
-                    evidenceIndex.remove(evidence);
+                    evidenceIndex.removeInt(evidence);
                     evidenceIndex.put(replacement, r);
                 }
             }

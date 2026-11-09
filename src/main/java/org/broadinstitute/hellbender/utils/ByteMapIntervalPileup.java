@@ -349,27 +349,26 @@ class ByteMapIntervalPileup implements IntervalPileup {
             if (size == 0) {
                 return Int2ObjectMaps.emptyMap();
             } else if (size == 1) {
-                return Int2ObjectMaps.singleton(offsets.get(0) , inserts.get(0));
+                return new Int2ObjectArrayMap<>(
+                        new int[]{offsets.getInt(0)}, new Insert[]{inserts.get(0)});
             } else {
-                final Int2ObjectMap<Insert> result = size < 5 ? new Int2ObjectArrayMap<>(size)
-                        : new Int2ObjectOpenHashMap<>(size);
-                for (int ins = 0; ins < size; ins++) {
-                    result.put(offsets.get(ins) , inserts.get(ins));
-                }
-                return result;
+                final int[] keys = offsets.toIntArray();
+                final Insert[] values = inserts.toArray(new Insert[0]);
+                return size < 5 ? new Int2ObjectArrayMap<>(keys, values)
+                        : new Int2ObjectOpenHashMap<>(keys, values);
             }
         }
 
         private static void mergeAdjacentInserts(final GATKRead read, final List<Insert> inserts, final IntList offsets) {
             int i;
             for (i = inserts.size() - 1; i > 0; i--) {
-                if (offsets.get(i) == offsets.get(i-1)) {
+                if (offsets.getInt(i) == offsets.getInt(i-1)) {
                     final Insert left = inserts.get(i-1);
                     final Insert right = inserts.get(i);
                     final Insert merged = new Insert(read, left.offset, left.column,left.length + right.length);
                     inserts.remove(i);
                     inserts.set(i - 1, merged);
-                    offsets.remove(i);
+                    offsets.removeInt(i);
                 }
             }
         }

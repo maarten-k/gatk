@@ -90,7 +90,7 @@ public final class DoubleSequence {
      */
     public double get(final int index) {
         Utils.validIndex(index, values.size());
-        return values.get(index);
+        return values.getDouble(index);
     }
 
     /**
@@ -116,9 +116,9 @@ public final class DoubleSequence {
     public double min() {
         final int size = values.size();
         if (size > 2) {
-            return Math.min(values.get(0), values.get(size - 1));
+            return Math.min(values.getDouble(0), values.getDouble(size - 1));
         } else {
-            return values.isEmpty() ? Double.NaN : values.get(0);
+            return values.isEmpty() ? Double.NaN : values.getDouble(0);
         }
     }
 
@@ -129,9 +129,9 @@ public final class DoubleSequence {
     public double max() {
         final int size = values.size();
         if (size > 2) {
-            return Math.max(values.get(0), values.get(size - 1));
+            return Math.max(values.getDouble(0), values.getDouble(size - 1));
         } else {
-            return values.isEmpty() ? Double.NaN : values.get(0);
+            return values.isEmpty() ? Double.NaN : values.getDouble(0);
         }
     }
 

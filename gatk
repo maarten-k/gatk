@@ -413,6 +413,7 @@ def runCommand(cmd, dryrun):
         sys.stderr.write("    " + " ".join(cmd)+"\n")
         gatk_env = os.environ.copy()
         gatk_env["SUPPRESS_GCLOUD_CREDS_WARNING"] = "true"
+        gatk_env["log4j2.statusLogger.level"] = "OFF"
         check_call(cmd, env=gatk_env)
 
 def getSplitArgs(args):

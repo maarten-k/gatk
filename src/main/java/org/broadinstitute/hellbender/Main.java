@@ -241,7 +241,7 @@ public class Main {
      */
     protected void handleResult(final Object result) {
         if (result != null) {
-            System.out.println("Tool returned:\n" + result);
+            System.err.println("Tool returned:\n" + result);
         }
     }
 
@@ -573,7 +573,7 @@ public class Main {
     protected void printVersionInfo(PrintStream out){
         final String toolkitName = RuntimeUtils.getToolkitName(this.getClass());
         final String version = RuntimeUtils.getVersion(this.getClass());
-        System.out.println(String.format("%s v%s", toolkitName, version));
+        out.println(String.format("%s v%s", toolkitName, version));
         final Manifest manifest = RuntimeUtils.getManifest(this.getClass());
         if( manifest != null){
             final Attributes manifestAttributes = manifest.getMainAttributes();

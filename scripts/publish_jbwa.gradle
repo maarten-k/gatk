@@ -45,7 +45,7 @@ uploadArchives {
             pom.project {
                 name 'jbwa'
                 packaging 'jar'
-                description 'Java Bindings (JNI) for bwa'
+                description = 'Java Bindings (JNI) for bwa'
                 url 'https://github.com/lindenb/jbwa'
 
                 scm {

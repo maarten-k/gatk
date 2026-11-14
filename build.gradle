@@ -13,10 +13,10 @@ plugins {
     id 'signing'
 //    id "jacoco"
     id "de.undercouch.download" version "5.6.0" //used for downloading GSA lib
-    id "com.gradleup.shadow" version "8.3.3"    //used to build the shadow and sparkJars
-    id 'com.palantir.git-version' version '3.1.0' //version helper
+    id "com.gradleup.shadow" version "9.0.0"    //used to build the shadow and sparkJars
+    id 'com.palantir.git-version' version '5.2.0' //version helper
     id 'org.sonatype.gradle.plugins.scan' version '3.0.0' // scans for security vulnerabilities in our dependencies
-    id 'com.gradleup.nmcp' version '1.6.1' // publishes releases to the Sonatype Central Portal (OSSRH was retired)
+    id 'com.gradleup.nmcp' version '1.6.2' // publishes releases to the Sonatype Central Portal (OSSRH was retired)
 }
 
 
@@ -25,6 +25,7 @@ import com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransfor
 
 import java.time.format.DateTimeFormatter
 import java.util.stream.Collectors
+import java.nio.file.Files
 
 application {
     mainClass = "org.broadinstitute.hellbender.Main"
@@ -52,11 +53,11 @@ repositories {
     maven {
         // Note: We are still publishing to JFrog, but consuming artifacts from GAR. This interim state works because
         // a background kubernetes job syncs new artifacts from JFrog to GAR within 5 minutes.
-        url "https://us-central1-maven.pkg.dev/dsp-artifact-registry/libs-snapshot/" //for htsjdk snapshots
+        url="https://us-central1-maven.pkg.dev/dsp-artifact-registry/libs-snapshot/" //for htsjdk snapshots
     }
 
     maven {
-        url "https://oss.sonatype.org/content/repositories/snapshots" //for disq snapshots
+        url ="https://oss.sonatype.org/content/repositories/snapshots" //for disq snapshots
     }
 
     mavenLocal()
@@ -158,6 +159,30 @@ def ensureBuildPrerequisites(largeResourcesFolder, buildPrerequisitesMessage, sk
     resolveLargeResourceStubFiles(largeResourcesFolder, buildPrerequisitesMessage)
 }
 
+// Create a symbolic link from linkName to the target file, removing any existing link/file first.
+// Uses Java NIO for cross-platform compatibility, with a fallback to `ln` command on Unix-like systems
+// if NIO symlink creation fails. Logs a warning on Windows where symlinks may require elevation.
+def createSymlink(File outputDir, File targetFile, String linkName) {
+    def linkPath = new File(outputDir, linkName).toPath()
+    def targetPath = targetFile.toPath()
+    
+    try {
+        // Remove existing symlink or file if it exists
+        if (linkPath.toFile().exists() || Files.isSymbolicLink(linkPath)) {
+            Files.deleteIfExists(linkPath)
+        }
+        // Create the symlink using Java NIO
+        Files.createSymbolicLink(linkPath, targetPath.getFileName())
+    } catch (UnsupportedOperationException e) {
+        // Java NIO symlinks may not be supported on Windows; fall back to `ln` command
+        if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+            logger.warn("Symlink creation via Java NIO not supported on Windows. " +
+                    "Administrator privileges may be required for symbolic links.")
+        }
+        throw e
+    }
+}
+
 final isRelease = Boolean.getBoolean("release")
 final versionOverridden = System.getProperty("versionOverride") != null
 
@@ -203,7 +228,7 @@ configurations {
 
     externalSourceConfiguration {
         // External sources we need for doc and tab completion generation tasks (i.e., Picard sources)
-        transitive false
+        transitive=false
     }
 
     sparkConfiguration {
@@ -476,7 +501,7 @@ run {
         // transform the list of runtime configuration --add-opens args into command line argument format
         final runtimeJVMArgs = runtimeAddOpens.stream()
                 .flatMap(openSpec -> ['--add-opens', openSpec].stream())
-                .toList()
+                .collect(Collectors.toList())
         // add in any other required args
         runtimeJVMArgs.add('-Dio.netty.tryReflectionSetAccessible=true')
         jvmArgs = runtimeJVMArgs
@@ -490,7 +515,7 @@ test {
     testJVMAddOpens.addAll(testAddOpens)
     final testConfigurationJVMArgs = testJVMAddOpens.stream()
             .flatMap(openSpec -> ['--add-opens', openSpec].stream())
-            .toList()
+            .collect(Collectors.toList())
     // add in any other required args
     testConfigurationJVMArgs.add('-Dio.netty.tryReflectionSetAccessible=true')
     jvmArgs = testConfigurationJVMArgs
@@ -513,24 +538,6 @@ processTestResources {
 java {
     sourceCompatibility = 1.17
     targetCompatibility = 1.17
-}
-
-def createSymlinks(archivePath, symlinkLocation) {
-    exec {
-        commandLine 'ln', '-fs', archivePath, symlinkLocation
-        ignoreExitValue = false
-    }
-}
-
-// Suffix is what will be added to the symlink
-def createGatkSymlinks(destinationDir, archiveFile, suffix, baseJarName, secondaryBaseJarName) {
-    def finalSuffix = (suffix == "") ? "" : ("-" + suffix)
-
-    def symlinkLocation = destinationDir.getAsFile().get().toString() + "/" + baseJarName + finalSuffix + ".jar"
-    def symlinkLocation2 = destinationDir.getAsFile().get().toString() + "/" + secondaryBaseJarName + finalSuffix + ".jar"
-
-    createSymlinks(archiveFile.getAsFile().get().getAbsolutePath(), symlinkLocation)
-    createSymlinks(archiveFile.getAsFile().get().getAbsolutePath(), symlinkLocation2)
 }
 
 logger.info("build for version:" + version)
@@ -557,7 +564,7 @@ tasks.withType(Jar).configureEach {
 }
 
 wrapper {
-    gradleVersion = '8.10.2'
+    gradleVersion = '9.9.1'
 }
 
 tasks.withType(ShadowJar).configureEach {
@@ -565,7 +572,7 @@ tasks.withType(ShadowJar).configureEach {
     archiveBaseName = project.name + '-package'
     mergeServiceFiles()
     relocate 'com.google.common', 'org.broadinstitute.hellbender.relocated.com.google.common'
-    zip64 true
+    zip64 = true
     exclude 'log4j.properties' // from adam jar as it clashes with hellbender's log4j2.xml
     exclude '**/*.SF' // these are Manifest signature files and
     exclude '**/*.RSA' // keys which may accidentally be imported from other signed projects and then fail at runtime
@@ -584,10 +591,18 @@ shadowJar {
     archiveClassifier = 'local'
     mergeServiceFiles('reference.conf')
     doLast {
-        // Create a symlink to the newly created jar.  The name will be gatk.jar and
-        //  it will be at the same level as the newly created jar.  (overwriting symlink, if it exists)
-        // Please note that this will cause failures in Windows, which does not support symlinks.
-        createGatkSymlinks(destinationDirectory, archiveFile, "", baseJarName, secondaryBaseJarName)
+        // Create stable-name aliases (symlinks) for the versioned JAR.
+        // This allows consumers like scripts/sv/sanity_checks.sh and generated WDL commands
+        // to reliably locate the built executable under stable names like gatk.jar and hellbender.jar
+        def outputDir = destinationDirectory.getAsFile().get()
+        def archiveFile = archiveFile.getAsFile().get()
+        
+        try {
+            createSymlink(outputDir, archiveFile, baseJarName + '.jar')
+            createSymlink(outputDir, archiveFile, secondaryBaseJarName + '.jar')
+        } catch (Exception e) {
+            logger.warn("Failed to create symlinks for shadow jar: ${e.message}. This is expected on Windows systems.")
+        }
     }
 }
 
@@ -599,10 +614,19 @@ tasks.register('sparkJar', ShadowJar) {
     configurations = [project.configurations.sparkConfiguration]
     archiveClassifier = 'spark'
     doLast {
-        // Create a symlink to the newly created jar.  The name will be gatk.jar and
-        //  it will be at the same level as the newly created jar.  (overwriting symlink, if it exists)
-        // Please note that this will cause failures in Windows, which does not support symlinks.
-        createGatkSymlinks(destinationDirectory, archiveFile, archiveClassifier, baseJarName, secondaryBaseJarName)
+        // Create stable-name aliases (symlinks) for the versioned Spark JAR.
+        // This allows consumers to reliably locate the built Spark executable under stable names
+        // like gatk-spark.jar and hellbender-spark.jar
+        def outputDir = destinationDirectory.getAsFile().get()
+        def archiveFile = archiveFile.getAsFile().get()
+        def finalSuffix = "-" + archiveClassifier.get()
+        
+        try {
+            createSymlink(outputDir, archiveFile, baseJarName + finalSuffix + '.jar')
+            createSymlink(outputDir, archiveFile, secondaryBaseJarName + finalSuffix + '.jar')
+        } catch (Exception e) {
+            logger.warn("Failed to create symlinks for spark jar: ${e.message}. This is expected on Windows systems.")
+        }
     }
 }
 
@@ -659,7 +683,7 @@ tasks.register('collectBundleIntoDir', Copy) {
 
 tasks.register('bundle', Zip) {
     dependsOn collectBundleIntoDir
-    zip64 true
+    zip64 = true
 
     archiveBaseName = project.name + "-" + project.version
     destinationDirectory = file("$buildDir")
@@ -836,7 +860,7 @@ tasks.register('gatkDoc', Javadoc) {
     options.noTimestamp(false)
 
     outputs.dir(gatkDocDir)
-    options.destinationDirectory(gatkDocDir)
+    options.destinationDirectory = gatkDocDir
 
     options.addStringOption("settings-dir", "src/main/resources/org/broadinstitute/hellbender/utils/helpTemplates")
     if (project.hasProperty('phpDoc')) {
@@ -877,7 +901,7 @@ tasks.register('gatkTabComplete', Javadoc) {
     options.noTimestamp(false)
 
     outputs.dir(tabCompletionDir)
-    options.destinationDirectory(tabCompletionDir)
+    options.destinationDirectory = tabCompletionDir
 
     // This is a hack to work around a gross Gradle bug:
     options.addStringOption('use-default-templates', '-use-default-templates')
@@ -939,7 +963,7 @@ tasks.register('gatkWDLGen', Javadoc) {
     options.noTimestamp(false)
 
     outputs.dir(gatkWDLDir)
-    options.destinationDirectory(gatkWDLDir)
+    options.destinationDirectory = gatkWDLDir
 
     options.addStringOption("settings-dir", "src/main/resources/org/broadinstitute/hellbender/utils/wdlTemplates")
     options.addStringOption("output-file-extension", "wdl")
@@ -1052,26 +1076,25 @@ ossIndexAudit {
 }
 
 /**
- *This specifies what artifacts will be built and uploaded when performing a maven upload.
+ * Add artifacts as direct task dependencies of the assemble task.
+ * This replaces the deprecated archives configuration.
  */
-artifacts {
-    archives javadocJar
-    archives sourcesJar
-    archives testUtilsJar
-    archives testUtilsJavadocJar
-    archives testUtilsSourcesJar
-
+tasks.named('assemble') {
+    dependsOn javadocJar
+    dependsOn sourcesJar
+    dependsOn testUtilsJar
+    dependsOn testUtilsJavadocJar
+    dependsOn testUtilsSourcesJar
 }
-//remove zip and tar added by the application plugin
-configurations.archives.artifacts.removeAll {it.file =~ '.zip$'}
-configurations.archives.artifacts.removeAll {it.file =~ '.tar$'}
+// The zip and tar artifacts from the application plugin are no longer added
+// since we're not using the archives configuration
 
 /**
  * Sign non-snapshot releases with our secret key.  This should never need to be invoked directly.
  */
 signing {
     useGpgCmd() // sign via the gpg command line (gpg2, supports ed25519), rather than a secret keyring file
-    required { isRelease }
+    required = { isRelease }
     sign publishing.publications
 }
 

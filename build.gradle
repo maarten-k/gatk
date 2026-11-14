@@ -25,6 +25,7 @@ import com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransfor
 
 import java.time.format.DateTimeFormatter
 import java.util.stream.Collectors
+import java.nio.file.Files
 
 application {
     mainClass = "org.broadinstitute.hellbender.Main"
@@ -156,6 +157,30 @@ def ensureBuildPrerequisites(largeResourcesFolder, buildPrerequisitesMessage, sk
     // Large runtime resource files must be present at build time to be compiled into the jar, so
     // try to resolve them to real files if any of them are stubs.
     resolveLargeResourceStubFiles(largeResourcesFolder, buildPrerequisitesMessage)
+}
+
+// Create a symbolic link from linkName to the target file, removing any existing link/file first.
+// Uses Java NIO for cross-platform compatibility, with a fallback to `ln` command on Unix-like systems
+// if NIO symlink creation fails. Logs a warning on Windows where symlinks may require elevation.
+def createSymlink(File outputDir, File targetFile, String linkName) {
+    def linkPath = new File(outputDir, linkName).toPath()
+    def targetPath = targetFile.toPath()
+    
+    try {
+        // Remove existing symlink or file if it exists
+        if (linkPath.toFile().exists() || Files.isSymbolicLink(linkPath)) {
+            Files.deleteIfExists(linkPath)
+        }
+        // Create the symlink using Java NIO
+        Files.createSymbolicLink(linkPath, targetPath.getFileName())
+    } catch (UnsupportedOperationException e) {
+        // Java NIO symlinks may not be supported on Windows; fall back to `ln` command
+        if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+            logger.warn("Symlink creation via Java NIO not supported on Windows. " +
+                    "Administrator privileges may be required for symbolic links.")
+        }
+        throw e
+    }
 }
 
 final isRelease = Boolean.getBoolean("release")
@@ -566,15 +591,18 @@ shadowJar {
     archiveClassifier = 'local'
     mergeServiceFiles('reference.conf')
     doLast {
-        // Create a symlink to the newly created jar.  The name will be gatk.jar and
-        //  it will be at the same level as the newly created jar.  (overwriting symlink, if it exists)
-        // Please note that this will cause failures in Windows, which does not support symlinks.
-        // TODO: Fix symlink creation for Gradle 9.9.1
-        // def symlinkLocation = destinationDirectory.getAsFile().get().toString() + "/" + baseJarName + ".jar"
-        // def symlinkLocation2 = destinationDirectory.getAsFile().get().toString() + "/" + secondaryBaseJarName + ".jar"
-        // def archivePath = archiveFile.getAsFile().get().getAbsolutePath()
-        // exec { commandLine 'ln', '-fs', archivePath, symlinkLocation; ignoreExitValue = false }
-        // exec { commandLine 'ln', '-fs', archivePath, symlinkLocation2; ignoreExitValue = false }
+        // Create stable-name aliases (symlinks) for the versioned JAR.
+        // This allows consumers like scripts/sv/sanity_checks.sh and generated WDL commands
+        // to reliably locate the built executable under stable names like gatk.jar and hellbender.jar
+        def outputDir = destinationDirectory.getAsFile().get()
+        def archiveFile = archiveFile.getAsFile().get()
+        
+        try {
+            createSymlink(outputDir, archiveFile, baseJarName + '.jar')
+            createSymlink(outputDir, archiveFile, secondaryBaseJarName + '.jar')
+        } catch (Exception e) {
+            logger.warn("Failed to create symlinks for shadow jar: ${e.message}. This is expected on Windows systems.")
+        }
     }
 }
 
@@ -586,16 +614,19 @@ tasks.register('sparkJar', ShadowJar) {
     configurations = [project.configurations.sparkConfiguration]
     archiveClassifier = 'spark'
     doLast {
-        // Create a symlink to the newly created jar.  The name will be gatk.jar and
-        //  it will be at the same level as the newly created jar.  (overwriting symlink, if it exists)
-        // Please note that this will cause failures in Windows, which does not support symlinks.
-        // TODO: Fix symlink creation for Gradle 9.9.1
-        // def finalSuffix = "-" + archiveClassifier
-        // def symlinkLocation = destinationDirectory.getAsFile().get().toString() + "/" + baseJarName + finalSuffix + ".jar"
-        // def symlinkLocation2 = destinationDirectory.getAsFile().get().toString() + "/" + secondaryBaseJarName + finalSuffix + ".jar"
-        // def archivePath = archiveFile.getAsFile().get().getAbsolutePath()
-        // exec { commandLine 'ln', '-fs', archivePath, symlinkLocation; ignoreExitValue = false }
-        // exec { commandLine 'ln', '-fs', archivePath, symlinkLocation2; ignoreExitValue = false }
+        // Create stable-name aliases (symlinks) for the versioned Spark JAR.
+        // This allows consumers to reliably locate the built Spark executable under stable names
+        // like gatk-spark.jar and hellbender-spark.jar
+        def outputDir = destinationDirectory.getAsFile().get()
+        def archiveFile = archiveFile.getAsFile().get()
+        def finalSuffix = "-" + archiveClassifier.get()
+        
+        try {
+            createSymlink(outputDir, archiveFile, baseJarName + finalSuffix + '.jar')
+            createSymlink(outputDir, archiveFile, secondaryBaseJarName + finalSuffix + '.jar')
+        } catch (Exception e) {
+            logger.warn("Failed to create symlinks for spark jar: ${e.message}. This is expected on Windows systems.")
+        }
     }
 }
 
